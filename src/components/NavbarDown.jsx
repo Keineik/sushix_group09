@@ -46,7 +46,7 @@ const NavbarDown = () => {
             </a>
             <a
               className={`nav-link ${activeNav === 2 ? 'text-danger' : ''}`}
-              href="#"
+              href="/branches"
               onClick={() => handleNavClick(2)}
             >
               <b>HỆ THỐNG CỬA HÀNG</b>
