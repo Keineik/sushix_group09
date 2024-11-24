@@ -1,7 +1,13 @@
 const About = () => {
     return (
-        <div>
-            <h2 className="section-title text-center mt-4" style={{ color: "#E82429" }}>Giới thiệu SushiX</h2>
+        <div style={{ marginTop: "165px" }}>
+            <h2 
+                className="section-title text-center mt-4" 
+                style={{ color: "#E82429", fontFamily: "'Potta One', cursive" }}
+            >
+                Giới thiệu SushiX
+            </h2>
+
             <div className="container px-5 py-4">
                 <div className="row">
                     <div className="col w-full md:w-1/2">
