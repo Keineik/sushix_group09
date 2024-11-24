@@ -1,0 +1,21 @@
+a.custom-hover-container:hover {
+    color:red !important;
+}
+
+.custom-hover-container {
+    color:black;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+.img-hover {
+    opacity: 1;
+    transition: .5s ease;
+}
+
+.img-hover:hover {
+    opacity: 0.5;
+}
+

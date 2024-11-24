@@ -39,7 +39,7 @@ const NavbarDown = () => {
             </a>
             <a
               className={`nav-link ${activeNav === 1 ? 'text-danger' : ''}`}
-              href="#"
+              href="/menu"
               onClick={() => handleNavClick(1)}
             >
               <b>THỰC ĐƠN</b>

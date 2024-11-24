@@ -1,0 +1,70 @@
+[
+    {
+        "id": 1,
+        "name": "Starter"
+    },
+    {
+        "id": 2,
+        "name": "Sashimi Combo"
+    },
+    {
+        "id": 3,
+        "name": "Sashimi"
+    },
+    {
+        "id": 4,
+        "name": "Nigiri"
+    },
+    {
+        "id": 5,
+        "name": "Gukan"
+    },
+    {
+        "id": 6,
+        "name": "Hosomaki"
+    },
+    {
+        "id": 7,
+        "name": "Maki"
+    },
+    {
+        "id": 8,
+        "name": "Salad"
+    },
+    {
+        "id": 9,
+        "name": "Appetizer"
+    },
+    {
+        "id": 10,
+        "name": "Teppan"
+    },
+    {
+        "id": 11,
+        "name": "Yaki"
+    },
+    {
+        "id": 12,
+        "name": "Furai"
+    },
+    {
+        "id": 13,
+        "name": "Tempura"
+    },
+    {
+        "id": 14,
+        "name": "Udon"
+    },
+    {
+        "id": 15,
+        "name": "Donburi"
+    },
+    {
+        "id": 16,
+        "name": "Curry"
+    },
+    {
+        "id": 17,
+        "name": "Drink Menu"
+    }
+]
