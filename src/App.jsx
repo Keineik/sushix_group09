@@ -3,12 +3,14 @@ import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
 import Branches from "./pages/Branches.jsx";
 import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements} from 'react-router-dom'
+import Menu from './pages/Menu.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<MainLayout />}>
       <Route index element={<Home />} />
       <Route path='/about' element={<About />} />
+      <Route path='/menu' element={<Menu />} />
       <Route path='/branches' element={<Branches />} />
     </Route>
   )
