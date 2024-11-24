@@ -1,0 +1,28 @@
+[
+  {
+    "CouponID": 1,
+    "CouponCode": "SUSHI10",
+    "CouponDesc": "Giảm 10% cho đơn từ 200.000 VND",
+    "DiscountFlat": null,
+    "DiscountRate": 10,
+    "MinOrderValue": 200000,
+    "MaxDiscountValue": 50000,
+    "EffectiveDate": "2024-11-01",
+    "ExpiredDate": "2024-12-31",
+    "TotalUsageLimit": 100,
+    "MinMembershipRequirement": "Silver"
+  },
+  {
+    "CouponID": 2,
+    "CouponCode": "FREESHIP",
+    "CouponDesc": "Miễn phí giao hàng cho đơn từ 100.000 VND",
+    "DiscountFlat": 30000,
+    "DiscountRate": null,
+    "MinOrderValue": 100000,
+    "MaxDiscountValue": null,
+    "EffectiveDate": "2024-11-01",
+    "ExpiredDate": "2024-11-30",
+    "TotalUsageLimit": 50,
+    "MinMembershipRequirement": "None"
+  }
+]

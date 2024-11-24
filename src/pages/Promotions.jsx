@@ -1,42 +1,20 @@
-import React, { useState } from "react";
-
-
-const promotions = [
-  {
-    CouponID: 1,
-    CouponCode: "SUSHI10",
-    CouponDesc: "Giảm 10% cho đơn từ 200.000 VND",
-    DiscountFlat: null,
-    DiscountRate: 10,
-    MinOrderValue: 200000,
-    MaxDiscountValue: 50000,
-    EffectiveDate: "2024-11-01",
-    ExpiredDate: "2024-11-20",
-    TotalUsageLimit: 100,
-    MinMembershipRequirement: "Silver",
-  },
-  {
-    CouponID: 2,
-    CouponCode: "FREESHIP",
-    CouponDesc: "Miễn phí giao hàng cho đơn từ 100.000 VND",
-    DiscountFlat: 30000,
-    DiscountRate: null,
-    MinOrderValue: 100000,
-    MaxDiscountValue: null,
-    EffectiveDate: "2024-11-01",
-    ExpiredDate: "2024-11-30",
-    TotalUsageLimit: 50,
-    MinMembershipRequirement: "None",
-  },
-];
+import { useState } from "react";
+import promotions from "../dummy/promotions.json"; 
 
 const Promotions = () => {
+  const itemsPerPage = 6;
+  const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  const filteredPromotions = promotions.filter((promo) =>
-    promo.CouponCode.toLowerCase().includes(search.toLowerCase()) ||
-    promo.CouponDesc.toLowerCase().includes(search.toLowerCase())
-  );
+  const totalPages = Math.ceil(promotions.length / itemsPerPage);
+
+  const displayedPromotions = promotions
+    .filter(promo => promo.CouponCode.toLowerCase().includes(search.toLowerCase()) || promo.CouponDesc.toLowerCase().includes(search.toLowerCase()))
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const isExpired = (expiredDate) => {
     const currentDate = new Date();
@@ -48,23 +26,31 @@ const Promotions = () => {
     return usageCount >= limit;
   };
 
+  const formatDate = (date) => {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(date).toLocaleDateString('vi-VN', options);
+  };
+
   return (
     <div className="container my-5">
-    <h1 className="text-center text-danger mb-4"> <b>Khuyến Mãi Tại SushiX</b></h1>
-    <div className="mb-3">
-      <input
-      type="text"
-      className="form-control"
-      placeholder="Tìm kiếm khuyến mãi..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      />
-    </div>
-    <div className="row">
-        {filteredPromotions.map((promo) => (
-        <div key={promo.CouponID} className="col-md-6 mb-4">
+      <h1 className="text-center text-danger mb-4"> <b>Khuyến Mãi Tại SushiX</b></h1>
+      
+      {/* Search input */}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Tìm kiếm khuyến mãi..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      <div className="row">
+        {displayedPromotions.map((promo) => (
+          <div key={promo.CouponID} className="col-md-6 mb-4">
             <div className="card bg-light">
-            <div className="card-body">
+              <div className="card-body">
                 <div
                   className="d-flex align-items-center"
                   style={{
@@ -104,43 +90,56 @@ const Promotions = () => {
 
                 <p className="card-text">{promo.CouponDesc}</p>
                 <p>
-                <strong>Hiệu lực:</strong>{" "}
-                {formatDate(promo.EffectiveDate)} - {formatDate(promo.ExpiredDate)}
+                  <strong>Hiệu lực:</strong>{" "}
+                  {formatDate(promo.EffectiveDate)} - {formatDate(promo.ExpiredDate)}
                 </p>
                 <p>
-                <strong>Giảm giá:</strong>{" "}
-                {promo.DiscountFlat
-                    ? `${promo.DiscountFlat.toLocaleString()} VND`
-                    : `${promo.DiscountRate}%`}
+                  <strong>Giảm giá:</strong>{" "}
+                  {promo.DiscountFlat
+                      ? `${promo.DiscountFlat.toLocaleString()} VND`
+                      : `${promo.DiscountRate}%`}
                 </p>
                 {promo.MaxDiscountValue && (
-                <p>
+                  <p>
                     <strong>Giảm giá tối đa:</strong>{" "}
                     {promo.MaxDiscountValue.toLocaleString()} VND
-                </p>
+                  </p>
                 )}
                 <p>
-                <strong>Đơn tối thiểu:</strong>{" "}
-                {promo.MinOrderValue.toLocaleString()} VND
+                  <strong>Đơn tối thiểu:</strong>{" "}
+                  {promo.MinOrderValue.toLocaleString()} VND
                 </p>
                 <p>
-                <strong>Thành viên tối thiểu:</strong> {promo.MinMembershipRequirement}
+                  <strong>Thành viên tối thiểu:</strong> {promo.MinMembershipRequirement}
                 </p>
                 {(isExpired(promo.ExpiredDate) || isUsageLimitReached(promo.UsageCount, promo.TotalUsageLimit)) && (
                   <span className="badge bg-danger">Hết hạn hoặc hết lượt sử dụng</span>
                 )}
+              </div>
             </div>
-            </div>
-        </div>
+          </div>
         ))}
-    </div>
+      </div>
+
+      <nav className="mt-4">
+        <ul className="pagination justify-content-center">
+          {[...Array(totalPages).keys()].map((page) => (
+            <li
+              className={`page-item ${currentPage === page + 1 ? "active" : ""}`}
+              key={page + 1}
+            >
+              <button
+                className="page-link"
+                onClick={() => handlePageChange(page + 1)}
+              >
+                {page + 1}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };
 
 export default Promotions;
-
-const formatDate = (date) => {
-  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-  return new Date(date).toLocaleDateString('vi-VN', options);
-};
