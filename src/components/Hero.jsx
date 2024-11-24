@@ -19,9 +19,9 @@ const Hero = () => {
                   <img src={bannerImage1} className="d-block w-100" alt="Slide 1" />
                   <div className="carousel-caption d-flex justify-content-center align-items-center">
                     <div className="text-center bg-dark p-4 opacity-75 rounded" style={{ position: 'absolute', top: '-500%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)' }}>
-                      <h3 className="display-4 text-shadow-head fw-bold mb-4 red-text">Sushi Tươi, Ngon, Và Trải Nghiệm Độc Đáo Tại SuShiX</h3>
+                      <h3 className="display-4 text-shadow-head fw-bold mb-4 red-text">Sushi Tươi, Ngon, Và Trải Nghiệm Độc Đáo Tại SushiX</h3>
                       <p className="lead mb-4" style={{ color: 'white' }}>
-                        Trải nghiệm sushi tươi ngon ngay tại SuShiX, mang đến sự khác biệt cho bữa ăn của bạn!
+                        Trải nghiệm sushi tươi ngon ngay tại SushiX, mang đến sự khác biệt cho bữa ăn của bạn!
                       </p>
                       <div className="d-flex justify-content-center">
                         <a href="#!" className="btn btn-danger btn-lg">Explore More</a>

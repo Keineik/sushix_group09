@@ -20,14 +20,14 @@ const NavbarDown = () => {
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', 
       }}
     >
-      <div className="container px-5">
+      <div className="container px-1">
         <select className="form-select w-25" aria-label="Select Branch">
           <option selected>Chọn Chi Nhánh</option>
           <option value="1">366A3 Phan Văn Trị, Quận Gò Vấp</option>
           <option value="2">242 - 244 Phan Xích Long, Q. Phú Nhuận</option>
           <option value="3">31 - 33 Nguyễn Thị Thập, Him Lam, Q.7</option>
         </select>
-        <div className="collapse navbar-collapse ms-4" id="navbarNavAltMarkup">
+        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">
             <a
               className={`nav-link ${activeNav === 0 ? 'text-danger' : ''}`}
@@ -60,15 +60,22 @@ const NavbarDown = () => {
             </a>
             <a
               className={`nav-link ${activeNav === 4 ? 'text-danger' : ''}`}
-              href="#"
+              href="/promotions"
               onClick={() => handleNavClick(4)}
+            >
+              <b>KHUYẾN MÃI</b>
+            </a>
+            <a
+              className={`nav-link ${activeNav === 5 ? 'text-danger' : ''}`}
+              href="#"
+              onClick={() => handleNavClick(5)}
             >
               <b>LIÊN HỆ</b>
             </a>
           </div>
           <button className="btn btn-outline-danger ms-auto d-flex align-items-center">
           <svg
-            xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-file-earmark-text me-2"
+            xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-file-earmark-text"
             viewBox="0 0 16 16"
           >
             <path
