@@ -6,7 +6,7 @@ const Navbar = () => {
     <nav
       className="navbar bg-body-tertiary"
       style={{
-        position: 'fixed',
+        position: 'sticky',
         zIndex: 1050,
         top: 0,
         left: 0,

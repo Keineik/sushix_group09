@@ -12,7 +12,7 @@ const NavbarDown = () => {
      <nav
       className="navbar navbar-expand-lg bg-body-tertiary"
       style={{
-        position: 'fixed',
+        position: 'sticky',
         zIndex: 1049,
         top: '105px', 
         left: 0,
