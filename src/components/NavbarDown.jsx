@@ -32,7 +32,7 @@ const NavbarDown = () => {
             <a
               className={`nav-link ${activeNav === 0 ? 'text-danger' : ''}`}
               aria-current="page"
-              href="#"
+              href="/about"
               onClick={() => handleNavClick(0)}
             >
               <b>GIỚI THIỆU</b>

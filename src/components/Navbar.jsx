@@ -14,7 +14,7 @@ const Navbar = () => {
       }}
     >
       <div className="container px-5">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/">
           <img
             // src="https://tokyodelihome.com.vn/Data/Sites/1/skins/default/img//logo.png" alt="Logo"
             src={logo} alt="Logo"
