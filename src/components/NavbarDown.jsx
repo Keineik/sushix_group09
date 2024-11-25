@@ -67,10 +67,10 @@ const NavbarDown = () => {
             </a>
             <a
               className={`nav-link ${activeNav === 5 ? 'text-danger' : ''}`}
-              href="#"
+              href="/reservation"
               onClick={() => handleNavClick(5)}
             >
-              <b>LIÊN HỆ</b>
+              <b>ĐẶT BÀN</b>
             </a>
           </div>
           <button className="btn btn-outline-danger ms-auto d-flex align-items-center">
