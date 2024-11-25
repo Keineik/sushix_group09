@@ -19,3 +19,35 @@ a.custom-hover-container:hover {
     opacity: 0.5;
 }
 
+.pagination-btn {
+    width: 35px;
+    height: 35px;
+    margin: 0 5px;
+    border-radius: 50%;
+    border: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: #6c757d;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+.arrow-btn {
+    border: none;
+    background-color: transparent;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.arrow-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

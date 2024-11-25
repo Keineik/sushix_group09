@@ -66,12 +66,11 @@ const Branches = () => {
                 </div>
             </div>
             <nav className="mt-4">
-                <ul className="pagination justify-content-center">
+                <ul className="pagination justify-content-center align-items-center">
                     {/* Previous button */}
-                    <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                    <li className="page-item">
                         <button
-                            className="page-link"
-                            type="button"
+                            className="arrow-btn"
                             onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                         >
@@ -80,26 +79,21 @@ const Branches = () => {
                     </li>
 
                     {/* Page numbers */}
-                    {[...Array(totalPages).keys()].map((page) => (
-                        <li
-                            className={`page-item ${currentPage === page + 1 ? "active" : ""}`}
-                            key={page + 1}
-                        >
+                    {[...Array(totalPages)].map((_, index) => (
+                        <li className="page-item" key={index + 1}>
                             <button
-                                className="page-link"
-                                type="button"
-                                onClick={() => handlePageChange(page + 1)}
+                                className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                                onClick={() => handlePageChange(index + 1)}
                             >
-                                {page + 1}
+                                {index + 1}
                             </button>
                         </li>
                     ))}
 
                     {/* Next button */}
-                    <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                    <li className="page-item">
                         <button
-                            className="page-link"
-                            type="button"
+                            className="arrow-btn"
                             onClick={() => handlePageChange(currentPage + 1)}
                             disabled={currentPage === totalPages}
                         >
