@@ -21,18 +21,19 @@ const Items = ({ items }) => {
                 <div className="row border border-0 gy-2">
                     <h5 className="ps-5 py-2">SUSHIX</h5>
                 </div>
-                <div class="row row-cols-3 border-0">
-                    {displayedItems.map((item) => (
-                        <div className="col">
-                            <div class="card h-100 border-0">
+                <div className="items-grid">
+                    {displayedItems.map((item, index) => (
+                        <div className="grid-item" key={item.id}>
+                            <div className="card h-100 border-0">
                                 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
                                     <img src={item.image} className="card-img-top img-hover" alt={item.name} />
                                 </a>
-                                <div class="card-body">
-                                    <p class="card-text text-center">{item.name}</p>
-                                    <h5 class="card-title text-center text-danger">{item.price}đ</h5>
+                                <div className="card-body">
+                                    <p className="card-text text-center">{item.name}</p>
+                                    <h5 className="card-title text-center text-danger">{item.price}đ</h5>
                                 </div>
                             </div>
+                            {index % 3 !== 2 && <div className="vertical-divider"></div>}
                         </div>
                     ))}
                 </div>

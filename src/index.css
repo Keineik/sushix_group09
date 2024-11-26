@@ -51,3 +51,66 @@ a.custom-hover-container:hover {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.border-end {
+    border-right: 1px solid #dee2e6 !important;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    position: relative;
+}
+
+.grid-item {
+    position: relative;
+    padding: 1rem;
+}
+
+/* Horizontal lines only */
+.items-grid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        linear-gradient(to bottom, #dee2e6 1px, transparent 1px) 0 0;
+    background-size: 100% calc(100% / 4);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Keep existing vertical divider animation */
+.vertical-divider {
+    position: absolute;
+    right: 0;
+    top: 25%;
+    height: 50%;
+    width: 1px;
+    background-color: #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.grid-item:hover > .vertical-divider {
+    top: 0;
+    height: 100%;
+}
+
+/* Add to index.css */
+.card {
+    height: 380px !important; /* Fixed card height */
+}
+
+.card img {
+    height: 200px; /* Fixed image height */
+    width: 100%;
+    object-fit: cover; /* Maintains aspect ratio while covering container */
+}
+
