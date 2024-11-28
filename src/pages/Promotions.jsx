@@ -122,22 +122,39 @@ const Promotions = () => {
       </div>
 
       <nav className="mt-4">
-        <ul className="pagination justify-content-center">
-          {[...Array(totalPages).keys()].map((page) => (
-            <li
-              className={`page-item ${currentPage === page + 1 ? "active" : ""}`}
-              key={page + 1}
-            >
-              <button
-                className="page-link"
-                onClick={() => handlePageChange(page + 1)}
-              >
-                {page + 1}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+                <ul className="pagination justify-content-center align-items-center">
+                    <li className="page-item">
+                        <button
+                            className="arrow-btn"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            <i className="bi bi-arrow-left"></i>
+                        </button>
+                    </li>
+
+                    {[...Array(totalPages)].map((_, index) => (
+                        <li className="page-item" key={index + 1}>
+                            <button
+                                className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        </li>
+                    ))}
+
+                    <li className="page-item">
+                        <button
+                            className="arrow-btn"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            <i className="bi bi-arrow-right"></i>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
     </div>
   );
 };

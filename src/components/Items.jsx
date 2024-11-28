@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Items = ({ items }) => {
+const Items = ({ items, onAddToCart }) => {
     const itemsPerPage = 12;
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -13,6 +13,7 @@ const Items = ({ items }) => {
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -31,6 +32,12 @@ const Items = ({ items }) => {
                                 <div className="card-body">
                                     <p className="card-text text-center">{item.name}</p>
                                     <h5 className="card-title text-center text-danger">{item.price}đ</h5>
+                                    <button
+                                      className="order-btn"
+                                      onClick={() => onAddToCart(item)}
+                                    >
+                                        <b>ĐẶT HÀNG</b>
+                                      </button>
                                 </div>
                             </div>
                             {index % 3 !== 2 && <div className="vertical-divider"></div>}

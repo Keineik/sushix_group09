@@ -114,3 +114,25 @@ a.custom-hover-container:hover {
     object-fit: cover; /* Maintains aspect ratio while covering container */
 }
 
+.grid-item {
+    position: relative;
+}
+
+.order-btn {
+	display: none;
+	position: absolute;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	width: 100%;
+	background-color:#d20903;
+	color: white;
+	border: none;
+	padding: 10px 0;
+	cursor: pointer;
+	text-align: center;
+}
+
+.grid-item:hover .order-btn {
+	display: block;
+}
