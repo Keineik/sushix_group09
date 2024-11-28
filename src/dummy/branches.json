@@ -1,12 +1,14 @@
 [
-    {
-      "name": "SushiX TÊN LỬA",
+    { 
+    "BranchID": 1,
+    "name": "SushiX TÊN LỬA",
       "address": "306 - 308 đường Tên Lửa, phường Bình Trị Đông B, Bình Tân",
       "phone": "+84 283 928 399",
       "hours": "11:00 - 22:00",
       "imgSrc": "/src/assets/branches/tenlua.jpg"
     },
     {
+      "BranchID": 2,
       "name": "SushiX Phan Van Tri",
       "address": "366A3 Phan Văn Trị, Quận Gò Vấp",
       "phone": "(028) 71089799",
@@ -14,6 +16,7 @@
       "imgSrc": "/src/assets/branches/phanvantri.jpg"
     },
     {
+      "BranchID": 3,
       "name": "SushiX Cresent",
       "address": "Lô CR1, 103 Tôn Dật Tiên, Q.7",
       "phone": "1900 234504 - Line 600",
@@ -21,6 +24,7 @@
       "imgSrc": "/src/assets/branches/cresent.jpg"
     },
     {
+      "BranchID": 4,
       "name": "SushiX Nguyễn Thị Thập",
       "address": "31 - 33 Nguyễn Thị Thập, Him Lam, Q.7",
       "phone": "(028) 7107 8799",
@@ -28,6 +32,7 @@
       "imgSrc": "/src/assets/branches/ngthithap.jpg"
     },
     {
+      "BranchID": 5,
       "name": "SushiX Song Hành",
       "address": "34 Song Hành, Quận 2",
       "phone": "(028) 6259 3737",
@@ -35,6 +40,7 @@
       "imgSrc": "/src/assets/branches/songhanh.jpg"
     },
     {
+      "BranchID": 6,
       "name": "SushiX ParkView",
       "address": "107 Nguyễn Đức Cảnh, Q.7, TPHCM",
       "phone": "1900 234504 - Line 444",
@@ -42,6 +48,7 @@
       "imgSrc": "/src/assets/branches/parkview.jpg"
     },
     {
+      "BranchID": 7,
       "name": "SushiX ParkView",
       "address": "107 Nguyễn Đức Cảnh, Q.7, TPHCM",
       "phone": "1900 234504 - Line 444",

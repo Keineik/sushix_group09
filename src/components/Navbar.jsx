@@ -1,8 +1,8 @@
 import logo from '../assets/logo.png';
-
-const Navbar = ({cart, onCartClick} ) => {
+import { Link } from 'react-router-dom';
+const Navbar = ({ cart, onCartClick }) => {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  
+
   return (
     // <nav className="navbar bg-body-tertiary">
     <nav
@@ -30,16 +30,16 @@ const Navbar = ({cart, onCartClick} ) => {
         <form className="d-flex w-50" role="search">
           <input
             className="form-control-md me-1.5 w-75" type="search" placeholder=" Bạn cần tìm sản phẩm gì?"
-            aria-label="Search" 
+            aria-label="Search"
             style={{
               border: '2px solid red',
               outline: 'none',
               marginLeft: '107px',
             }}
-            />
-          <button 
-            className="btn btn" 
-            type="submit" 
+          />
+          <button
+            className="btn btn"
+            type="submit"
             style={{
               border: 'none'
             }}
@@ -52,7 +52,7 @@ const Navbar = ({cart, onCartClick} ) => {
             </svg>
           </button>
         </form>
-        
+
         <div className="d-flex justify-content-end align-items-center"></div>
         <button type="button" className="btn position-relative ms-auto" onClick={onCartClick}>
           <svg
@@ -62,11 +62,11 @@ const Navbar = ({cart, onCartClick} ) => {
               d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
           </svg>
           <span className="position-absolute top-0 start-95 translate-middle badge rounded-pill bg-danger">
-          {totalItems}
-          <span className="visually-hidden">unread messages</span>
-        </span>
+            {totalItems}
+            <span className="visually-hidden">unread messages</span>
+          </span>
         </button>
-        
+
         <div className="btn-group">
           <button
             type="button" className="btn dropdown-toggle ms-3" data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,10 +80,14 @@ const Navbar = ({cart, onCartClick} ) => {
           </button>
           <ul className="dropdown-menu dropdown-menu-end">
             <li>
-              <button className="dropdown-item" type="button">Đăng nhập</button>
+              <Link to="/login" className="dropdown-item">
+                Đăng nhập
+              </Link>
             </li>
             <li>
-              <button className="dropdown-item" type="button">Đăng ký</button>
+              <Link to="/register" className="dropdown-item">
+                Đăng ký
+              </Link>
             </li>
           </ul>
         </div>
