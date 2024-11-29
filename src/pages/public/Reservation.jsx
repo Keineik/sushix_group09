@@ -1,5 +1,5 @@
 import React from "react";
-import branches from "../dummy/branches.json";
+import branches from "../../dummy/branches.json";
 
 const Reservation = () => {
     return (

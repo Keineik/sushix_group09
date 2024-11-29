@@ -1,5 +1,5 @@
 import { useState } from "react";
-import branches from "../dummy/branches.json";
+import branches from "../../dummy/branches.json";
 
 const Branches = () => {
     const itemsPerPage = 6;

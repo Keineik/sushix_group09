@@ -1,0 +1,36 @@
+Chức năng quản lý cấp chi nhánh
+Gồm tất cả các chức năng của nhân viên và các chức năng riêng sau:
+• Quản lý nhân viên chi nhánh
+‣ Xem danh sách nhân viên
+‣ Thêm/xóa/cập nhật thông tin nhân viên
+‣ Phân công vị trí làm việc cho nhân viên (bộ phận: bếp, lễ tân, phục vụ bàn, thu ngân..)
+‣ Xem lịch sử làm việc của nhân viên
+• Cập nhật món phục vụ trong thực đơn (có/không)
+• Thống kê
+‣ Số lượng đơn hàng mỗi ngày/mỗi tháng/mỗi năm
+‣ Doanh thu mỗi ngày/mỗi tháng/mỗi quý/mỗi năm
+‣ Thống kê giá trị mua hàng và tần suất mua hàng của từng khách hàng theo tháng/năm
+‣ Thống kê theo từng món ăn các giá trị như doanh thu, số lượng, sắp xếp theo số lượng bán, doanh thu bán
+trong khoảng thời gian nhất định.
+‣ Thống kê số bàn phục vụ, điểm đánh giá của mỗi nhân viên cuối mỗi ngày/tháng/quý/năm.
+Chức năng quản lý cấp công ty
+Gồm tất cả các chức năng của cấp chi nhánh và các chức năng riêng sau:
+• Quản lý chi nhánh
+‣ Thêm/xóa/cập nhật thông tin chi nhánh
+• Quản lý thực đơn
+‣ Thêm/xóa/cập nhật thông tin món ăn, combo
+‣ Phân loại món ăn
+• Quản lý chương trình thẻ thành viên
+‣ Định nghĩa điều kiện và quyền lợi cho từng loại thẻ
+• Quản lý nhân sự
+‣ Thêm/xóa/sửa bộ phận
+‣ Phân công vị trí làm việc cho nhân viên (quản lý chi nhánh, bộ phận: bếp, lễ tân, phục vụ bàn, thu ngân..)
+‣ Chuyển nhân sự giữa các chi nhánh
+• Thống kê (tổng hợp của toàn bộ các chi nhánh)
+‣ Số lượng đơn hàng mỗi ngày/mỗi tháng/mỗi năm
+‣ Doanh thu mỗi ngày/mỗi tháng/mỗi quý /mỗi năm
+‣ Khách hàng “thân thiết” nhất : theo tiêu chí tích lũy điểm hoặc tần suất mua hàng
+‣ Thống kê doanh thu theo món ăn (doanh thu, số lượng), món bán chạy, món bán chậm nhất trong khoảng
+thời gian nhất định.
+• Quản lý dịch vụ ưu đãi
+‣ Thêm/xóa/cập nhật chương trình ưu đãi theo loại thẻ thành viên

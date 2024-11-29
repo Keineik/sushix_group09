@@ -1,5 +1,5 @@
 import { useState } from "react";
-import promotions from "../dummy/promotions.json"; 
+import promotions from "../../dummy/promotions.json"; 
 
 const Promotions = () => {
   const itemsPerPage = 6;

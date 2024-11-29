@@ -3,210 +3,126 @@
         "id" : 1,
         "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
         "price" : "75.000",
+        "category" : "Starter",
         "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
     },
     {
         "id" : 2,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "CÁ HỒI-5 MIẾNG",
+        "price" : "129.000",
+        "category" : "Sashimi",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7217/sashimi-02.jpg"
     },
     {
         "id" : 3,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "LƯỜN CÁ HỒI NƯỚNG SỐT KABAYAKI - 2 MIẾNG",
+        "price" : "55.000",
+        "category" : "Nigiri",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7256/nigiri-05.jpg"
     },
     {
         "id" : 4,
-        "name" : "AMONG US",
-        "price" : "69.696",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7303/cu%E1%BB%91n-tempura-%C4%91%E1%BA%B7c-bi%E1%BB%87t.png"
+        "name" : "CUỐN CÁ NGỪ",
+        "price" : "65.000",
+        "category" : "Hosomaki",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7273/hako-hosomaki-05.jpg"
     },
     {
         "id" : 5,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "CUỐN CÁ HỒI PHÔ MAI ĐẶC BIỆT",
+        "price" : "139.000",
+        "category" : "Maki",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7275/cu%E1%BB%91n-c%C3%A1-h%E1%BB%93i-ph%C3%B4-mai-%C4%91%E1%BA%B7c-bi%E1%BB%87t.png"
     },
     {
         "id" : 6,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "SALAD THỊT BÒ",
+        "price" : "105.000",
+        "category" : "Salad",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7281/salad-02.jpg"
     },
     {
         "id" : 7,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "BÁNH XÈO KIỂU NHẬT",
+        "price" : "95.000",
+        "category" : "Appetizer",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7285/1appetizer-01.jpg"
     },
     {
         "id" : 8,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "CÁ HỒI NƯỚNG SỐT TERIAYAKI",
+        "price" : "109.000",
+        "category" : "Teppan",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7325/c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-teriyaki.jpg"
     },
     {
         "id" : 9,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "LƯƠN NHẬT NƯỚNG",
+        "price" : "155.000",
+        "category" : "Yaki",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7407/yaki-02.jpg"
     },
     {
         "id" : 10,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "THỊT HEO CUỘN PHÔ MAI CHIÊN XÙ",
+        "price" : "105.000",
+        "category" : "Furai",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7335/furai-tempura-04.jpg"
     },
     {
         "id" : 11,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "TEMPURA TÔM - 5 MIẾNG",
+        "price" : "139.000",
+        "category" : "Tempura",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7336/furai-tempura-05.jpg"
     },
     {
         "id" : 12,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "UDON THỊT BÒ MỸ NÓNG (L)",
+        "price" : "139.000",
+        "category" : "Udon",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7341/1udon-01.jpg"
     },
     {
         "id" : 13,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
+        "name" : "MÌ SOBA XÀO HẢI SẢN",
         "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "category" : "Udon",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7343/m%C3%AC-soba-x%C3%A0o-h%E1%BA%A3i-s%E1%BA%A3n.jpg"
     },
     {
         "id" : 14,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "UDON XÀO HẢI SẢN",
+        "price" : "109.000",
+        "category" : "Udon",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7355/udon-08.jpg"
     },
     {
         "id" : 15,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "HỘP CƠM LƯƠN VÀ THỊT BÒ MỸ",
+        "price" : "159.000",
+        "category" : "Donburi",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7357/donburi-curry-01.jpg"
     },
     {
         "id" : 16,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "CƠM CÀ RI THỊT BÒ MỸ",
+        "price" : "99.000",
+        "category" : "Curry",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7366/donburi-curry-05.jpg"
     },
     {
         "id" : 17,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "TRÀ XANH NHẬT",
+        "price" : "15.000",
+        "category" : "Drink",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7167/tea-03.jpg"
     },
     {
         "id" : 18,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 19,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 20,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 21,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 22,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 23,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 24,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 25,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 26,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 27,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 28,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 29,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 30,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 31,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 32,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 33,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 34,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
-    },
-    {
-        "id" : 35,
-        "name" : "TRỨNG HẤP KIỂU NHẬT VÀ TRỨNG CÁ HỒI",
-        "price" : "75.000",
-        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7199/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt-v%C3%A0-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+        "name" : "TRÀ HOA ĐẬU BIẾC CHANH NHẬT BẠC HÀ",
+        "price" : "55.000",
+        "category" : "Drink",
+        "image" : "https://tokyodelihome.com.vn/Data/Sites/1/Product/7192/tr%C3%A0-hoa-%C4%91%E1%BA%ADu-bi%E1%BA%BFc-chanh-nh%E1%BA%ADt-b%E1%BA%A1c-h%C3%A0.jpg"
     }
 ]
