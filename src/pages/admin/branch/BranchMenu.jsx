@@ -3,7 +3,6 @@ import items from '../../../dummy/items.json';
 import categories from '../../../dummy/categories.json';
 
 const BranchMenu = () => {
-    // Initialize items with availability status from JSON
     const [menuItems, setMenuItems] = useState(
         items.map(item => ({
             ...item,
@@ -13,13 +12,13 @@ const BranchMenu = () => {
     );
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
-    
+
     const menuCategories = ['all', ...categories.map(cat => cat.name)];
 
     const handleAvailabilityToggle = (itemId) => {
-        setMenuItems(menuItems.map(item => 
-            item.id === itemId 
-                ? {...item, available: !item.available}
+        setMenuItems(menuItems.map(item =>
+            item.id === itemId
+                ? { ...item, available: !item.available }
                 : item
         ));
 
@@ -35,7 +34,7 @@ const BranchMenu = () => {
     return (
         <div className="container-fluid py-4">
             <h2 className="mb-4">Menu Management</h2>
-            
+
             <div className="row mb-4">
                 <div className="col-md-6">
                     <input
@@ -47,7 +46,7 @@ const BranchMenu = () => {
                     />
                 </div>
                 <div className="col-md-4">
-                    <select 
+                    <select
                         className="form-select"
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
@@ -62,7 +61,6 @@ const BranchMenu = () => {
             </div>
 
             <div className="card">
-                <div className="card-body">
                     <div className="table-responsive">
                         <table className="table table-hover">
                             <thead>
@@ -100,7 +98,6 @@ const BranchMenu = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
             </div>
         </div>
     );

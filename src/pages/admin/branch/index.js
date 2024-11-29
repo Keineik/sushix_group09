@@ -1,4 +1,7 @@
 export { default as BranchDashboard } from './BranchDashboard';
 export { default as BranchMenu } from './BranchMenu';
-export { default as EmployeeList } from './EmployeeList';
-export { default as EmployeeForm } from './EmployeeForm';
+export { default as Branch } from './BranchStaff';
+export { default as StaffForm } from './StaffForm';
+export { default as BranchCustomer } from './BranchCustomer';
+export { default as BranchInvoice } from './BranchInvoice';
+export { default as BranchOrder } from './BranchOrder';

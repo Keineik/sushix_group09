@@ -8,19 +8,30 @@ const navItems = [
     icon: 'house'
   },
   {
-    path: 'employees',
-    label: 'Employees',
-    icon: 'people',
-    children: [
-      { path: '', label: 'List', icon: 'list' },
-      { path: 'add', label: 'Add New', icon: 'plus' }
-    ]
+    path: 'staffs',
+    label: 'Staffs',
+    icon: 'people'
   },
   {
     path: 'menu',
     label: 'Menu',
     icon: 'book'
   },
+  {
+    path: 'customers',
+    label: 'Customers',
+    icon: 'person'
+  },
+  {
+    path: 'orders',
+    label: 'Orders',
+    icon: 'list-ol'
+  },
+  {
+    path: 'invoice',
+    label: 'Invoice',
+    icon: 'receipt'
+  }
 ];
 
 const BranchAdminLayout = () => {

@@ -1,0 +1,66 @@
+[
+    {
+        "StaffID": 1,
+        "StaffName": "Nguyen Van A",
+        "StaffDoB": "1990-01-15",
+        "StaffGender": "Male",
+        "DeptName": "Kitchen",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 2,
+        "StaffName": "Tran Thi B",
+        "StaffDoB": "1992-03-22",
+        "StaffGender": "Female",
+        "DeptName": "Service",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 3,
+        "StaffName": "Le Van C",
+        "StaffDoB": "1988-07-10",
+        "StaffGender": "Male",
+        "DeptName": "Reception",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 4,
+        "StaffName": "Pham Thi D",
+        "StaffDoB": "1995-11-05",
+        "StaffGender": "Female",
+        "DeptName": "Cashier",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 5,
+        "StaffName": "Hoang Van E",
+        "StaffDoB": "1985-05-18",
+        "StaffGender": "Male",
+        "DeptName": "Service",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 6,
+        "StaffName": "Vu Thi F",
+        "StaffDoB": "1993-09-30",
+        "StaffGender": "Female",
+        "DeptName": "Cleaning",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 7,
+        "StaffName": "Chill guy",
+        "StaffDoB": "2004-03-22",
+        "StaffGender": "Male",
+        "DeptName": "Kitchen",
+        "BranchID": 1
+    },
+    {
+        "StaffID": 8,
+        "StaffName": "Sad guy",
+        "StaffDoB": "2004-01-15",
+        "StaffGender": "Male",
+        "DeptName": "Service",
+        "BranchID": 1
+    }
+]

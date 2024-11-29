@@ -1,0 +1,27 @@
+[
+    {
+      "BranchID": 1,
+      "DeptName": "Kitchen",
+      "Salary": 8000000
+    },
+    {
+      "BranchID": 1,
+      "DeptName": "Reception",
+      "Salary": 7000000
+    },
+    {
+      "BranchID": 1,
+      "DeptName": "Service",
+      "Salary": 6000000
+    },
+    {
+      "BranchID": 1,
+      "DeptName": "Cashier",
+      "Salary": 7500000
+    },
+    {
+      "BranchID": 1,
+      "DeptName": "Cleaning",
+      "Salary": 5000000
+    }
+  ]
