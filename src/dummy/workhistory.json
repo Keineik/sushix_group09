@@ -1,0 +1,56 @@
+[
+  {
+    "StaffID": 1,
+    "History": [
+      { "StartDate": "2010-01-01", "BranchID": 2, "DeptName": "Cleaning", "QuitDate": "2015-06-30" },
+      { "StartDate": "2015-07-01", "BranchID": 1, "DeptName": "Service", "QuitDate": "2020-12-31" },
+      { "StartDate": "2021-01-01", "BranchID": 1, "DeptName": "Kitchen", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 2,
+    "History": [
+      { "StartDate": "2018-01-15", "BranchID": 1, "DeptName": "Reception", "QuitDate": "2020-02-28" },
+      { "StartDate": "2020-03-01", "BranchID": 1, "DeptName": "Service", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 3,
+    "History": [
+      { "StartDate": "2012-05-01", "BranchID": 1, "DeptName": "Service", "QuitDate": "2018-12-31" },
+      { "StartDate": "2019-01-01", "BranchID": 1, "DeptName": "Reception", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 4,
+    "History": [
+      { "StartDate": "2017-07-01", "BranchID": 3, "DeptName": "Kitchen", "QuitDate": "2019-12-31" },
+      { "StartDate": "2020-01-01", "BranchID": 1, "DeptName": "Cashier", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 5,
+    "History": [
+      { "StartDate": "2010-03-01", "BranchID": 2, "DeptName": "Cleaning", "QuitDate": "2015-12-31" },
+      { "StartDate": "2016-01-01", "BranchID": 1, "DeptName": "Service", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 6,
+    "History": [
+      { "StartDate": "2015-09-01", "BranchID": 1, "DeptName": "Cleaning", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 7,
+    "History": [
+      { "StartDate": "2023-01-01", "BranchID": 1, "DeptName": "Kitchen", "QuitDate": null }
+    ]
+  },
+  {
+    "StaffID": 8,
+    "History": [
+      { "StartDate": "2022-02-01", "BranchID": 1, "DeptName": "Service", "QuitDate": null }
+    ]
+  }
+]

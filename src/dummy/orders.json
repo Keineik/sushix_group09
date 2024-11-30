@@ -1,0 +1,42 @@
+[
+  {
+    "OrderID": 1,
+    "OrderDateTime": "2024-11-01T12:30:00",
+    "OrderStatus": "Completed",
+    "StaffID": 101,
+    "CustID": 201,
+    "BranchID": 1,
+    "TableID": 5
+  },
+  {
+    "OrderID": 2,
+    "OrderDateTime": "2024-11-02T14:15:00",
+    "OrderStatus": "Pending",
+    "StaffID": 102,
+    "CustID": 202,
+    "BranchID": 1,
+    "DeliveryAddress": "123 Main Street, Cityville",
+    "DeliveryDateTime": "2024-11-02T16:00:00",
+    "DeliveryStatus": "Out for Delivery"
+  },
+  {
+    "OrderID": 3,
+    "OrderDateTime": "2024-11-03T18:45:00",
+    "OrderStatus": "Cancelled",
+    "StaffID": 103,
+    "CustID": 203,
+    "BranchID": 2,
+    "TableID": 10
+  },
+  {
+    "OrderID": 4,
+    "OrderDateTime": "2024-11-04T10:00:00",
+    "OrderStatus": "Completed",
+    "StaffID": 104,
+    "CustID": 204,
+    "BranchID": 2,
+    "DeliveryAddress": "456 Another Rd, Townsville",
+    "DeliveryDateTime": "2024-11-04T12:00:00",
+    "DeliveryStatus": "Delivered"
+  }
+]

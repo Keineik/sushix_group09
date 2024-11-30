@@ -1,0 +1,22 @@
+[
+  {
+    "InvoiceID": 1,
+    "CouponID": 101,
+    "OrderID": 201,
+    "TaxRate": 0.1,
+    "ShippingCost": 50000,
+    "PaymentMethod": "Credit Card",
+    "InvoiceDate": "2024-11-01",
+    "InvoiceStatus": "Paid"
+  },
+  {
+    "InvoiceID": 2,
+    "CouponID": 102,
+    "OrderID": 202,
+    "TaxRate": 0.05,
+    "ShippingCost": 40000,
+    "PaymentMethod": "Cash",
+    "InvoiceDate": "2024-11-02",
+    "InvoiceStatus": "Pending"
+  }
+]

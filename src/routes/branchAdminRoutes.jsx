@@ -5,7 +5,8 @@ import {
   StaffForm,
   BranchCustomer,
   BranchOrder,
-  BranchInvoice
+  BranchInvoice,
+  OrderForm
 } from '../pages/admin/branch';
   
   export const branchAdminRoutes = [
@@ -20,6 +21,17 @@ import {
     },
     { path: '/admin/branch/menu', element: <BranchMenu /> },
     { path: '/admin/branch/customers', element: <BranchCustomer /> },
-    { path: '/admin/branch/orders', element: <BranchOrder /> },
+
+    // { path: '/admin/branch/orders', element: <BranchOrder /> },
+
+    { 
+      path: '/admin/branch/orders',
+      element: <BranchOrder />, 
+      children: [
+        { path: 'add', element: <OrderForm /> },
+        { path: 'edit/:id', element: <OrderForm /> }
+      ]
+    },
+
     { path: '/admin/branch/invoice', element: <BranchInvoice /> },
   ];

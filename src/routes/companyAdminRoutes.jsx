@@ -1,7 +1,8 @@
 import { 
-  CompanyDashboard 
+  CompanyDashboard,
 } from '../pages/admin/company';
 
 export const companyAdminRoutes = [
-    { path: '/admin/company', element: <CompanyDashboard /> }
+    { path: '/admin/company', element: <CompanyDashboard /> },
+
   ];
