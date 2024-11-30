@@ -1,14 +1,14 @@
 a.custom-hover-container:hover {
-    color:red !important;
+    color: red !important;
 }
 
 .custom-hover-container {
-    color:black;
+    color: black;
     display: block;
     padding: 10px;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
-  }
+}
 
 .img-hover {
     opacity: 1;
@@ -96,13 +96,13 @@ a.custom-hover-container:hover {
     transition: all 0.3s ease;
 }
 
-.grid-item:hover > .vertical-divider {
+.grid-item:hover>.vertical-divider {
     top: 0;
     height: 100%;
 }
 
 .card {
-    height: 380px !important; 
+    height: 380px !important;
 }
 
 .card img {
@@ -116,22 +116,22 @@ a.custom-hover-container:hover {
 }
 
 .order-btn {
-	display: none;
-	position: absolute;
-	bottom: 10px;
-	left: 0;
-	right: 0;
-	width: 100%;
-	background-color:#d20903;
-	color: white;
-	border: none;
-	padding: 10px 0;
-	cursor: pointer;
-	text-align: center;
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #d20903;
+    color: white;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    text-align: center;
 }
 
 .grid-item:hover .order-btn {
-	display: block;
+    display: block;
 }
 
 .sidebar {
@@ -167,4 +167,36 @@ main {
     .sidebar {
         top: 5rem;
     }
+}
+
+.form-signin {
+    max-width: 400px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .form-floating:focus-within {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.form-signin .btn {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.form-signin .shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

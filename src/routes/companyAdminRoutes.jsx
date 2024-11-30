@@ -1,8 +1,17 @@
-import { 
+import {
   CompanyDashboard,
-} from '../pages/admin/company';
+} from '../pages/private/company';
+import PrivateRoute from '../components/PrivateRoute';
 
-export const companyAdminRoutes = [
-    { path: '/admin/company', element: <CompanyDashboard /> },
 
-  ];
+export const CompanyAdminRoutes = [
+  {
+    path: '/admin/company',
+    element: (
+      <PrivateRoute>
+        <CompanyDashboard />
+      </PrivateRoute>
+    ),
+  },
+
+];

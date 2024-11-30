@@ -109,7 +109,7 @@ const Register = () => {
 
                             <button
                                 type="submit"
-                                className="btn btn-primary w-100"
+                                className="btn btn-danger w-100"
                                 
                             >
                                 Đăng Ký

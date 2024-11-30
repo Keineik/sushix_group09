@@ -1,5 +1,4 @@
-// src/layouts/admin/CompanyAdminLayout.jsx
-import BaseAdminLayout from './BaseAdminLayout';
+import BaseLayout from './BaseLayout';
 
 const navItems = [
   {
@@ -40,7 +39,7 @@ const navItems = [
 
 const CompanyAdminLayout = () => {
   return (
-    <BaseAdminLayout
+    <BaseLayout
       title="Company Admin"
       basePath="/admin/company"
       navItems={navItems}

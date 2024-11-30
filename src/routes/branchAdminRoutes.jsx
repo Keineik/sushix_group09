@@ -1,4 +1,4 @@
-import { 
+import {
   BranchDashboard,
   BranchMenu,
   Branch,
@@ -7,31 +7,38 @@ import {
   BranchOrder,
   BranchInvoice,
   OrderForm
-} from '../pages/admin/branch';
-  
-  export const branchAdminRoutes = [
-    { path: '/admin/branch', element: <BranchDashboard /> },
-    { 
-      path: '/admin/branch/staffs',
-      children: [
-        { path: '', element: <Branch /> },
-        { path: 'add', element: <StaffForm /> },
-        { path: 'edit/:id', element: <StaffForm /> }
-      ]
-    },
-    { path: '/admin/branch/menu', element: <BranchMenu /> },
-    { path: '/admin/branch/customers', element: <BranchCustomer /> },
+} from '../pages/private/branch';
+import PrivateRoute from '../components/PrivateRoute';
 
-    // { path: '/admin/branch/orders', element: <BranchOrder /> },
 
-    { 
-      path: '/admin/branch/orders',
-      element: <BranchOrder />, 
-      children: [
-        { path: 'add', element: <OrderForm /> },
-        { path: 'edit/:id', element: <OrderForm /> }
-      ]
-    },
+export const BranchAdminRoutes = [
+  {
+    path: '/admin/branch',
+    element: (
+      <PrivateRoute>
+        <BranchDashboard />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: '/admin/branch/staffs',
+    children: [
+      { path: '', element: <Branch /> },
+      { path: 'add', element: <StaffForm /> },
+      { path: 'edit/:id', element: <StaffForm /> }
+    ]
+  },
+  { path: '/admin/branch/menu', element: <BranchMenu /> },
+  { path: '/admin/branch/customers', element: <BranchCustomer /> },
 
-    { path: '/admin/branch/invoice', element: <BranchInvoice /> },
-  ];
+  {
+    path: '/admin/branch/orders',
+    element: <BranchOrder />,
+    children: [
+      { path: 'add', element: <OrderForm /> },
+      { path: 'edit/:id', element: <OrderForm /> }
+    ]
+  },
+
+  { path: '/admin/branch/invoice', element: <BranchInvoice /> },
+];

@@ -1,4 +1,3 @@
-// src/pages/admin/branch/StaffList.jsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import staffs from '../../../dummy/staffs.json';

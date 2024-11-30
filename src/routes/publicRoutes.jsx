@@ -1,4 +1,3 @@
-// src/routes/publicRoutes.jsx
 import { 
   Home,
   About,
@@ -10,7 +9,8 @@ import {
   Login
 } from '../pages/public';
 
-export const publicRoutes = [
+
+export const PublicRoutes = [
   { 
     path: '/',
     element: <Home />,

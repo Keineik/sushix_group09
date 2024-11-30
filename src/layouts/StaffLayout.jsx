@@ -7,16 +7,6 @@ const navItems = [
     icon: 'house'
   },
   {
-    path: 'staffs',
-    label: 'Staffs',
-    icon: 'people'
-  },
-  {
-    path: 'menu',
-    label: 'Menu',
-    icon: 'book'
-  },
-  {
     path: 'customers',
     label: 'Customers',
     icon: 'person'
@@ -33,14 +23,14 @@ const navItems = [
   }
 ];
 
-const BranchAdminLayout = () => {
+const StaffLayout = () => {
   return (
     <BaseLayout
-      title="Branch Admin"
-      basePath="/admin/branch"
+      title="Staff"
+      basePath="/staff"
       navItems={navItems}
     />
   );
 };
 
-export default BranchAdminLayout;
+export default StaffLayout;

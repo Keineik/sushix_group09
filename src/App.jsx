@@ -1,21 +1,40 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { MainLayout, BranchAdminLayout, CompanyAdminLayout } from './layouts';
-import { publicRoutes } from './routes/publicRoutes';
-import { branchAdminRoutes } from './routes/branchAdminRoutes';
-import { companyAdminRoutes } from './routes/companyAdminRoutes';
+import { MainLayout, BranchAdminLayout, CompanyAdminLayout, StaffLayout } from './layouts';
+import { PublicRoutes } from './routes/PublicRoutes';
+import { BranchAdminRoutes } from './routes/BranchAdminRoutes';
+import { CompanyAdminRoutes } from './routes/CompanyAdminRoutes';
+import { StaffRoutes } from './routes/StaffRoutes';
+import PrivateLogin from './pages/private/PrivateLogin';
+import PrivateRoute from './components/PrivateRoute';
 
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
-    children: publicRoutes
+    children: PublicRoutes
   },
   {
     element: <BranchAdminLayout />,
-    children: branchAdminRoutes
+    children: BranchAdminRoutes
   },
   {
     element: <CompanyAdminLayout />,
-    children: companyAdminRoutes
+    children: CompanyAdminRoutes
+  },
+  {
+    element: <StaffLayout />,
+    children: StaffRoutes
+  },
+  {
+    path: '/private-login',
+    element: <PrivateLogin />,
+  },
+  {
+    path: '/admin',
+    element: (
+      <PrivateRoute>
+        <div />
+      </PrivateRoute>
+    )
   }
 ]);
 

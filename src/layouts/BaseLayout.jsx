@@ -1,14 +1,27 @@
 // src/layouts/admin/BaseAdminLayout.jsx
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const BaseAdminLayout = ({ title, basePath, navItems }) => {
+const BaseLayout = ({ title, basePath, navItems }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('userRole');
+    navigate('/private-login');
+  };
+
   return (
     <div className="admin-layout">
       <header className="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <Link className="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" to={basePath}>
           {title}
         </Link>
+        <button 
+          className="btn text-white border-0 ms-auto me-3"
+          onClick={handleLogout}
+        >
+          Log out
+        </button>
       </header>
 
       <div className="container-fluid">
@@ -55,7 +68,7 @@ const BaseAdminLayout = ({ title, basePath, navItems }) => {
   );
 };
 
-BaseAdminLayout.propTypes = {
+BaseLayout.propTypes = {
   title: PropTypes.string.isRequired,
   basePath: PropTypes.string.isRequired,
   navItems: PropTypes.arrayOf(PropTypes.shape({
@@ -70,4 +83,4 @@ BaseAdminLayout.propTypes = {
   })).isRequired
 };
 
-export default BaseAdminLayout;
+export default BaseLayout;
