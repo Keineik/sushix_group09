@@ -6,7 +6,8 @@ import {
   BranchCustomer,
   BranchOrder,
   BranchInvoice,
-  OrderForm
+  OrderForm,
+  CustomerForm,
 } from '../pages/private/branch';
 import PrivateRoute from '../components/PrivateRoute';
 
@@ -29,12 +30,20 @@ export const BranchAdminRoutes = [
     ]
   },
   { path: '/admin/branch/menu', element: <BranchMenu /> },
-  { path: '/admin/branch/customers', element: <BranchCustomer /> },
+
+  {
+    path: '/admin/branch/customers',
+    children: [
+      { path: '', element: <BranchCustomer /> },
+      { path: 'add', element: <CustomerForm /> },
+      { path: 'edit/:id', element: <CustomerForm /> }
+    ]
+  },
 
   {
     path: '/admin/branch/orders',
-    element: <BranchOrder />,
     children: [
+      { path: '', element: <BranchOrder /> },
       { path: 'add', element: <OrderForm /> },
       { path: 'edit/:id', element: <OrderForm /> }
     ]

@@ -1,42 +1,43 @@
 [
   {
     "OrderID": 1,
-    "OrderDateTime": "2024-11-01T12:30:00",
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-11-30T18:30:00",
     "OrderStatus": "Completed",
     "StaffID": 101,
-    "CustID": 201,
-    "BranchID": 1,
-    "TableID": 5
+    "CustID": 1001,
+    "TableID": 12
   },
   {
     "OrderID": 2,
-    "OrderDateTime": "2024-11-02T14:15:00",
-    "OrderStatus": "Pending",
+    "RsID": 2,
+    "TableID": 1,
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-12-01T19:00:00",
+    "OrderStatus": "Confirmed",
     "StaffID": 102,
-    "CustID": 202,
-    "BranchID": 1,
-    "DeliveryAddress": "123 Main Street, Cityville",
-    "DeliveryDateTime": "2024-11-02T16:00:00",
-    "DeliveryStatus": "Out for Delivery"
+    "CustID": 1002,
+    "ArrivalDateTime": "2024-12-01T19:00:00",
+    "RsNotes": "Prefer window seat"
   },
   {
     "OrderID": 3,
-    "OrderDateTime": "2024-11-03T18:45:00",
-    "OrderStatus": "Cancelled",
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-12-02T13:00:00",
+    "OrderStatus": "Pending",
     "StaffID": 103,
-    "CustID": 203,
-    "BranchID": 2,
-    "TableID": 10
+    "CustID": 1003,
+    "TableID": 8
   },
   {
     "OrderID": 4,
-    "OrderDateTime": "2024-11-04T10:00:00",
-    "OrderStatus": "Completed",
+    "OrderType": "Delivery",
+    "OrderDateTime": "2024-12-03T14:30:00",
+    "OrderStatus": "In Progress",
     "StaffID": 104,
-    "CustID": 204,
-    "BranchID": 2,
-    "DeliveryAddress": "456 Another Rd, Townsville",
-    "DeliveryDateTime": "2024-11-04T12:00:00",
-    "DeliveryStatus": "Delivered"
+    "CustID": 1004,
+    "DeliveryAddress": "123 Main Street, Cityville",
+    "DeliveryStatus": "Out for Delivery",
+    "DeliveryDateTime": "2024-12-03T15:00:00"
   }
 ]

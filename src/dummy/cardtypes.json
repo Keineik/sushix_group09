@@ -1,0 +1,16 @@
+[
+  {
+    "CardTypeID": 1,
+    "CardName": "Silver",
+    "DiscountRate": 10,
+    "PointsRequiredForUpgrade": 100,
+    "PointsRequiredForRenewal": 80
+  },
+  {
+    "CardTypeID": 2,
+    "CardName": "Gold",
+    "DiscountRate": 20,
+    "PointsRequiredForUpgrade": 200,
+    "PointsRequiredForRenewal": 150
+  }
+]

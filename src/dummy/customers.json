@@ -1,0 +1,15 @@
+[
+  {
+    "CustID": 1,
+    "CustName": "John Doe",
+    "CustEmail": "john@example.com",
+    "CustGender": "Male",
+    "CustPhoneNumber": "123-456-7890",
+    "CustCitizenID": "123456789",
+    "lastAccess": {
+      "StartDateTime": "2024-11-30 08:00:00",
+      "EndDateTime": "2024-11-30 09:00:00"
+    },
+    "MembershipCardID": 101
+  }
+]

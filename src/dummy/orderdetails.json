@@ -1,43 +1,43 @@
 [
   {
     "OrderID": 1,
-    "ItemID": 101,
+    "ItemID": 1,
     "UnitPrice": 150000,
     "OrderQuantity": 2
   },
   {
     "OrderID": 1,
-    "ItemID": 102,
+    "ItemID": 2,
     "UnitPrice": 100000,
     "OrderQuantity": 1
   },
   {
     "OrderID": 2,
-    "ItemID": 201,
+    "ItemID": 2,
     "UnitPrice": 200000,
     "OrderQuantity": 1
   },
   {
     "OrderID": 2,
-    "ItemID": 202,
+    "ItemID": 3,
     "UnitPrice": 25000,
     "OrderQuantity": 2
   },
   {
     "OrderID": 3,
-    "ItemID": 103,
+    "ItemID": 3,
     "UnitPrice": 180000,
     "OrderQuantity": 3
   },
   {
     "OrderID": 4,
-    "ItemID": 203,
+    "ItemID": 3,
     "UnitPrice": 120000,
     "OrderQuantity": 1
   },
   {
     "OrderID": 4,
-    "ItemID": 204,
+    "ItemID": 4,
     "UnitPrice": 80000,
     "OrderQuantity": 1
   }
