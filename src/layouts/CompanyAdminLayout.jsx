@@ -12,7 +12,7 @@ const navItems = [
     icon: 'building',
     children: [
       { path: '', label: 'List', icon: 'list' },
-      { path: 'add', label: 'Add New', icon: 'plus' }
+      { path: 'staffs', label: 'Staffs', icon: 'people' }
     ]
   },
   {

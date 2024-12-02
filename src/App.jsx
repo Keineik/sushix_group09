@@ -6,6 +6,8 @@ import { CompanyAdminRoutes } from './routes/CompanyAdminRoutes';
 import { StaffRoutes } from './routes/StaffRoutes';
 import PrivateLogin from './pages/private/PrivateLogin';
 import PrivateRoute from './components/PrivateRoute';
+import Unauthorized from './pages/Unauthorized';
+
 
 const router = createBrowserRouter([
   {
@@ -13,15 +15,27 @@ const router = createBrowserRouter([
     children: PublicRoutes
   },
   {
-    element: <BranchAdminLayout />,
+    element: (
+      <PrivateRoute allowedRoles={['branch', 'company']}>
+        <BranchAdminLayout />
+      </PrivateRoute>
+    ),
     children: BranchAdminRoutes
   },
   {
-    element: <CompanyAdminLayout />,
+    element: (
+      <PrivateRoute allowedRoles={['company']}>
+        <CompanyAdminLayout />
+      </PrivateRoute>
+    ),
     children: CompanyAdminRoutes
   },
   {
-    element: <StaffLayout />,
+    element: (
+      <PrivateRoute allowedRoles={['staff']}>
+        <StaffLayout />
+      </PrivateRoute>
+    ),
     children: StaffRoutes
   },
   {
@@ -31,13 +45,19 @@ const router = createBrowserRouter([
   {
     path: '/admin',
     element: (
-      <PrivateRoute>
+      <PrivateRoute allowedRoles={['company', 'branch']}>
         <div />
       </PrivateRoute>
     )
+  },
+  {
+    path: '/unauthorized',
+    element: <Unauthorized />,
   }
 ]);
 
-export default function App() {
+const App = () => {
   return <RouterProvider router={router} />;
-}
+};
+
+export default App;
