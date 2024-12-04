@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Items = ({ items, onAddToCart }) => {
     const itemsPerPage = 12;
@@ -26,15 +27,15 @@ const Items = ({ items, onAddToCart }) => {
                     {displayedItems.map((item, index) => (
                         <div className="grid-item" key={item.id}>
                             <div className="card h-100 border-0">
-                                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                                <Link to={`item/${item.id}`}>
                                     <img src={item.image} className="card-img-top img-hover" alt={item.name} />
-                                </a>
+                                </Link>
                                 <div className="card-body">
                                     <p className="card-text text-center">{item.name}</p>
                                     <h5 className="card-title text-center text-danger">{item.price}đ</h5>
                                     <button
                                       className="order-btn"
-                                      onClick={() => onAddToCart(item)}
+                                      onClick={() => onAddToCart(item) }
                                     >
                                         <b>ĐẶT HÀNG</b>
                                       </button>
@@ -82,6 +83,5 @@ const Items = ({ items, onAddToCart }) => {
         </main>
     )
 }
-
 
 export default Items

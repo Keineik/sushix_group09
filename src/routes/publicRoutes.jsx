@@ -6,7 +6,9 @@ import {
   Promotions,
   Reservation,
   Register,
-  Login
+  Login,
+  ItemInfo,
+  DeliveryTrackingPage
 } from '../pages/public';
 
 
@@ -21,8 +23,11 @@ export const PublicRoutes = [
     element: <About />,
   },
   {
-    path: '/menu', 
-    element: <Menu />,
+    path: '/menu',
+    children: [
+      { path: '', element: <Menu /> }, 
+      { path: 'item/:id', element: <ItemInfo /> }, 
+    ],
   },
   {
     path: '/branches',
@@ -43,5 +48,9 @@ export const PublicRoutes = [
   {
     path: '/login',
     element: <Login />,
-  }
+  },
+  {
+    path: '/deliverytracking',
+    element: <DeliveryTrackingPage />,
+  },
 ];

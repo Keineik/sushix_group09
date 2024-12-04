@@ -9,7 +9,7 @@ const MainLayout = () => {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
 
-  const addToCart = (product) => {
+  const addToCart = (product, quantity = 1) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
       if (existingItem) {
@@ -19,7 +19,8 @@ const MainLayout = () => {
             : item
         );
       }
-      return [...prevCart, { ...product, quantity: 1 }];
+      setShowCart(true)
+      return [...prevCart, { ...product, quantity }];
     });
   };
 

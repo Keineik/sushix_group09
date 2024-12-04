@@ -3,7 +3,7 @@ const About = () => {
         <div>
             <h2 
                 className="section-title text-center mt-4" 
-                style={{ color: "#E82429", fontFamily: "'Potta One', cursive" }}
+                style={{ color: "#E82429"}}
             >
                 Giới thiệu SushiX
             </h2>

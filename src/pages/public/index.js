@@ -6,3 +6,5 @@ export { default as Promotions } from './Promotions';
 export { default as Reservation } from './Reservation';
 export { default as Register } from './Register';
 export { default as Login } from './Login';
+export { default as ItemInfo } from './ItemInfo';
+export { default as DeliveryTrackingPage } from './DeliveryTracking';
