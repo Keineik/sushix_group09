@@ -8,3 +8,5 @@ export { default as Register } from './Register';
 export { default as Login } from './Login';
 export { default as ItemInfo } from './ItemInfo';
 export { default as DeliveryTrackingPage } from './DeliveryTracking';
+export {default as Profile} from './Profile';
+export {default as Membershipcards} from './Membershipcards';

@@ -53,7 +53,7 @@ const NavbarDown = () => {
             </a>
             <a
               className={`nav-link ${activeNav === 3 ? 'text-danger' : ''}`}
-              href="#"
+              href="/membershipcards"
               onClick={() => handleNavClick(3)}
             >
               <b>THẺ THÀNH VIÊN</b>

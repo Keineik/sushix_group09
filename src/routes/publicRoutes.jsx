@@ -1,3 +1,4 @@
+import { element } from 'prop-types';
 import { 
   Home,
   About,
@@ -8,7 +9,9 @@ import {
   Register,
   Login,
   ItemInfo,
-  DeliveryTrackingPage
+  DeliveryTrackingPage,
+  Profile,
+  Membershipcards
 } from '../pages/public';
 
 
@@ -53,4 +56,12 @@ export const PublicRoutes = [
     path: '/deliverytracking',
     element: <DeliveryTrackingPage />,
   },
+  {
+    path: '/profile',
+    element : <Profile />,
+  },
+  {
+    path: '/membershipcards',
+    element : <Membershipcards />,
+  }
 ];
