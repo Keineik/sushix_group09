@@ -267,3 +267,27 @@ body {
 .list-group-item.active::after {
     background-color: #ddd;
 }
+
+.nav-link.custom-btn {
+    padding: 5px 15px; 
+    font-size: 14px; 
+    border-radius: 20px; 
+    color: #333; 
+    background-color: transparent;
+    border: 1px solid #ddd; 
+    transition: all 0.3s ease;
+  }
+
+  .nav-link.custom-btn:hover {
+    color: white; 
+    background-color: #E82429;
+    border: 1px solid #E82429; 
+  }
+  
+
+  .nav-link.custom-btn.active {
+    color: white; 
+    background-color: #E82429; 
+    border: 1px solid #E82429; 
+  }
+  

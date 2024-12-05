@@ -13,7 +13,9 @@ import {
   Profile,
   Membershipcards,
   Account,
-  RewardHistory
+  RewardHistory,
+  CardsPolicy,
+  LookupCards
 } from '../pages/public';
 
 
@@ -57,6 +59,11 @@ export const PublicRoutes = [
   {
     path: '/membershipcards',
     element : <Membershipcards />,
+    children: [
+      { path: '', element: < CardsPolicy/> }, 
+      { path: 'cardspolicy', element: <CardsPolicy /> },
+      { path: 'lookupcards', element: <LookupCards /> },
+    ]
   },
   {
     path: '/account',

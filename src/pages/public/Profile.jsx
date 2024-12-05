@@ -35,9 +35,9 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="card mb-1">
-            <div className="card-body">
-              <h6 className="card-title">Bạn có 0 điểm thưởng.</h6>
+          <div className="card mb-4" style={{ maxHeight: '40px'}}>
+            <div className="card-body p-3">
+              <h5 className="card-title mx-4 my-2" style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#333' }}></h5>
             </div>
           </div>
         </div>
