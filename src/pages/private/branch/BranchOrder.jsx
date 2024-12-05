@@ -128,7 +128,7 @@ const Order = () => {
                       className="btn btn-sm btn-outline-danger ms-2"
                       onClick={() => handleDeleteOrder(order.OrderID)}
                     >
-                      Delete Order
+                      Delete
                     </button>
                   </td>
                 </tr>

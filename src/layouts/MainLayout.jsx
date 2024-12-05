@@ -8,6 +8,12 @@ import { useState } from "react";
 const MainLayout = () => {
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const onLogout = () => {
+    setIsLoggedIn(false);
+    // Logic ....
+  };
 
   const addToCart = (product, quantity = 1) => {
     setCart((prevCart) => {
@@ -38,7 +44,7 @@ const MainLayout = () => {
 
   return (
     <div>
-      <Navbar cart={cart} onCartClick={() => setShowCart(!showCart)} />
+      <Navbar cart={cart} onCartClick={() => setShowCart(!showCart) } isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <NavbarDown />
       <main>
         <Outlet

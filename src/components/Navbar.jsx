@@ -1,10 +1,11 @@
 import logo from '../assets/logo.png';
 import { Link } from 'react-router-dom';
-const Navbar = ({ cart, onCartClick }) => {
+
+
+const Navbar = ({ cart, onCartClick, isLoggedIn, onLogout }) => {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    // <nav className="navbar bg-body-tertiary">
     <nav
       className="navbar bg-body-tertiary"
       style={{
@@ -18,7 +19,6 @@ const Navbar = ({ cart, onCartClick }) => {
       <div className="container px-5">
         <a className="navbar-brand" href="/">
           <img
-            // src="https://tokyodelihome.com.vn/Data/Sites/1/skins/default/img//logo.png" alt="Logo"
             src={logo} alt="Logo"
             width="200" height="95" className="d-inline-block align-text-top"
             style={{
@@ -79,21 +79,38 @@ const Navbar = ({ cart, onCartClick }) => {
             </svg>
           </button>
           <ul className="dropdown-menu dropdown-menu-end">
-            <li>
-              <Link to="/login" className="dropdown-item">
-                Đăng nhập
-              </Link>
-            </li>
-            <li>
-              <Link to="/register" className="dropdown-item">
-                Đăng ký
-              </Link>
-            </li>
+            {isLoggedIn ? (
+              <>
+                <li>
+                  <Link to="/account" className="dropdown-item">
+                    Thông tin tài khoản
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={onLogout} className="dropdown-item">
+                    Đăng xuất
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login" className="dropdown-item">
+                    Đăng nhập
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/register" className="dropdown-item">
+                    Đăng ký
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
 export default Navbar;

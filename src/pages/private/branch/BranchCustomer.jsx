@@ -102,7 +102,7 @@ const CustomerList = () => {
                         className="btn btn-sm btn-outline-info"
                         onClick={() => setSelectedCustomer(customer)}
                       >
-                        View Membership Card
+                        Membership Card
                       </button>
                     </div>
                   </td>

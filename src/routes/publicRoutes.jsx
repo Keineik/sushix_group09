@@ -11,7 +11,9 @@ import {
   ItemInfo,
   DeliveryTrackingPage,
   Profile,
-  Membershipcards
+  Membershipcards,
+  Account,
+  RewardHistory
 } from '../pages/public';
 
 
@@ -53,15 +55,17 @@ export const PublicRoutes = [
     element: <Login />,
   },
   {
-    path: '/deliverytracking',
-    element: <DeliveryTrackingPage />,
-  },
-  {
-    path: '/profile',
-    element : <Profile />,
-  },
-  {
     path: '/membershipcards',
     element : <Membershipcards />,
-  }
+  },
+  {
+    path: '/account',
+    element: <Account />, 
+    children: [
+      { path: '', element: <Profile /> }, 
+      { path: 'profile', element: <Profile /> },
+      { path: 'deliverytracking', element: <DeliveryTrackingPage /> },
+      { path: 'rewardhistory', element: <RewardHistory /> },
+    ],
+  },
 ];

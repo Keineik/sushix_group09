@@ -73,7 +73,7 @@ const NavbarDown = () => {
               <b>ĐẶT BÀN</b>
             </a>
           </div>
-          <Link to="/deliverytracking" className="btn btn-outline-danger ms-auto d-flex align-items-center">
+          <Link to="/account/deliverytracking" className="btn btn-outline-danger ms-auto d-flex align-items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
