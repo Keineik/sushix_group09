@@ -2,29 +2,28 @@
   {
     "OrderID": 1,
     "OrderType": "Dine-In",
-    "OrderDateTime": "2024-11-30T18:30:00",
-    "OrderStatus": "Completed",
+    "OrderDateTime": "2024-12-01T12:00:00",
+    "OrderStatus": "Served",
     "StaffID": 101,
     "CustID": 1001,
-    "TableID": 12
+    "TableID": 5
   },
   {
     "OrderID": 2,
-    "RsID": 2,
-    "TableID": 1,
-    "OrderType": "Dine-In",
-    "OrderDateTime": "2024-12-01T19:00:00",
-    "OrderStatus": "Confirmed",
+    "OrderType": "Delivery",
+    "OrderDateTime": "2024-12-01T13:30:00",
+    "OrderStatus": "Out for Delivery",
     "StaffID": 102,
     "CustID": 1002,
-    "ArrivalDateTime": "2024-12-01T19:00:00",
-    "RsNotes": "Prefer window seat"
+    "DeliveryAddress": "456 Elm Street, Townsville",
+    "DeliveryDateTime": "2024-12-01T14:00:00"
   },
   {
     "OrderID": 3,
+    "RsID" : 7,
     "OrderType": "Dine-In",
-    "OrderDateTime": "2024-12-02T13:00:00",
-    "OrderStatus": "Pending",
+    "OrderDateTime": "2024-12-06T17:30:00",
+    "OrderStatus": "Served",
     "StaffID": 103,
     "CustID": 1003,
     "TableID": 8
@@ -33,11 +32,68 @@
     "OrderID": 4,
     "OrderType": "Delivery",
     "OrderDateTime": "2024-12-03T14:30:00",
-    "OrderStatus": "In Progress",
+    "OrderStatus": "Out for Delivery",
     "StaffID": 104,
     "CustID": 1004,
     "DeliveryAddress": "123 Main Street, Cityville",
-    "DeliveryStatus": "Out for Delivery",
     "DeliveryDateTime": "2024-12-03T15:00:00"
+  },
+  {
+    "OrderID": 5,
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-12-04T18:00:00",
+    "OrderStatus": "Served",
+    "StaffID": 105,
+    "CustID": 1005,
+    "TableID": 3
+  },
+  {
+    "OrderID": 6,
+    "OrderType": "Delivery",
+    "OrderDateTime": "2024-12-05T19:00:00",
+    "OrderStatus": "Delivered",
+    "StaffID": 106,
+    "CustID": 1006,
+    "DeliveryAddress": "789 Oak Street, Villagetown",
+    "DeliveryDateTime": "2024-12-05T19:30:00"
+  },
+  {
+    "OrderID": 7,
+    "RsID" : 4,
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-12-03T18:30:00",
+    "OrderStatus": "Served",
+    "StaffID": 107,
+    "CustID": 1007,
+    "TableID": 7
+  },
+  {
+    "OrderID": 8,
+    "RsID" : 1,
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-11-30T18:30:00",
+    "OrderStatus": "Completed",
+    "StaffID": 108,
+    "CustID": 1008,
+    "TableID": 10
+  },
+  {
+    "OrderID": 9,
+    "OrderType": "Delivery",
+    "OrderDateTime": "2024-12-08T17:00:00",
+    "OrderStatus": "Out for Delivery",
+    "StaffID": 109,
+    "CustID": 1009,
+    "DeliveryAddress": "321 Pine Street, Hamlet",
+    "DeliveryDateTime": "2024-12-08T17:30:00"
+  },
+  {
+    "OrderID": 10,
+    "OrderType": "Dine-In",
+    "OrderDateTime": "2024-12-09T13:00:00",
+    "OrderStatus": "Completed",
+    "StaffID": 110,
+    "CustID": 1010,
+    "TableID": 2
   }
 ]

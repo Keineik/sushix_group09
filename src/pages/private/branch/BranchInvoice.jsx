@@ -21,7 +21,7 @@ const Invoice = () => {
 
   useEffect(() => {
     setInvoices(invoiceData);
-    setOrders(orderData);
+    setOrders(orderData.filter((order) => order.OrderStatus === 'Served' || order.OrderStatus === 'Delivered'));
     setPromotionsData(promotions);
   }, []);
 

@@ -1,0 +1,102 @@
+[
+    {
+        "RsID": 1,
+        "NumOfGuests": 10,
+        "RsDateTime": "2024-11-30T15:30:00",
+        "ArrivalDateTime": "2024-11-30T18:30:00",
+        "RsNotes": "Prefer window seat",
+        "BranchID": 1,
+        "CustID": 2,
+        "RsStatus" : "Confirmed"
+    },
+    {
+        "RsID": 2,
+        "NumOfGuests": 4,
+        "RsDateTime": "2024-12-01T12:00:00",
+        "ArrivalDateTime": "2024-12-01T12:30:00",
+        "RsNotes": "Birthday celebration",
+        "BranchID": 2,
+        "CustID": 3,
+        "RsStatus" : "Not confirmed"
+    },
+    {
+        "RsID": 3,
+        "NumOfGuests": 2,
+        "RsDateTime": "2024-12-02T19:00:00",
+        "ArrivalDateTime": "2024-12-02T19:15:00",
+        "RsNotes": "Anniversary dinner",
+        "BranchID": 1,
+        "CustID": 4,
+        "RsStatus" : "Cancelled"
+    },
+    {
+        "RsID": 4,
+        "NumOfGuests": 6,
+        "RsDateTime": "2024-12-03T18:00:00",
+        "ArrivalDateTime": "2024-12-03T18:30:00",
+        "RsNotes": "Business meeting",
+        "BranchID": 3,
+        "CustID": 5,
+        "RsStatus" : "Confirmed"
+    },
+    {
+        "RsID": 5,
+        "NumOfGuests": 8,
+        "RsDateTime": "2024-12-04T20:00:00",
+        "ArrivalDateTime": "2024-12-04T20:30:00",
+        "RsNotes": "Family gathering",
+        "BranchID": 2,
+        "CustID": 6,
+        "RsStatus" :"Not confirmed"
+    },
+    {
+        "RsID": 6,
+        "NumOfGuests": 3,
+        "RsDateTime": "2024-12-05T13:00:00",
+        "ArrivalDateTime": "2024-12-05T13:15:00",
+        "RsNotes": "Lunch meeting",
+        "BranchID": 1,
+        "CustID": 7,
+        "RsStatus" : "Cancelled"
+    },
+    {
+        "RsID": 7,
+        "NumOfGuests": 5,
+        "RsDateTime": "2024-12-06T17:00:00",
+        "ArrivalDateTime": "2024-12-06T17:30:00",
+        "RsNotes": "Team outing",
+        "BranchID": 3,
+        "CustID": 8,
+        "RsStatus" : "Confirmed"
+    },
+    {
+        "RsID": 8,
+        "NumOfGuests": 7,
+        "RsDateTime": "2024-12-07T14:00:00",
+        "ArrivalDateTime": "2024-12-07T14:30:00",
+        "RsNotes": "Friends reunion",
+        "BranchID": 2,
+        "CustID": 9,
+        "RsStatus" : "Not confirmed"
+    },
+    {
+        "RsID": 9,
+        "NumOfGuests": 9,
+        "RsDateTime": "2024-12-08T16:00:00",
+        "ArrivalDateTime": "2024-12-08T16:30:00",
+        "RsNotes": "Corporate event",
+        "BranchID": 1,
+        "CustID": 10,
+        "RsStatus" : "Cancelled"
+    },
+    {
+        "RsID": 10,
+        "NumOfGuests": 2,
+        "RsDateTime": "2024-12-09T18:00:00",
+        "ArrivalDateTime": "2024-12-09T18:15:00",
+        "RsNotes": "Romantic dinner",
+        "BranchID": 3,
+        "CustID": 11,
+        "RsStatus" : "Not Confirmed"
+    }
+]

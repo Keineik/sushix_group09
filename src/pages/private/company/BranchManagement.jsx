@@ -78,8 +78,7 @@ const BranchManagement = () => {
 };
 
 const handleDelete = (branchId) => {
-  // Implement delete functionality here
-  console.log(`Deleting branch with ID: ${branchId}`);
+  // Do something :)
 };
 
 export default BranchManagement;

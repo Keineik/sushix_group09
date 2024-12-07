@@ -7,3 +7,4 @@ export { default as BranchInvoice } from './BranchInvoice';
 export { default as BranchOrder } from './BranchOrder';
 export { default as OrderForm } from './OrderForm';
 export { default as CustomerForm } from './CustomerForm';
+export { default as BranchReservation } from './BranchReservation';

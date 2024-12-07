@@ -4,15 +4,11 @@ import { Navigate } from 'react-router-dom';
 const PrivateRoute = ({ children, allowedRoles = ['company', 'staff', 'branch'] }) => {
     const userRole = localStorage.getItem('userRole');
 
-    console.log('Allowed Role:', allowedRoles);
-    console.log('User Role:', userRole);
-
     if (!userRole) {
         return <Navigate to="/private-login" />;
     }
 
     if (!allowedRoles.includes(userRole)) {
-        console.log('Not     Alloweddddddddd');
         return <Navigate to="/unauthorized" />;
     }
 

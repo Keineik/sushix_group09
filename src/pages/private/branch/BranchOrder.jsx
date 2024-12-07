@@ -3,45 +3,53 @@ import { Link } from 'react-router-dom';
 import orderData from '../../../dummy/orders.json';
 import orderDetailsData from '../../../dummy/orderdetails.json';
 
-const Order = () => {
+const Order = ({ OrderType }) => {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [sortOrder, setSortOrder] = useState('desc'); 
-  useEffect(() => {
-    setOrders(orderData);
-    setOrderDetails(orderDetailsData);
-  }, []);
+  const [sortConfig, setSortConfig] = useState({ key: 'OrderDateTime', direction: 'desc' });
 
-  // Memoize filtered orders for performance
-  const filteredOrders = useMemo(() => {
-    return orders
-      .filter(
-        (order) =>
-          order.OrderID.toString().includes(searchTerm) ||
-          (order.CustID && order.CustID.toString().includes(searchTerm)) ||
-          (order.StaffID && order.StaffID.toString().includes(searchTerm))
-      )
-      .sort((a, b) => {
-        const dateA = new Date(a.OrderDateTime);
-        const dateB = new Date(b.OrderDateTime);
-        
-        // Sort based on the order of 'sortOrder' state
-        if (sortOrder === 'asc') {
-          return dateA - dateB; 
-        } else {
-          return dateB - dateA; 
+  useEffect(() => {
+    setOrders(orderData.filter(order => order.OrderType === OrderType));
+    setOrderDetails(orderDetailsData);
+  }, [OrderType]);
+
+  const sortedOrders = useMemo(() => {
+    let sortableOrders = [...orders];
+    if (sortConfig !== null) {
+      sortableOrders.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
         }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
       });
-  }, [searchTerm, orders, sortOrder]);
+    }
+    return sortableOrders;
+  }, [orders, sortConfig]);
+
+  const filteredOrders = useMemo(() => {
+    return sortedOrders.filter(
+      (order) =>
+        order.OrderID.toString().includes(searchTerm) ||
+        (order.CustID && order.CustID.toString().includes(searchTerm)) ||
+        (order.StaffID && order.StaffID.toString().includes(searchTerm))
+    );
+  }, [searchTerm, sortedOrders]);
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
-  };
-
-  const determineOrderType = (order) => {
-    return order.OrderType || 'Unknown';
   };
 
   const getOrderDetails = (orderID) => {
@@ -54,14 +62,10 @@ const Order = () => {
     alert(`Order with ID ${orderID} has been deleted`);
   };
 
-  const handleSortChange = () => {
-    setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
-  };
-
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Order</h2>
+        <h2>{OrderType} Order</h2>
         <Link to="add" className="btn btn-primary">
           Add Order
         </Link>
@@ -77,22 +81,32 @@ const Order = () => {
         />
       </div>
 
-      <div className="mb-4 d-flex justify-content-end">
-        <button onClick={handleSortChange} className="btn btn-link btn-sm">
-          Sort by Date ({sortOrder === 'asc' ? 'Ascending' : 'Descending'})
-        </button>
-      </div>
-
       <div className="card">
         <div className="table-responsive">
           <table className="table table-striped table-hover">
             <thead>
               <tr>
-                <th>Order ID</th>
-                <th>Order Type</th>
-                <th>Order Date</th>
+                <th onClick={() => handleSort('OrderID')}>
+                  Order ID
+                  {sortConfig.key === 'OrderID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                </th>
+                <th onClick={() => handleSort('OrderDateTime')}>
+                  Order Date
+                  {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                </th>
+                <th onClick={() => handleSort('CustID')}>
+                  Customer ID
+                  {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                </th>
                 <th>Status</th>
-                <th>Details</th>
+                {
+                  OrderType === 'Dine-In' &&
+                  <th onClick={() => handleSort('TableID')}>
+                    Table
+                    {sortConfig.key === 'TableID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                  </th>
+                }
+
                 <th>Actions</th>
               </tr>
             </thead>
@@ -100,17 +114,11 @@ const Order = () => {
               {filteredOrders.map((order) => (
                 <tr key={order.OrderID}>
                   <td>{order.OrderID}</td>
-                  <td>{determineOrderType(order)}</td>
                   <td>{formatDate(order.OrderDateTime)}</td>
+                  <td>{order.CustID}</td>
                   <td>{order.OrderStatus}</td>
-                  <td>
-                    {order.RsID
-                      ? `Reservation Time: ${formatDate(order.ArrivalDateTime)}, Table: ${order.TableID}`
-                      : order.TableID
-                        ? `Table: ${order.TableID}`
-                        : `Address: ${order.DeliveryAddress}`}
-                  </td>
-
+                  { OrderType === 'Dine-In' && <td>{order.TableID}</td> }
+                  
                   <td>
                     <button
                       className="btn btn-sm btn-outline-primary"
@@ -154,7 +162,7 @@ const Order = () => {
               </div>
               <div className="modal-body">
                 <p><strong>Order ID:</strong> {selectedOrder.OrderID}</p>
-                <p><strong>Order Type:</strong> {determineOrderType(selectedOrder)}</p>
+                <p><strong>Order Type:</strong> {selectedOrder.OrderType}</p>
                 <p><strong>Order Date:</strong> {formatDate(selectedOrder.OrderDateTime)}</p>
                 {selectedOrder.OrderType === 'Dine-In' && selectedOrder.TableID && (
                   <p><strong>Table ID:</strong> {selectedOrder.TableID}</p>
@@ -219,8 +227,8 @@ const formatDate = (dateString) => {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false,  
-  }).replace(',', '');  
+    hour12: false,
+  }).replace(',', '');
 };
 
 export default Order;

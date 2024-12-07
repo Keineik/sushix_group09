@@ -8,9 +8,9 @@ import {
   BranchInvoice,
   OrderForm,
   CustomerForm,
+  BranchReservation
 } from '../pages/private/branch';
 import PrivateRoute from '../components/PrivateRoute';
-
 
 export const BranchAdminRoutes = [
   {
@@ -41,11 +41,30 @@ export const BranchAdminRoutes = [
   },
 
   {
+    path: '/admin/branch/reservations',
+    element: <BranchReservation />
+  },
+
+  {
     path: '/admin/branch/orders',
     children: [
-      { path: '', element: <BranchOrder /> },
-      { path: 'add', element: <OrderForm /> },
-      { path: 'edit/:id', element: <OrderForm /> }
+      { path: '', element: <BranchOrder OrderType="Dine-In" /> },
+      {
+        path: 'delivery',
+        children: [
+          { path: '', element: <BranchOrder OrderType="Delivery" />, },
+          { path: 'add', element: <OrderForm /> },
+          { path: 'edit/:id', element: <OrderForm /> },
+        ]
+      },
+      {
+        path: 'dine-in',
+        children: [
+          { path: '', element: <BranchOrder OrderType="Dine-In" />},
+          { path: 'add', element: <OrderForm /> },
+          { path: 'edit/:id', element: <OrderForm /> },
+        ]
+      }
     ]
   },
 
