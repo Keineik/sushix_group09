@@ -290,4 +290,32 @@ body {
     background-color: #E82429; 
     border: 1px solid #E82429; 
   }
+
+  .checkout-option {
+      font-size: 16px;
+      color: #dc3545;
+      background-color: #fff;
+      border: 2px solid #dc3545;
+      border-radius: 8px;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+  }
+
+  .checkout-option:hover {
+      background-color: #dc3545;
+      color: #fff;
+
+  }
+
+  .checkout-option:hover .arrow {
+      color: #fff;
+  }
+
+  .arrow {
+      margin-left: auto;
+      color: #dc3545;
+      font-weight: bold;
+      font-size: 25px;
+      
+  }
   

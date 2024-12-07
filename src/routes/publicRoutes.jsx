@@ -15,7 +15,8 @@ import {
   Account,
   RewardHistory,
   CardsPolicy,
-  LookupCards
+  LookupCards,
+  Checkout
 } from '../pages/public';
 
 
@@ -74,5 +75,10 @@ export const PublicRoutes = [
       { path: 'deliverytracking', element: <DeliveryTrackingPage /> },
       { path: 'rewardhistory', element: <RewardHistory /> },
     ],
+  },
+
+  {
+    path: '/checkout',
+    element: <Checkout />,
   },
 ];

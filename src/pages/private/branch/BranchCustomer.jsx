@@ -136,8 +136,6 @@ const CustomerList = () => {
                           <>
                             <p><strong>Card Name:</strong> {cardType.CardName}</p>
                             <p><strong>Discount Rate:</strong> {cardType.DiscountRate}%</p>
-                            <p><strong>Points for Upgrade:</strong> {cardType.PointsRequiredForUpgrade}</p>
-                            <p><strong>Points for Renewal:</strong> {cardType.PointsRequiredForRenewal}</p>
                           </>
                         ) : (
                           <p>Card type details not available.</p>
