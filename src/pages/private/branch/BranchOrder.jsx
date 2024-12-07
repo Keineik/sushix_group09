@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import orderData from '../../../dummy/orders.json';
 import orderDetailsData from '../../../dummy/orderdetails.json';
 
-const Order = ({ OrderType }) => {
+const BranchOrder = ( {OrderType} ) => {
+  const [activeStatus, setActiveStatus] = useState('Preparing');
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,14 +12,20 @@ const Order = ({ OrderType }) => {
   const [sortConfig, setSortConfig] = useState({ key: 'OrderDateTime', direction: 'desc' });
 
   useEffect(() => {
-    setOrders(orderData.filter(order => order.OrderType === OrderType));
+    setOrders(orderData);
     setOrderDetails(orderDetailsData);
-  }, [OrderType]);
+  }, []);
 
-  const sortedOrders = useMemo(() => {
-    let sortableOrders = [...orders];
-    if (sortConfig !== null) {
-      sortableOrders.sort((a, b) => {
+  const filteredOrders = useMemo(() => {
+    return orders
+      .filter(order => order.OrderType === OrderType && order.OrderStatus === activeStatus)
+      .filter(
+        (order) =>
+          order.OrderID.toString().includes(searchTerm) ||
+          (order.CustID && order.CustID.toString().includes(searchTerm)) ||
+          (order.StaffID && order.StaffID.toString().includes(searchTerm))
+      )
+      .sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
           return sortConfig.direction === 'asc' ? -1 : 1;
         }
@@ -27,18 +34,7 @@ const Order = ({ OrderType }) => {
         }
         return 0;
       });
-    }
-    return sortableOrders;
-  }, [orders, sortConfig]);
-
-  const filteredOrders = useMemo(() => {
-    return sortedOrders.filter(
-      (order) =>
-        order.OrderID.toString().includes(searchTerm) ||
-        (order.CustID && order.CustID.toString().includes(searchTerm)) ||
-        (order.StaffID && order.StaffID.toString().includes(searchTerm))
-    );
-  }, [searchTerm, sortedOrders]);
+  }, [orders, OrderType, activeStatus, searchTerm, sortConfig]);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -65,11 +61,101 @@ const Order = ({ OrderType }) => {
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>{OrderType} Order</h2>
+        <h2>{OrderType} Orders - {activeStatus}</h2>
         <Link to="add" className="btn btn-primary">
           Add Order
         </Link>
       </div>
+      <ul className="nav nav-tabs mt-3">
+        {OrderType === 'Dine-In' && (
+          <>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Preparing' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Preparing')}
+              >
+                Preparing
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Served' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Served')}
+              >
+                Served
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Completed' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Completed')}
+              >
+                Completed
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Cancelled' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Cancelled')}
+              >
+                Cancelled
+              </button>
+            </li>
+          </>
+        )}
+        {OrderType === 'Delivery' && (
+          <>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Ordered' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Ordered')}
+              >
+                Ordered
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Preparing' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Preparing')}
+              >
+                Preparing
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Out for Delivery' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Out for Delivery')}
+              >
+                Out for Delivery
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Delivered' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Delivered')}
+              >
+                Delivered
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Completed' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Completed')}
+              >
+                Completed
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeStatus === 'Cancelled' ? 'active' : ''}`}
+                onClick={() => setActiveStatus('Cancelled')}
+              >
+                Cancelled
+              </button>
+            </li>
+          </>
+        )}
+      </ul>
 
       <div className="mb-4">
         <input
@@ -99,14 +185,12 @@ const Order = ({ OrderType }) => {
                   {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                 </th>
                 <th>Status</th>
-                {
-                  OrderType === 'Dine-In' &&
+                {OrderType === 'Dine-In' && (
                   <th onClick={() => handleSort('TableID')}>
                     Table
                     {sortConfig.key === 'TableID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                   </th>
-                }
-
+                )}
                 <th>Actions</th>
               </tr>
             </thead>
@@ -114,11 +198,10 @@ const Order = ({ OrderType }) => {
               {filteredOrders.map((order) => (
                 <tr key={order.OrderID}>
                   <td>{order.OrderID}</td>
-                  <td>{formatDate(order.OrderDateTime)}</td>
+                  <td>{new Date(order.OrderDateTime).toLocaleString()}</td>
                   <td>{order.CustID}</td>
                   <td>{order.OrderStatus}</td>
-                  { OrderType === 'Dine-In' && <td>{order.TableID}</td> }
-                  
+                  {OrderType === 'Dine-In' && <td>{order.TableID}</td>}
                   <td>
                     <button
                       className="btn btn-sm btn-outline-primary"
@@ -155,22 +238,19 @@ const Order = ({ OrderType }) => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Order Details</h5>
-                <button
-                  className="btn-close"
-                  onClick={() => setSelectedOrder(null)}
-                ></button>
+                <button className="btn-close" onClick={() => setSelectedOrder(null)}></button>
               </div>
               <div className="modal-body">
                 <p><strong>Order ID:</strong> {selectedOrder.OrderID}</p>
                 <p><strong>Order Type:</strong> {selectedOrder.OrderType}</p>
-                <p><strong>Order Date:</strong> {formatDate(selectedOrder.OrderDateTime)}</p>
+                <p><strong>Order Date:</strong> {new Date(selectedOrder.OrderDateTime).toLocaleString()}</p>
                 {selectedOrder.OrderType === 'Dine-In' && selectedOrder.TableID && (
                   <p><strong>Table ID:</strong> {selectedOrder.TableID}</p>
                 )}
                 {selectedOrder.OrderType === 'Dine-In' && selectedOrder.RsID && (
                   <>
                     <p><strong>Reservation ID:</strong> {selectedOrder.RsID}</p>
-                    <p><strong>Arrival Time:</strong> {formatDate(selectedOrder.ArrivalDateTime)}</p>
+                    <p><strong>Arrival Time:</strong> {new Date(selectedOrder.ArrivalDateTime).toLocaleString()}</p>
                     <p><strong>Number of Guests:</strong> {selectedOrder.NumOfGuests}</p>
                     <p><strong>Special Notes:</strong> {selectedOrder.RsNotes}</p>
                   </>
@@ -204,10 +284,7 @@ const Order = ({ OrderType }) => {
                 </table>
               </div>
               <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setSelectedOrder(null)}
-                >
+                <button className="btn btn-secondary" onClick={() => setSelectedOrder(null)}>
                   Close
                 </button>
               </div>
@@ -219,16 +296,4 @@ const Order = ({ OrderType }) => {
   );
 };
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).replace(',', '');
-};
-
-export default Order;
+export default BranchOrder;
