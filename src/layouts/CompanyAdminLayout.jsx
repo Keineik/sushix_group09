@@ -10,10 +10,6 @@ const navItems = [
     path: 'branches',
     label: 'Branches',
     icon: 'building',
-    children: [
-      { path: '', label: 'List', icon: 'list' },
-      { path: 'staffs', label: 'Staffs', icon: 'people' }
-    ]
   },
   {
     path: 'menu',
@@ -29,6 +25,11 @@ const navItems = [
     path: 'membership',
     label: 'Membership',
     icon: 'trophy'
+  },
+  {
+    path: 'coupon',
+    label: 'Coupon',
+    icon: 'ticket'
   },
   {
     path: 'hr',

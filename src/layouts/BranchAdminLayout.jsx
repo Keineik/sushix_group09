@@ -51,6 +51,7 @@ const navItems = [
   }
 ];
 
+// Need changes when API is ready
 const BranchAdminLayout = () => {
   const { branchId } = useParams();
 

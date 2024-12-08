@@ -21,7 +21,7 @@ const BranchManagement = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Link to="add" className="btn btn-primary">
+        <Link to="add" className="btn btn-danger">
           Add Branch
         </Link>
       </div>

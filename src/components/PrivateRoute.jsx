@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
+// Need changes here
 const PrivateRoute = ({ children, allowedRoles = ['company', 'staff', 'branch'] }) => {
     const userRole = localStorage.getItem('userRole');
 
