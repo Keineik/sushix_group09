@@ -56,7 +56,7 @@ const DeliveryTrackingPage = () => {
   });
 
   return (
-    <div className="container mt-4">
+    <div className="container">
       <h3 className="section-title" style={{ color: '#E82429', fontWeight: 'bold' }}>
         Theo dõi đơn hàng
       </h3>

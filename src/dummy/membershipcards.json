@@ -6,5 +6,53 @@
     "CustID": 1,
     "CardTypeID": 1,
     "LastUpdated": "2024-01-01"
+  },
+  {
+    "CardID": 101,
+    "IssueDate": "2024-02-01",
+    "Points": 150,
+    "CustID": 1,
+    "CardTypeID": 1,
+    "LastUpdated": "2024-02-01"
+  },
+  {
+    "CardID": 101,
+    "IssueDate": "2024-03-01",
+    "Points": 180,
+    "CustID": 1,
+    "CardTypeID": 1,
+    "LastUpdated": "2024-03-01"
+  },
+  {
+    "CardID": 101,
+    "IssueDate": "2024-04-01",
+    "Points": 250,
+    "CustID": 1,
+    "CardTypeID": 1,
+    "LastUpdated": "2024-04-01"
+  },
+  {
+    "CardID": 101,
+    "IssueDate": "2024-05-01",
+    "Points": 200,
+    "CustID": 1,
+    "CardTypeID": 1,
+    "LastUpdated": "2024-05-01"
+  },
+  {
+    "CardID": 101,
+    "IssueDate": "2024-06-01",
+    "Points": 220,
+    "CustID": 1,
+    "CardTypeID": 1,
+    "LastUpdated": "2024-06-01"
+  },
+  {
+    "CardID": 101,
+    "IssueDate": "2024-07-01",
+    "Points": 300,
+    "CustID": 1,
+    "CardTypeID": 1,
+    "LastUpdated": "2024-07-01"
   }
 ]
