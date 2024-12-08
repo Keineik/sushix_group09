@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { MainLayout, BranchAdminLayout, CompanyAdminLayout, StaffLayout } from './layouts';
-import { PublicRoutes } from './routes/publicRoutes';
+import { PublicRoutes } from './routes/PublicRoutes';
 import { BranchAdminRoutes } from './routes/BranchAdminRoutes';
 import { CompanyAdminRoutes } from './routes/CompanyAdminRoutes';
 import { StaffRoutes } from './routes/StaffRoutes';

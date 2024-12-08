@@ -53,18 +53,18 @@ const BranchManagement = () => {
                       >
                         Edit
                       </Link>
+                      <Link
+                        to={`/admin/branch/${branch.BranchID}`}
+                        className="btn btn-sm btn-outline-dark"
+                      >
+                        Manage
+                      </Link>
                       <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => handleDelete(branch.BranchID)}
                       >
                         Delete
                       </button>
-                      <Link
-                        to={`details/${branch.BranchID}`}
-                        className="btn btn-sm btn-outline-info"
-                      >
-                        Details
-                      </Link>
                     </div>
                   </td>
                 </tr>
@@ -78,7 +78,7 @@ const BranchManagement = () => {
 };
 
 const handleDelete = (branchId) => {
-  // Do something :)
+  // Do something
 };
 
 export default BranchManagement;

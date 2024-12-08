@@ -1,4 +1,5 @@
 import BaseLayout from './BaseLayout';
+import { useParams } from 'react-router-dom';
 
 const navItems = [
   {
@@ -51,10 +52,12 @@ const navItems = [
 ];
 
 const BranchAdminLayout = () => {
+  const { branchId } = useParams();
+
   return (
     <BaseLayout
       title="Branch Admin"
-      basePath="/admin/branch"
+      basePath={`/admin/branch/${branchId}`}
       navItems={navItems}
     />
   );

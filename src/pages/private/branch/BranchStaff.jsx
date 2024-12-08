@@ -4,7 +4,7 @@ import staffs from '../../../dummy/staffs.json';
 import departments from '../../../dummy/departments.json';
 import workHistory from '../../../dummy/workhistory.json';
 
-const StaffList = () => {
+const BranchStaff = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDept, setSelectedDept] = useState('all');
   const [selectedStaff, setSelectedStaff] = useState(null);
@@ -150,4 +150,4 @@ const StaffList = () => {
   );
 };
 
-export default StaffList;
+export default BranchStaff;

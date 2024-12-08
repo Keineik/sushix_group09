@@ -17,7 +17,7 @@ const PrivateLogin = () => {
       navigate('/admin/company');
     } else if (username === 'branch' && password === 'branch') {
       userRole = 'branch';
-      navigate('/admin/branch');
+      navigate('/admin/branch/br01');
     } else {
       userRole = 'staff';
       navigate('/staff');

@@ -1,3 +1,4 @@
+import { Children } from 'react';
 import BaseLayout from './BaseLayout';
 
 const navItems = [
@@ -12,9 +13,26 @@ const navItems = [
     icon: 'person'
   },
   {
+    path: 'reservations',
+    label: 'Reservations',
+    icon: 'calendar-check'
+  },
+  {
     path: 'orders',
     label: 'Orders',
-    icon: 'list-ol'
+    icon: 'list-ol',
+    children: [
+      {
+        path: 'dine-in',
+        label: 'Dine In',
+        icon: 'person-wheelchair'
+      },
+      {
+        path: 'delivery',
+        label: 'Delivery',
+        icon: 'truck'
+      }
+    ]
   },
   {
     path: 'invoice',

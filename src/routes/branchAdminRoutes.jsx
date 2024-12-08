@@ -1,7 +1,7 @@
 import {
   BranchDashboard,
   BranchMenu,
-  Branch,
+  BranchStaff,
   StaffForm,
   BranchCustomer,
   BranchOrder,
@@ -10,63 +10,61 @@ import {
   CustomerForm,
   BranchReservation
 } from '../pages/private/branch';
-import PrivateRoute from '../components/PrivateRoute';
 
 export const BranchAdminRoutes = [
   {
-    path: '/admin/branch',
-    element: (
-      <PrivateRoute>
-        <BranchDashboard />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: '/admin/branch/staffs',
+    path: '/admin/branch/:branchId',
     children: [
-      { path: '', element: <Branch /> },
-      { path: 'add', element: <StaffForm /> },
-      { path: 'edit/:id', element: <StaffForm /> }
-    ]
-  },
-  { path: '/admin/branch/menu', element: <BranchMenu /> },
-
-  {
-    path: '/admin/branch/customers',
-    children: [
-      { path: '', element: <BranchCustomer /> },
-      { path: 'add', element: <CustomerForm /> },
-      { path: 'edit/:id', element: <CustomerForm /> }
-    ]
-  },
-
-  {
-    path: '/admin/branch/reservations',
-    element: <BranchReservation />
-  },
-
-  {
-    path: '/admin/branch/orders',
-    children: [
-      { path: '', element: <BranchOrder OrderType="Dine-In" /> },
       {
-        path: 'delivery',
+        path: '',
+        element: (
+            <BranchDashboard />
+        )
+      },
+      {
+        path: 'staffs',
         children: [
-          { path: '', element: <BranchOrder OrderType="Delivery" />, },
-          { path: 'add', element: <OrderForm /> },
-          { path: 'edit/:id', element: <OrderForm /> },
+          { path: '', element: <BranchStaff /> },
+          { path: 'add', element: <StaffForm /> },
+          { path: 'edit/:id', element: <StaffForm /> }
+        ]
+      },
+      { path: 'menu', element: <BranchMenu /> },
+      {
+        path: 'customers',
+        children: [
+          { path: '', element: <BranchCustomer /> },
+          { path: 'add', element: <CustomerForm /> },
+          { path: 'edit/:id', element: <CustomerForm /> }
         ]
       },
       {
-        path: 'dine-in',
+        path: 'reservations',
+        element: <BranchReservation />
+      },
+      {
+        path: 'orders',
         children: [
-          { path: '', element: <BranchOrder OrderType="Dine-In" />},
-          { path: 'add', element: <OrderForm /> },
-          { path: 'edit/:id', element: <OrderForm /> },
+          { path: '', element: <BranchOrder OrderType="Dine-In" /> },
+          {
+            path: 'delivery',
+            children: [
+              { path: '', element: <BranchOrder OrderType="Delivery" />, },
+              { path: 'add', element: <OrderForm /> },
+              { path: 'edit/:id', element: <OrderForm /> },
+            ]
+          },
+          {
+            path: 'dine-in',
+            children: [
+              { path: '', element: <BranchOrder OrderType="Dine-In" /> },
+              { path: 'add', element: <OrderForm /> },
+              { path: 'edit/:id', element: <OrderForm /> },
+            ]
+          }
         ]
-      }
+      },
+      { path: 'invoice', element: <BranchInvoice /> },
     ]
-  },
-
-  { path: '/admin/branch/invoice', element: <BranchInvoice /> },
+  }
 ];
