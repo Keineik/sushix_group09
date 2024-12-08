@@ -34,7 +34,7 @@
     "OrderDateTime": "2024-12-03T14:30:00",
     "OrderStatus": "Out for Delivery",
     "StaffID": 104,
-    "CustID": 1004,
+    "CustID": 1,
     "DeliveryAddress": "123 Main Street, Cityville",
     "DeliveryDateTime": "2024-12-03T15:00:00"
   },
@@ -53,7 +53,7 @@
     "OrderDateTime": "2024-12-05T19:00:00",
     "OrderStatus": "Delivered",
     "StaffID": 106,
-    "CustID": 1006,
+    "CustID": 1,
     "DeliveryAddress": "789 Oak Street, Villagetown",
     "DeliveryDateTime": "2024-12-05T19:30:00"
   },
@@ -64,7 +64,7 @@
     "OrderDateTime": "2024-12-03T18:30:00",
     "OrderStatus": "Served",
     "StaffID": 107,
-    "CustID": 1007,
+    "CustID": 1,
     "TableID": 7
   },
   {
@@ -74,7 +74,7 @@
     "OrderDateTime": "2024-11-30T18:30:00",
     "OrderStatus": "Completed",
     "StaffID": 108,
-    "CustID": 1008,
+    "CustID": 1,
     "TableID": 10
   },
   {
@@ -83,7 +83,7 @@
     "OrderDateTime": "2024-12-08T17:00:00",
     "OrderStatus": "Out for Delivery",
     "StaffID": 109,
-    "CustID": 1009,
+    "CustID": 1,
     "DeliveryAddress": "321 Pine Street, Hamlet",
     "DeliveryDateTime": "2024-12-08T17:30:00"
   },
@@ -93,7 +93,7 @@
     "OrderDateTime": "2024-12-09T13:00:00",
     "OrderStatus": "Completed",
     "StaffID": 110,
-    "CustID": 1010,
+    "CustID": 1,
     "TableID": 2
   }
 ]

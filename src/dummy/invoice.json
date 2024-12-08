@@ -18,5 +18,35 @@
     "PaymentMethod": "Cash",
     "InvoiceDate": "2024-11-02",
     "InvoiceStatus": "Pending"
+  },
+  {
+    "InvoiceID": 3,
+    "CouponID": 102,
+    "OrderID": 4,
+    "TaxRate": 0.05,
+    "ShippingCost": 40000,
+    "PaymentMethod": "Cash",
+    "InvoiceDate": "2024-11-02",
+    "InvoiceStatus": "Pending"
+  },
+  {
+    "InvoiceID": 4,
+    "CouponID": 102,
+    "OrderID": 6,
+    "TaxRate": 0.05,
+    "ShippingCost": 30000,
+    "PaymentMethod": "Cash",
+    "InvoiceDate": "2024-11-02",
+    "InvoiceStatus": "Pending"
+  },
+  {
+    "InvoiceID": 9,
+    "CouponID": 102,
+    "OrderID": 202,
+    "TaxRate": 0.05,
+    "ShippingCost": 30000,
+    "PaymentMethod": "Cash",
+    "InvoiceDate": "2024-11-02",
+    "InvoiceStatus": "Pending"
   }
 ]

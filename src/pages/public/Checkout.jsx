@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import promotions from "../../dummy/promotions.json";
 import branches from "../../dummy/branches.json";
+import customers from '../../dummy/customers.json';
 
 const formatCurrency = (value) => {
   const numericValue = Number(value);
@@ -18,10 +19,15 @@ const Checkout = ({ isLoggedIn}) => {
   const [discount, setDiscount] = useState(0);
   const [error, setError] = useState("");
   const [step, setStep] = useState(isLoggedIn ? 2 : 1); // Default to Step 2 if logged in
+
+  const loggedInCustID = 1;
+
+  const loggedInUser = customers.find((customer) => customer.CustID === loggedInCustID);
+
   const [customerInfo, setCustomerInfo] = useState({
-    name: isLoggedIn ? "kaka" : "",
-    phone: isLoggedIn ? "01297363667" : "",
-    email: isLoggedIn ? "abab" : "",
+    name: isLoggedIn ? loggedInUser.CustName : "",
+    phone: isLoggedIn ? loggedInUser.CustPhoneNumber : "",
+    email: isLoggedIn ? loggedInUser.CustEmail : "",
     address: ""
   });
   const [branch, setBranch] = useState(null);
@@ -176,7 +182,7 @@ const Checkout = ({ isLoggedIn}) => {
                   </option>
                 ))}
               </select>
-              {error && !branch && <p className="text-danger mt-2">Vui lòng chọn chi nhánh</p>}
+              {error && !branch && <p className="text-danger mt-2"><i>Vui lòng chọn chi nhánh</i></p>}
               
               <div className="mt-3">
                 <h6 className="mb-4 text-danger">Chọn phương thức thanh toán</h6>
