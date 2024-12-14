@@ -15,14 +15,14 @@ const Reservation = () => {
                     Đặt bàn trực tuyến
                 </h3>
             </div>
-            <div className="container py-4" 
-            style={{
-                backgroundColor: "#f2f2f2",
-                color: "#333333",        
-                padding: "20px",
-                borderRadius: "8px",
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-            }} >
+            <div className="container py-4"
+                 style={{
+                     backgroundColor: "#f2f2f2",
+                     color: "#333333",
+                     padding: "20px",
+                     borderRadius: "8px",
+                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                 }}>
                 <p className="text-center">
                     Quý khách vui lòng cung cấp thông tin để chúng tôi hỗ trợ đặt bàn tốt nhất.
                 </p>
@@ -77,7 +77,7 @@ const Reservation = () => {
                                     <label htmlFor="restaurantSelection"></label>
                                     <select className="form-control" id="restaurantSelection">
                                         <option value="" selected disabled>
-                                             Chọn nhà hàng 
+                                            Chọn nhà hàng
                                         </option>
                                         {branches.map((branch) => (
                                             <option key={branch.id} value={branch.id}>
@@ -88,28 +88,28 @@ const Reservation = () => {
                                 </div>
                             </div>
 
-                           <div className="row mb-4">
-                            <div className="col-md-6 form-group">
-                                <label htmlFor="reservationDate">Ngày (*)</label>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="reservationDate"
-                                    required
-                                />
-                            </div>
+                            <div className="row mb-4">
+                                <div className="col-md-6 form-group">
+                                    <label htmlFor="reservationDate">Ngày (*)</label>
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        id="reservationDate"
+                                        required
+                                    />
+                                </div>
 
-                            {/* Time Selection */}
-                            <div className="col-md-6 form-group">
-                                <label htmlFor="reservationTime">Thời gian (*)</label>
-                                <input
-                                    type="time"
-                                    className="form-control"
-                                    id="reservationTime"
-                                    required
-                                />
+                                {/* Time Selection */}
+                                <div className="col-md-6 form-group">
+                                    <label htmlFor="reservationTime">Thời gian (*)</label>
+                                    <input
+                                        type="time"
+                                        className="form-control"
+                                        id="reservationTime"
+                                        required
+                                    />
+                                </div>
                             </div>
-                           </div>
                             <div className="form-group mb-4">
                                 <label htmlFor="guestCount">Số lượng khách (*)</label>
                                 <input
@@ -122,7 +122,6 @@ const Reservation = () => {
                                 />
                             </div>
 
-                    
 
                             {/* Notes Section */}
                             <div className="form-group mb-4">
@@ -134,11 +133,13 @@ const Reservation = () => {
                                     rows="3"
                                 ></textarea>
                             </div>
-                            
-                            <div> <button type="submit" className="btn btn-danger w-100 fw-bold">
-                                Gửi 
-                            </button> </div>
-                            
+
+                            <div>
+                                <button type="submit" className="btn btn-danger w-100 fw-bold">
+                                    Gửi
+                                </button>
+                            </div>
+
                         </form>
                     </div>
 

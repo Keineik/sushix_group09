@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import customers from "../../dummy/customers";
 const LookupCards = () => {
     const [name, setName] = useState("");
