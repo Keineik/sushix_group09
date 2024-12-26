@@ -1,46 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import itemsData from '../../../dummy/items.json';
-import categoriesData from '../../../dummy/categories.json';
+import { fetchMenuItems, updateMenuItem } from '../../../api/menuItem';
+import { fetchCategories } from '../../../api/category';
 
-//Currently not useable
 const ItemManagement = () => {
+    const itemsPerPage = 12;
     const [items, setItems] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
     const [categories, setCategories] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
+    const [currentPage, setCurrentPage] = useState(1);
 
-    //Test API calls
+    const fetchData = async () => {
+        try {
+            const menuItemsResponse = await fetchMenuItems({
+                page: currentPage,
+                limit: itemsPerPage,
+                searchTerm,
+                categoryId: selectedCategory === 'all' ? 0 : selectedCategory,
+                sortKey: sortConfig.key,
+                sortDirection: sortConfig.direction === 'asc'
+            });
+            const categoriesResponse = await fetchCategories();
+            setItems(menuItemsResponse.items || []);
+            setTotalCount(menuItemsResponse.totalCount || 0);
+            setCategories(categoriesResponse || []);
+        } catch (error) {
+            console.error('Error fetching menu items:', error);
+        }
+    };
+
     useEffect(() => {
-        // const fetchItems = async () => {
-        //     const response = await axios.get('/api/items', {
-        //         params: {
-        //             page: currentPage,
-        //             limit: 10,
-        //             search: searchTerm,
-        //             category: selectedCategory,
-        //             sortKey: sortConfig.key,
-        //             sortDirection: sortConfig.direction
-        //         }
-        //     });
-        //     setItems(response.data.items);
-        //     setTotalPages(response.data.totalPages);
-        // };
-
-        // const fetchCategories = async () => {
-        //     const response = await axios.get('/api/categories');
-        //     setCategories(response.data);
-        // };
-
-        // fetchItems();
-        // fetchCategories();
-        setCategories(categoriesData);
-        setItems(itemsData);
+        fetchData();
     }, [currentPage, searchTerm, selectedCategory, sortConfig]);
+
+    const handleUpdateDiscontinued = async (item) => {
+        try {
+            const updatedItem = { ...item, isDiscontinued: !item.isDiscontinued };
+            await updateMenuItem(item.itemId, updatedItem);
+            setItems(items.map(i => (i.itemId === item.itemId ? updatedItem : i)));
+        } catch (error) {
+            console.error('Error updating menu item:', error);
+        }
+    };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -63,10 +67,7 @@ const ItemManagement = () => {
         }));
     };
 
-    const handleDelete = async (id) => {
-        await axios.delete(`/api/items/${id}`);
-        setItems(items.filter(item => item.id !== id));
-    };
+    const totalPages = Math.ceil(totalCount / itemsPerPage);
 
     return (
         <div>
@@ -95,21 +96,36 @@ const ItemManagement = () => {
                     <tr>
                         <th onClick={() => handleSortChange('id')}>ID</th>
                         <th onClick={() => handleSortChange('name')}>Name</th>
-                        <th>Category</th>
+                        <th>Sold Quantity</th>
                         <th>Price</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {items.map(item => (
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>{item.name}</td>
-                            <td>{item.category}</td>
-                            <td>{item.price}</td>
+                        <tr key={item.itemId}>
+                            <td>{item.itemId}</td>
+                            <td>{item.itemName}</td>
+                            <td>{item.soldQuantity}</td>
+                            <td>{item.unitPrice}</td>
                             <td>
-                                <Link to={`edit/${item.id}`} className="btn btn-sm btn-outline-primary">Edit</Link>
-                                <button onClick={() => handleDelete(item.id)} className="btn btn-sm btn-outline-danger">Delete</button>
+                                <span className={`badge bg-${item.isDiscontinued ? 'danger' : 'success'}`}>
+                                    {item.isDiscontinued ? 'Discontinued' : 'Active'}
+                                </span>
+                            </td>
+                            <td>
+                                <div className="d-flex align-items-center">
+                                    <Link to={`edit/${item.itemId}`} className="btn btn-sm btn-outline-primary me-2">Edit</Link>
+                                    <div className="form-check form-switch">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            checked={!item.isDiscontinued}
+                                            onChange={() => handleUpdateDiscontinued(item)}
+                                        />
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     ))}

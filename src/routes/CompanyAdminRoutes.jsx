@@ -11,8 +11,10 @@ import {
   CouponManagement,
   CouponForm,
   HRManagement,
-  HRForm
+  HRForm,
+  ItemEditForm
 } from '../pages/private/company';
+import { Navigate } from 'react-router-dom';
 
 
 export const CompanyAdminRoutes = [
@@ -32,8 +34,14 @@ export const CompanyAdminRoutes = [
       {
         path: 'menu',
         children: [
-          { path: '', element: <ItemManagement /> },
-          { path: 'items', element: <ItemManagement /> },
+          { path: '', element: <Navigate to="items" /> },
+          { path: 'items', 
+            children: [
+              { path: '', element: <ItemManagement /> },
+              { path: 'edit/:id', element: <ItemEditForm /> },
+            ]
+            
+          },
           { path: 'categories', element: <CategoryManagement /> },
           { path: 'combos', element: <ComboManagement /> }
         ]

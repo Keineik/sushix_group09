@@ -16,7 +16,7 @@ const navItems = [
     label: 'Menu Management',
     icon: 'book',
     children: [
-      { path: '', label: 'Items', icon: 'grid' },
+      { path: 'items', label: 'Items', icon: 'grid' },
       { path: 'categories', label: 'Categories', icon: 'tags' },
       { path: 'combos', label: 'Combos', icon: 'box' }
     ]

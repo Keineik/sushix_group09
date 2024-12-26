@@ -7,14 +7,15 @@ export const fetchMenuItems = async ({
                                          searchTerm = '',
                                          categoryId = 0,
                                          branchId = 0,
+                                         filterShippable = 0,
                                          sortKey = 'ID',
                                          sortDirection = false,
                                      }) => {
     try {
         const response = await api.get('/menu-item', {
-            params: { page, limit, searchTerm, categoryId, branchId, sortKey, sortDirection },
+            params: {page, limit, searchTerm, categoryId, branchId, filterShippable, sortKey, sortDirection},
         });
-        return response.data;
+        return response.data.result;
     } catch (error) {
         console.error('Error fetching menu items:', error);
         throw error;
@@ -25,7 +26,7 @@ export const fetchMenuItems = async ({
 export const getMenuItem = async (itemId) => {
     try {
         const response = await api.get(`/menu-item/${itemId}`);
-        return response.data;
+        return response.data.result;
     } catch (error) {
         console.error('Error fetching menu item:', error);
         throw error;
