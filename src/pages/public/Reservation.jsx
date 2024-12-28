@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState} from 'react';
 import branches from "../../dummy/branches.json";
 
 const Reservation = () => {
+    const [includePreorder, setIncludePreorder] = useState(false);
+    const cart = location.state?.cart || [];
     return (
         <main>
             <div>
@@ -133,6 +135,16 @@ const Reservation = () => {
                                     rows="3"
                                 ></textarea>
                             </div>
+                            
+                            <div className="mb-3 form-check">
+                                <input
+                                type="checkbox"
+                                className="form-check-input"
+                                checked={includePreorder}
+                                onChange={() => setIncludePreorder(!includePreorder)}
+                                />
+                                <label className="form-check-label">Kèm đặt trước món trong giỏ hàng</label>
+                            </div>
 
                             <div>
                                 <button type="submit" className="btn btn-danger w-100 fw-bold">
@@ -144,18 +156,52 @@ const Reservation = () => {
                     </div>
 
                     {/* Image Section */}
-                    <div className="col-md-6">
-                        <img
-                            src="https://tokyodeli.com.vn/Data/Sites/3/media/img_0096.jpg"
-                            alt="Reservation Background"
-                            className="img-fluid"
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                            }}
-                        />
-                    </div>
+                    {!includePreorder &&
+                        (<div className="col-md-6">
+                            <img
+                                src="https://tokyodeli.com.vn/Data/Sites/3/media/img_0096.jpg"
+                                alt="Reservation Background"
+                                className="img-fluid"
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                }}
+                            />
+                        </div>)
+                    }
+
+                    {includePreorder && (
+                        <div className="col-md-6">
+                            <h4 className="mb-4 text-danger">Thông tin đơn đặt trước</h4>
+                            <h5>Sản phẩm</h5>
+                            {cart.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="d-flex align-items-center border-bottom py-3"
+                                    style={{ gap: "15px" }}
+                                >
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className="rounded"
+                                        style={{
+                                            width: "80px",
+                                            height: "80px",
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                    <div className="flex-grow-1">
+                                        <h6>{item.name}</h6>
+                                        <div>
+                                            <span>{formatCurrency(item.price)}</span>
+                                            <span className="mx-3">x {item.quantity}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </main>
