@@ -3,7 +3,7 @@ import api from './api'
 export const fetchCategories = async () => {
     try {
         const response = await api.get('/menu-category');
-        return response.data.result;
+        return response.data;
     } catch (error) {
         console.error('Error fetching categories:', error);
         throw error;

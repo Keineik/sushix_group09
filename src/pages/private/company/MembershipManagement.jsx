@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import cardTypesData from '../../../dummy/cardtypes.json';
+import { fetchCardTypes, deleteCardType } from '../../../api/cardType';
 
 const MembershipManagement = () => {
-    const [cardTypes, setCardTypes] = useState(cardTypesData);
+    const [cardTypes, setCardTypes] = useState([]);
+
+    const fetchData = async () => {
+        const { result } = await fetchCardTypes();
+        setCardTypes(result || []);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const handleDelete = (id) => {
+        deleteCardType(id);
         setCardTypes(cardTypes.filter(card => card.CardTypeID !== id));
     };
 
@@ -17,16 +27,16 @@ const MembershipManagement = () => {
             </div>
             <div className="row">
                 {cardTypes.map(card => (
-                    <div key={card.CardTypeID} className="col-md-4 mb-4">
+                    <div key={card.cardTypeId} className="col-md-4 mb-4">
                         <div className="card h-100">
                             <div className="card-body">
-                                <h5 className="card-title">{card.CardName}</h5>
-                                <p className="card-text"><strong>Discount Rate:</strong> {card.DiscountRate}%</p>
-                                <p className="card-text"><strong>Points Required for Upgrade:</strong> {card.PointsRequiredForUpgrade}</p>
-                                <p className="card-text"><strong>Points Required for Renewal:</strong> {card.PointsRequiredForRenewal}</p>
+                                <h5 className="card-title">{card.cardName}</h5>
+                                <p className="card-text"><strong>Discount Rate:</strong> {card.discountRate*100}%</p>
+                                <p className="card-text"><strong>Points Required for Upgrade:</strong> {card.pointsRequiredForRenewal}</p>
+                                <p className="card-text"><strong>Points Required for Renewal:</strong> {card.pointsRequiredForUpgrade}</p>
                                 <div className="d-flex justify-content-between">
-                                    <Link to={`edit/${card.CardTypeID}`} className="btn btn-sm btn-outline-primary">Edit</Link>
-                                    <button onClick={() => handleDelete(card.CardTypeID)} className="btn btn-sm btn-outline-danger">Delete</button>
+                                    <Link to={`edit/${card.cardTypeId}`} className="btn btn-sm btn-outline-primary">Edit</Link>
+                                    <button onClick={() => handleDelete(card.cardTypeId)} className="btn btn-sm btn-outline-danger">Delete</button>
                                 </div>
                             </div>
                         </div>

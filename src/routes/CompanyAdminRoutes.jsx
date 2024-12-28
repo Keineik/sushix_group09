@@ -2,7 +2,6 @@ import {
   CompanyDashboard,
   BranchManagement,
   BranchForm,
-  BranchDetails,
   ItemManagement,
   ComboManagement,
   CategoryManagement,
@@ -12,7 +11,8 @@ import {
   CouponForm,
   HRManagement,
   HRForm,
-  ItemEditForm
+  ItemEditForm,
+  CategoryForm
 } from '../pages/private/company';
 import { Navigate } from 'react-router-dom';
 
@@ -28,7 +28,6 @@ export const CompanyAdminRoutes = [
           { path: '', element: <BranchManagement /> },
           { path: 'add', element: <BranchForm /> },
           { path: 'edit/:id', element: <BranchForm /> },
-          { path: 'details/:id', element: <BranchDetails /> }
         ]
       },
       {
@@ -38,11 +37,19 @@ export const CompanyAdminRoutes = [
           { path: 'items', 
             children: [
               { path: '', element: <ItemManagement /> },
+              { path: 'add', element: <ItemEditForm /> },
               { path: 'edit/:id', element: <ItemEditForm /> },
             ]
             
           },
-          { path: 'categories', element: <CategoryManagement /> },
+          { 
+            path: 'categories', 
+            children: [
+              { path: '', element: <CategoryManagement /> },
+              { path: 'add', element: <CategoryForm /> },
+              { path : 'edit/:id', element: <CategoryForm /> }
+            ]
+          },
           { path: 'combos', element: <ComboManagement /> }
         ]
       },

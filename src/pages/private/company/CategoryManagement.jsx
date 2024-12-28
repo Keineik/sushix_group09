@@ -1,34 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
-import categoriesData from '../../../dummy/categories.json';
+import { fetchCategories, deleteCategory } from '../../../api/category';
 
-//Currently not useable
 const CategoryManagement = () => {
     const [categories, setCategories] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    //Test API calls
+    const loadCategories = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const { result } = await fetchCategories();
+            setCategories(result);
+        } catch (err) {
+            setError("Failed to fetch categories.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        // const fetchCategories = async () => {
-        //     const response = await axios.get('/api/categories', {
-        //         params: { search: searchTerm }
-        //     });
-        //     setCategories(response.data);
-        // };
-
-        // fetchCategories();
-        setCategories(categoriesData);
-    }, [searchTerm]);
+        loadCategories();
+    }, []);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
     const handleDelete = async (id) => {
-        await axios.delete(`/api/categories/${id}`);
-        setCategories(categories.filter(category => category.id !== id));
+        try {
+            await deleteCategory(id);
+            setCategories(categories.filter(category => category.id !== id));
+        } catch (error) {
+            console.error('Error deleting category:', error);
+        }
     };
+
+    const filteredCategories = categories.filter(category =>
+        category.categoryName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div>
@@ -42,27 +54,42 @@ const CategoryManagement = () => {
                 />
                 <Link to="add" className="btn btn-danger">Add New Category</Link>
             </div>
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {categories.map(category => (
-                        <tr key={category.id}>
-                            <td>{category.id}</td>
-                            <td>{category.name}</td>
-                            <td>
-                                <Link to={`edit/${category.id}`} className="btn btn-sm btn-outline-primary">Edit</Link>
-                                <button onClick={() => handleDelete(category.id)} className="btn btn-sm btn-outline-danger">Delete</button>
-                            </td>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p>{error}</p>
+            ) : (
+                <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {filteredCategories.map(category => (
+                            <tr key={category.categoryId}>
+                                <td>{category.categoryId}</td>
+                                <td>{category.categoryName}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <Link to={`edit/${category.categoryId}`} className="btn btn-sm btn-outline-primary me-2">
+                                            <i className="bi bi-pencil"></i>
+                                        </Link>
+                                        <button
+                                            className="btn btn-sm btn-outline-danger"
+                                            onClick={() => handleDelete(category.id)}
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };

@@ -41,60 +41,56 @@ const MembershipForm = () => {
     return (
         <div className="container-fluid py-4">
             <h2 className="mb-4">{isEdit ? 'Edit Card' : 'Add Card'}</h2>
-            <div className="card">
-                <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label className="form-label">Card Name</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={formData.CardName}
-                                onChange={(e) => setFormData({ ...formData, CardName: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Discount Rate (%)</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={formData.DiscountRate}
-                                onChange={(e) => setFormData({ ...formData, DiscountRate: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Points Required for Upgrade</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={formData.PointsRequiredForUpgrade}
-                                onChange={(e) => setFormData({ ...formData, PointsRequiredForUpgrade: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Points Required for Renewal</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                value={formData.PointsRequiredForRenewal}
-                                onChange={(e) => setFormData({ ...formData, PointsRequiredForRenewal: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="d-flex">
-                            <button type="submit" className="btn btn-success me-2">
-                                {isEdit ? 'Update Card' : 'Add Card'}
-                            </button>
-                            <button type="button" className="btn btn-secondary" onClick={() => navigate('/admin/company/membership')}>
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label className="form-label">Card Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={formData.CardName}
+                        onChange={(e) => setFormData({ ...formData, CardName: e.target.value })}
+                        required
+                    />
                 </div>
-            </div>
+                <div className="mb-3">
+                    <label className="form-label">Discount Rate (%)</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        value={formData.DiscountRate}
+                        onChange={(e) => setFormData({ ...formData, DiscountRate: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Points Required for Upgrade</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        value={formData.PointsRequiredForUpgrade}
+                        onChange={(e) => setFormData({ ...formData, PointsRequiredForUpgrade: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Points Required for Renewal</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        value={formData.PointsRequiredForRenewal}
+                        onChange={(e) => setFormData({ ...formData, PointsRequiredForRenewal: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="d-flex mt-4">
+                    <button type="submit" className="btn btn-success me-2">
+                        {isEdit ? 'Update Card' : 'Add Card'}
+                    </button>
+                    <button type="button" className="btn btn-secondary" onClick={() => navigate('/admin/company/membership')}>
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

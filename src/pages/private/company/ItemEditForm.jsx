@@ -24,7 +24,7 @@ const ItemEditForm = () => {
         const fetchData = async () => {
             try {
                 const categoriesResponse = await fetchCategories();
-                setCategories(categoriesResponse || []);
+                setCategories(categoriesResponse.result || []);
 
                 if (isEdit) {
                     const item = await getMenuItem(id);
@@ -109,8 +109,8 @@ const ItemEditForm = () => {
                     >
                         <option value="">Select Category</option>
                         {categories.map(category => (
-                            <option key={category.id} value={category.id}>
-                                {category.name}
+                            <option key={category.categoryId} value={category.categoryId}>
+                                {category.categoryName}
                             </option>
                         ))}
                     </select>

@@ -4,7 +4,7 @@ import api from './api';
 export const fetchCardTypes = async () => {
     try {
         const response = await api.get('/card-type');
-        return response.data.result;
+        return response.data;
     } catch (error) {
         console.error('Error fetching card types:', error);
         throw error;
@@ -15,7 +15,7 @@ export const fetchCardTypes = async () => {
 export const getCardType = async (cardTypeId) => {
     try {
         const response = await api.get(`/card-type/${cardTypeId}`);
-        return response.data.result;
+        return response.data;
     } catch (error) {
         console.error(`Error fetching card type with ID ${cardTypeId}:`, error);
         throw error;
@@ -26,7 +26,7 @@ export const getCardType = async (cardTypeId) => {
 export const createCardType = async (cardTypeRequest) => {
     try {
         const response = await api.post('/card-type', cardTypeRequest);
-        return response.data.result;
+        return response.data;
     } catch (error) {
         console.error('Error creating card type:', error);
         throw error;
@@ -37,7 +37,7 @@ export const createCardType = async (cardTypeRequest) => {
 export const updateCardType = async (cardTypeId, cardTypeRequest) => {
     try {
         const response = await api.put(`/card-type/${cardTypeId}`, cardTypeRequest);
-        return response.data.result;
+        return response.data;
     } catch (error) {
         console.error(`Error updating card type with ID ${cardTypeId}:`, error);
         throw error;
@@ -48,7 +48,7 @@ export const updateCardType = async (cardTypeId, cardTypeRequest) => {
 export const deleteCardType = async (cardTypeId) => {
     try {
         const response = await api.delete(`/card-type/${cardTypeId}`);
-        return response.data.result;
+        return response.data;
     } catch (error) {
         console.error(`Error deleting card type with ID ${cardTypeId}:`, error);
         throw error;

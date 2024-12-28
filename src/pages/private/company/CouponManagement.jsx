@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import couponsData from '../../../dummy/promotions.json';
+import { fetchCoupons } from '../../../api/coupon';
 
 const CouponManagement = () => {
   const [coupons, setCoupons] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const loadCoupons = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { result } = await fetchCoupons();
+      console.log(result);
+      setCoupons(result || []);
+    } catch (err) {
+      setError("Failed to fetch coupons.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    // Fetch coupons from the API or use dummy data
-    // const fetchCoupons = async () => {
-    //   const response = await axios.get('/api/coupons');
-    //   setCoupons(response.data);
-    // };
-    // fetchCoupons();
-    setCoupons(couponsData);
+    loadCoupons();
   }, []);
 
   const handleSearchChange = (e) => {
@@ -22,17 +32,15 @@ const CouponManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    // await axios.delete(`/api/coupons/${id}`);
-    setCoupons(coupons.filter(coupon => coupon.CouponID !== id));
+    setCoupons(coupons.filter(coupon => coupon.couponId !== id));
   };
 
   const filteredCoupons = coupons.filter(coupon =>
-    coupon.CouponCode.toLowerCase().includes(searchTerm.toLowerCase())
+    coupon.couponCode.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="container-fluid py-4">
-      <h2 className="mb-4">Coupon Management</h2>
+    <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <input
           type="text"
@@ -50,30 +58,79 @@ const CouponManagement = () => {
             <th>Code</th>
             <th>Description</th>
             <th>Discount</th>
-            <th>Min Order Value</th>
+            <th>Usage</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredCoupons.map(coupon => (
-            <tr key={coupon.CouponID}>
-              <td>{coupon.CouponID}</td>
-              <td>{coupon.CouponCode}</td>
-              <td>{coupon.CouponDesc}</td>
+            <tr key={coupon.couponId}>
+              <td>{coupon.couponId}</td>
+              <td>{coupon.couponCode}</td>
+              <td>{coupon.couponDesc}</td>
               <td>
-                {coupon.DiscountFlat
-                  ? `${coupon.DiscountFlat.toLocaleString()} VND`
-                  : `${coupon.DiscountRate}%`}
+                {coupon.discountFlat ? `${coupon.discountFlat} VND` : ''}
+                {coupon.discountRate ? ` ${coupon.discountRate*100}%` : ''}
               </td>
-              <td>{coupon.MinOrderValue.toLocaleString()} VND</td>
+              <td>{coupon.RemainingUsage}/{coupon.totalUsageLimit}</td>
               <td>
-                <Link to={`edit/${coupon.CouponID}`} className="btn btn-sm btn-outline-primary">Edit</Link>
-                <button onClick={() => handleDelete(coupon.CouponID)} className="btn btn-sm btn-outline-danger">Delete</button>
+                <div className="d-flex align-items-center">
+                  <button
+                    className="btn btn-sm btn-outline-primary me-2"
+                    onClick={() => setSelectedCoupon(coupon)}
+                  >
+                    <i className="bi bi-eye"></i>
+                  </button>
+                  <Link to={`edit/${coupon.couponId}`} className="btn btn-sm btn-outline-secondary me-2">
+                    <i className="bi bi-pencil"></i>
+                  </Link>
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleDelete(coupon.couponId)}
+                  >
+                    <i className="bi bi-trash"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {selectedCoupon && (
+        <div
+          className="modal show"
+          style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Coupon Details</h5>
+                <button className="btn-close" onClick={() => setSelectedCoupon(null)}></button>
+              </div>
+              <div className="modal-body">
+                <p><strong>ID:</strong> {selectedCoupon.couponId}</p>
+                <p><strong>Code:</strong> {selectedCoupon.couponCode}</p>
+                <p><strong>Description:</strong> {selectedCoupon.couponDesc}</p>
+                <p><strong>Discount Flat:</strong> {selectedCoupon.discountFlat}</p>
+                <p><strong>Discount Rate:</strong> {selectedCoupon.discountRate}</p>
+                <p><strong>Minimum Purchase:</strong> {selectedCoupon.minPurchase}</p>
+                <p><strong>Maximum Discount:</strong> {selectedCoupon.maxDiscount}</p>
+                <p><strong>Effective Date:</strong> {selectedCoupon.effectiveDate}</p>
+                <p><strong>Expiry Date:</strong> {selectedCoupon.expiryDate}</p>
+                <p><strong>Total Usage Limit:</strong> {selectedCoupon.totalUsageLimit}</p>
+                <p><strong>Remaining Usage:</strong> {selectedCoupon.RemainingUsage}</p>
+                <p><strong>Minimum Membership Requirement:</strong> {selectedCoupon.minMembershipRequirement}</p>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setSelectedCoupon(null)}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

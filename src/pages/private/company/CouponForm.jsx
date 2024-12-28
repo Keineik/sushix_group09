@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import couponsData from '../../../dummy/promotions.json';
+import { updateCoupon, createCoupon, getCoupon } from '../../../api/coupon';
+import { fetchCardTypes } from '../../../api/cardType';
 
 const CouponForm = () => {
   const { id } = useParams();
@@ -8,153 +9,202 @@ const CouponForm = () => {
   const isEdit = Boolean(id);
 
   const [formData, setFormData] = useState({
-    CouponCode: '',
-    CouponDesc: '',
-    DiscountFlat: '',
-    DiscountRate: '',
-    MinOrderValue: '',
-    MaxDiscountValue: '',
-    EffectiveDate: '',
-    ExpiredDate: '',
-    TotalUsageLimit: '',
-    MinMembershipRequirement: ''
+    couponCode: '',
+    couponDesc: '',
+    discountFlat: null,
+    discountRate: null,
+    minPurchase: null,
+    maxDiscount: null,
+    effectiveDate: '',
+    expiryDate: '',
+    totalUsageLimit: null,
+    minMembershipRequirement: null
   });
 
-  useEffect(() => {
-    if (isEdit) {
-      const coupon = couponsData.find(coupon => coupon.CouponID === parseInt(id));
-      if (coupon) {
-        setFormData(coupon);
-      } else {
-        console.error(`Coupon with ID ${id} not found.`);
-        navigate('/admin/company/coupons');
-      }
-    }
-  }, [id, isEdit, navigate]);
+  const [cardTypes, setCardTypes] = useState([]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const cardTypesResponse = await fetchCardTypes();
+        setCardTypes(cardTypesResponse || []);
+
+        if (isEdit) {
+          const coupon = await getCoupon(id);
+          setFormData(coupon);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [id, isEdit]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEdit) {
-      // Handle edit logic
-      console.log('Editing coupon:', formData);
-    } else {
-      // Handle add logic
-      console.log('Adding new coupon:', formData);
+    const updatedFormData = {
+      ...formData,
+      discountFlat: formData.discountFlat === '0' ? null : parseFloat(formData.discountFlat),
+      discountRate: formData.discountRate === '0' ? null : parseFloat(formData.discountRate/100.0),
+      minPurchase: formData.minPurchase === 0 ? null : parseFloat(formData.minPurchase),
+      maxDiscount: formData.maxDiscount === 0 ? null : parseFloat(formData.maxDiscount),
+      totalUsageLimit: formData.totalUsageLimit === 0 ? null : parseInt(formData.totalUsageLimit, 10),
+      minMembershipRequirement: formData.minMembershipRequirement === '' ? null : parseInt(formData.minMembershipRequirement, 10),
+    };
+    try {
+      if (isEdit) {
+        await updateCoupon(id, updatedFormData);
+      } else {
+        await createCoupon(updatedFormData);
+      }
+      navigate('/admin/company/coupons');
+    } catch (error) {
+      console.error('Error saving coupon:', error);
     }
-    navigate('/admin/company/coupons');
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value === '' ? null : value
+    }));
   };
 
   return (
     <div className="container-fluid py-4">
       <h2 className="mb-4">{isEdit ? 'Edit Coupon' : 'Add Coupon'}</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Coupon Code</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.CouponCode}
-                onChange={(e) => setFormData({ ...formData, CouponCode: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Description</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.CouponDesc}
-                onChange={(e) => setFormData({ ...formData, CouponDesc: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Discount Flat (VND)</label>
-              <input
-                type="number"
-                className="form-control"
-                value={formData.DiscountFlat}
-                onChange={(e) => setFormData({ ...formData, DiscountFlat: e.target.value })}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Discount Rate (%)</label>
-              <input
-                type="number"
-                className="form-control"
-                value={formData.DiscountRate}
-                onChange={(e) => setFormData({ ...formData, DiscountRate: e.target.value })}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Min Order Value (VND)</label>
-              <input
-                type="number"
-                className="form-control"
-                value={formData.MinOrderValue}
-                onChange={(e) => setFormData({ ...formData, MinOrderValue: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Max Discount Value (VND)</label>
-              <input
-                type="number"
-                className="form-control"
-                value={formData.MaxDiscountValue}
-                onChange={(e) => setFormData({ ...formData, MaxDiscountValue: e.target.value })}
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Effective Date</label>
-              <input
-                type="date"
-                className="form-control"
-                value={formData.EffectiveDate}
-                onChange={(e) => setFormData({ ...formData, EffectiveDate: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Expired Date</label>
-              <input
-                type="date"
-                className="form-control"
-                value={formData.ExpiredDate}
-                onChange={(e) => setFormData({ ...formData, ExpiredDate: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Total Usage Limit</label>
-              <input
-                type="number"
-                className="form-control"
-                value={formData.TotalUsageLimit}
-                onChange={(e) => setFormData({ ...formData, TotalUsageLimit: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Min Membership Requirement</label>
-              <input
-                type="text"
-                className="form-control"
-                value={formData.MinMembershipRequirement}
-                onChange={(e) => setFormData({ ...formData, MinMembershipRequirement: e.target.value })}
-                required
-              />
-            </div>
-            <div className="d-flex">
-              <button type="submit" className="btn btn-success me-2">
-                {isEdit ? 'Update Coupon' : 'Add Coupon'}
-              </button>
-              <button type="button" className="btn btn-secondary" onClick={() => navigate('/admin/company/coupons')}>
-                Cancel
-              </button>
-            </div>
-          </form>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label className="form-label">Coupon Code</label>
+          <input
+            type="text"
+            className="form-control"
+            name="couponCode"
+            value={formData.couponCode}
+            onChange={handleChange}
+            required
+          />
         </div>
+        <div className="mb-3">
+          <label className="form-label">Description</label>
+          <input
+            type="text"
+            className="form-control"
+            name="couponDesc"
+            value={formData.couponDesc}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Discount Flat (VND)</label>
+          <input
+            type="number"
+            step="any"
+            min={0}
+            className="form-control"
+            name="discountFlat"
+            value={formData.discountFlat || ''}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Discount Rate (%)</label>
+          <input
+            type="number"
+            step="any"
+            min={0}
+            max={100}
+            className="form-control"
+            name="discountRate"
+            value={formData.discountRate || ''}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Minimum Purchase (VND)</label>
+          <input
+            type="number"
+            step="any"
+            min={0}
+            className="form-control"
+            name="minPurchase"
+            value={formData.minPurchase || ''}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Maximum Discount (VND)</label>
+          <input
+            type="number"
+            step="any"
+            min={0}
+            className="form-control"
+            name="maxDiscount"
+            value={formData.maxDiscount || ''}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Effective Date</label>
+          <input
+            type="date"
+            className="form-control"
+            name="effectiveDate"
+            value={formData.effectiveDate}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Expiry Date</label>
+          <input
+            type="date"
+            className="form-control"
+            name="expiryDate"
+            value={formData.expiryDate}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Total Usage Limit</label>
+          <input
+            type="number"
+            step="any"
+            min={0}
+            className="form-control"
+            name="totalUsageLimit"
+            value={formData.totalUsageLimit || ''}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Minimum Membership Requirement</label>
+          <select
+            className="form-select"
+            name="minMembershipRequirement"
+            value={formData.minMembershipRequirement || ''}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Membership</option>
+            {cardTypes.map(cardType => (
+              <option key={cardType.cardTypeId} value={cardType.cardTypeId}>
+                {cardType.cardName}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="d-flex">
+          <button type="submit" className="btn btn-success me-2">
+            {isEdit ? 'Update Coupon' : 'Add Coupon'}
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate('/admin/company/coupons')}>
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

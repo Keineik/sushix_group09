@@ -21,12 +21,12 @@ const ItemManagement = () => {
                 searchTerm,
                 categoryId: selectedCategory === 'all' ? 0 : selectedCategory,
                 sortKey: sortConfig.key,
-                sortDirection: sortConfig.direction === 'asc'
+                sortDirection: sortConfig.direction === 'desc'
             });
             const categoriesResponse = await fetchCategories();
             setItems(menuItemsResponse.items || []);
             setTotalCount(menuItemsResponse.totalCount || 0);
-            setCategories(categoriesResponse || []);
+            setCategories(categoriesResponse.result || []);
         } catch (error) {
             console.error('Error fetching menu items:', error);
         }
@@ -86,7 +86,7 @@ const ItemManagement = () => {
                 >
                     <option value="all">All Categories</option>
                     {categories.map(category => (
-                        <option key={category.id} value={category.id}>{category.name}</option>
+                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
                     ))}
                 </select>
                 <Link to="add" className="btn btn-danger">Add New Item</Link>
@@ -116,7 +116,9 @@ const ItemManagement = () => {
                             </td>
                             <td>
                                 <div className="d-flex align-items-center">
-                                    <Link to={`edit/${item.itemId}`} className="btn btn-sm btn-outline-primary me-2">Edit</Link>
+                                    <Link to={`edit/${item.itemId}`} className="btn btn-sm btn-outline-primary me-2">
+                                        <i className="bi bi-pencil"></i>
+                                    </Link>
                                     <div className="form-check form-switch">
                                         <input
                                             className="form-check-input"

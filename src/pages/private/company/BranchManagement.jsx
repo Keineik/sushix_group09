@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import branches from '../../../dummy/branches.json';
+import { fetchBranches, deleteBranch } from '../../../api/branch';
 
 const BranchManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [branches, setBranches] = useState([]);
+
+  const loadBranches = async () => {
+    const { result } = await fetchBranches();
+    console.log(result);
+    setBranches(result || []);
+  }
+
+  useEffect(() => {
+    loadBranches();
+  }, []);
 
   const filteredBranches = branches.filter(branch =>
-    branch.name.toLowerCase().includes(searchTerm.toLowerCase())
+    branch.branchName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleDelete = (branchId) => {
+    deleteBranch(branchId);
+    setBranches(branches.filter(branch => branch.branchId !== branchId));
+  };
 
   return (
     <div className="container-fluid py-4">
@@ -26,7 +42,6 @@ const BranchManagement = () => {
         </Link>
       </div>
 
-      <div className="card">
         <div className="table-responsive">
           <table className="table table-hover">
             <thead>
@@ -41,29 +56,29 @@ const BranchManagement = () => {
             <tbody>
               {filteredBranches.map(branch => (
                 <tr key={branch.BranchID}>
-                  <td>{branch.name}</td>
-                  <td>{branch.address}</td>
-                  <td>{branch.phone}</td>
-                  <td>{branch.hours}</td>
+                  <td>{branch.branchName}</td>
+                  <td>{branch.branchAddress}</td>
+                  <td>{branch.branchPhoneNumber}</td>
+                  <td>{branch.closingTime}-{branch.openingTime}</td>
                   <td>
                     <div className="btn-group">
                       <Link
-                        to={`edit/${branch.BranchID}`}
+                        to={`edit/${branch.branchId}`}
                         className="btn btn-sm btn-outline-primary"
                       >
-                        Edit
+                        <i class="bi bi-pencil"></i>
                       </Link>
                       <Link
-                        to={`/admin/branch/${branch.BranchID}`}
+                        to={`/admin/branch/${branch.branchId}`}
                         className="btn btn-sm btn-outline-dark"
                       >
-                        Manage
+                        <i class="bi bi-gear"></i>
                       </Link>
                       <button
                         className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleDelete(branch.BranchID)}
+                        onClick={() => handleDelete(branch.branchId)}
                       >
-                        Delete
+                        <i className="bi bi-trash"></i>
                       </button>
                     </div>
                   </td>
@@ -73,12 +88,7 @@ const BranchManagement = () => {
           </table>
         </div>
       </div>
-    </div>
   );
-};
-
-const handleDelete = (branchId) => {
-  // Do something
 };
 
 export default BranchManagement;
