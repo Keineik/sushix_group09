@@ -7,12 +7,6 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  const formatCurrency = (value) => {
-    const numericValue = Number(value);
-    if (isNaN(numericValue)) return value;
-    return numericValue.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
-
   const handleUpdateQuantity = (id, newQuantity) => {
     if (newQuantity <= 0) {
       removeFromCart(id);
@@ -70,10 +64,10 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
             {cart.map((item) => (
               <div key={item.id} style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
                 <img
-                  src={item.image}
+                  src={item.imgUrl}
                   alt={item.name}
                   style={{
-                    width: "50px",
+                    width: "60px",
                     height: "50px",
                     objectFit: "cover",
                     marginRight: "15px",
@@ -82,7 +76,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
                 <div style={{ flex: 1 }}>
                   <span style={{ fontWeight: "bold", fontSize: "1rem" }}>{item.name}</span>
                   <div style={{ display: "flex", justifyContent: "space-between", marginTop: "5px" }}>
-                    <span>{formatCurrency(item.price)} ₫</span>
+                    <span>{item.price.toLocaleString()} ₫</span>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <button
                         onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
@@ -109,7 +103,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
           <div className="d-flex justify-content-between">
             <span style={{ fontWeight: "bold", fontSize: "1rem" }}>Tổng cộng:</span>
             <span style={{ fontWeight: "bold", fontSize: "1.2rem", color: "red" }}>
-              {formatCurrency(calculateTotal())} ₫
+              {calculateTotal().toLocaleString()} ₫
             </span>
           </div>
 

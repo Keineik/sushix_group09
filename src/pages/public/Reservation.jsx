@@ -156,22 +156,22 @@ const Reservation = () => {
                     </div>
 
                     {/* Image Section */}
-                    {!includePreorder &&
-                        (<div className="col-md-6">
-                            <img
-                                src="https://tokyodeli.com.vn/Data/Sites/3/media/img_0096.jpg"
-                                alt="Reservation Background"
-                                className="img-fluid"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                }}
-                            />
-                        </div>)
-                    }
+                    {/* {!includePreorder && */}
+                    <div className="col-md-6">
+                        <img
+                            src="https://tokyodeli.com.vn/Data/Sites/3/media/img_0096.jpg"
+                            alt="Reservation Background"
+                            className="img-fluid"
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                            }}
+                        />
+                    </div>
+                    {/* } */}
 
-                    {includePreorder && (
+                    {/* {includePreorder && (
                         <div className="col-md-6">
                             <h4 className="mb-4 text-danger">Thông tin đơn đặt trước</h4>
                             <h5>Sản phẩm</h5>
@@ -182,7 +182,7 @@ const Reservation = () => {
                                     style={{ gap: "15px" }}
                                 >
                                     <img
-                                        src={item.image}
+                                        src={item.imgUrl}
                                         alt={item.name}
                                         className="rounded"
                                         style={{
@@ -194,14 +194,14 @@ const Reservation = () => {
                                     <div className="flex-grow-1">
                                         <h6>{item.name}</h6>
                                         <div>
-                                            <span>{formatCurrency(item.price)}</span>
+                                            <span>{item.price}</span>
                                             <span className="mx-3">x {item.quantity}</span>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </main>

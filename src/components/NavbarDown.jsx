@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
-const NavbarDown = () => {
+const NavbarDown = ({cart}) => {
   const [activeNav, setActiveNav] = useState(null);
 
   const handleNavClick = (navIndex) => {
@@ -65,13 +65,14 @@ const NavbarDown = () => {
             >
               <b>KHUYẾN MÃI</b>
             </a>
-            <a
+            <Link
+              to="/reservation"
+              state={{ cart }} // Passing cart as state
               className={`nav-link ${activeNav === 5 ? 'text-danger' : ''}`}
-              href="/reservation"
               onClick={() => handleNavClick(5)}
             >
               <b>ĐẶT BÀN</b>
-            </a>
+            </Link>
           </div>
           <Link to="/account/deliverytracking" className="btn btn-outline-danger ms-auto d-flex align-items-center">
             <svg

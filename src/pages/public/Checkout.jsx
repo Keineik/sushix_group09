@@ -4,11 +4,6 @@ import promotions from "../../dummy/promotions.json";
 import branches from "../../dummy/branches.json";
 import customers from '../../dummy/customers.json';
 
-const formatCurrency = (value) => {
-    const numericValue = Number(value);
-    if (isNaN(numericValue)) return value;
-    return numericValue.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
 
 const Checkout = ({isLoggedIn}) => {
     // isLoggedIn = true;
@@ -64,7 +59,7 @@ const Checkout = ({isLoggedIn}) => {
         }
 
         if (calculateSubtotal() < matchingCoupon.MinOrderValue) {
-            setError(`Đơn hàng phải từ ${formatCurrency(matchingCoupon.MinOrderValue)} để sử dụng mã này.`);
+            setError(`Đơn hàng phải từ ${matchingCoupon.MinOrderValue.toLocaleString()} để sử dụng mã này.`);
             setDiscount(0);
             return;
         }
@@ -210,7 +205,7 @@ const Checkout = ({isLoggedIn}) => {
                                     style={{gap: "15px"}}
                                 >
                                     <img
-                                        src={item.image}
+                                        src={item.imgUrl}
                                         alt={item.name}
                                         className="rounded"
                                         style={{
@@ -222,7 +217,7 @@ const Checkout = ({isLoggedIn}) => {
                                     <div className="flex-grow-1">
                                         <h6>{item.name}</h6>
                                         <div>
-                                            <span>{formatCurrency(item.price)}</span>
+                                            <span>{item.price.toLocaleString()}</span>
                                             <span className="mx-3">x {item.quantity}</span>
                                         </div>
                                     </div>
@@ -236,27 +231,27 @@ const Checkout = ({isLoggedIn}) => {
                             <h5 className="mb-4 text-danger">Chi tiết thanh toán</h5>
                             <p className="d-flex justify-content-between">
                                 <span>Tiền hàng:</span>
-                                <span>{formatCurrency(calculateSubtotal())}</span>
+                                <span>{calculateSubtotal().toLocaleString()}</span>
                             </p>
                             <p className="d-flex justify-content-between">
                                 <span>Giảm giá:</span>
-                                <span className="text-success">- {formatCurrency(discount)}</span>
+                                <span className="text-success">- {discount.toLocaleString()}</span>
                             </p>
                             <p className="d-flex justify-content-between">
                                 <span>Phí vận chuyển:</span>
-                                <span>{formatCurrency(SHIPPING_FEE)}</span>
+                                <span>{SHIPPING_FEE.toLocaleString()}</span>
                             </p>
                             <p className="d-flex justify-content-between">
                                 <span>Tạm tính:</span>
-                                <span>{formatCurrency(calculateSubtotal())}</span>
+                                <span>{calculateSubtotal().toLocaleString()}</span>
                             </p>
                             <p className="d-flex justify-content-between">
                                 <span>VAT ({VAT_PERCENTAGE}%):</span>
-                                <span>{formatCurrency(calculateVAT())}</span>
+                                <span>{calculateVAT().toLocaleString()}</span>
                             </p>
                             <h5 className="d-flex justify-content-between mt-3 border-top pt-3">
                                 <span>Tổng cộng:</span>
-                                <span className="text-danger">{formatCurrency(calculateTotal())}</span>
+                                <span className="text-danger">{calculateTotal().toLocaleString()}</span>
                             </h5>
 
                             <div className="mt-3">

@@ -13,16 +13,25 @@ const MainLayout = () => {
 
   const addToCart = (product, quantity = 1) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map((item) =>
-            item.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item
-        );
-      }
+    const existingItem = prevCart.find((item) => item.id === product.itemId);
+    if (existingItem) {
+      return prevCart.map((item) =>
+        item.id === product.itemId
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
+    }
       setShowCart(true);
-      return [...prevCart, { ...product, quantity }];
+      return [
+      ...prevCart,
+      {
+        id: product.itemId,
+        name: product.itemName,
+        price: product.unitPrice,
+        imgUrl: product.imgUrl,
+        quantity,
+      },
+    ];
     });
   };
 
