@@ -41,6 +41,33 @@ const CouponForm = () => {
     fetchData();
   }, [id, isEdit]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (isEdit) {
+  //       try {
+  //         const coupon = await getCoupon(id); 
+  //         console.log('Coupon data:', coupon);
+  //         setFormData({
+  //           couponCode: coupon.couponCode || '',
+  //           couponDesc: coupon.couponDesc || '',
+  //           discountFlat: coupon.discountFlat || null,
+  //           discountRate: coupon.discountRate || null,
+  //           minPurchase: coupon.minPurchase || null,
+  //           maxDiscount: coupon.maxDiscount || null,
+  //           effectiveDate: coupon.effectiveDate || '',
+  //           expiryDate: coupon.expiryDate || '',
+  //           totalUsageLimit: coupon.totalUsageLimit || null,
+  //           minMembershipRequirement: coupon.minMembershipRequirement || null,
+  //         });
+  //       } catch (error) {
+  //         console.error('Error fetching coupon:', error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [id, isEdit]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedFormData = {
@@ -58,7 +85,7 @@ const CouponForm = () => {
       } else {
         await createCoupon(updatedFormData);
       }
-      navigate('/admin/company/coupons');
+      navigate('/admin/company/coupon');
     } catch (error) {
       console.error('Error saving coupon:', error);
     }
@@ -199,7 +226,7 @@ const CouponForm = () => {
           <button type="submit" className="btn btn-success me-2">
             {isEdit ? 'Update Coupon' : 'Add Coupon'}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={() => navigate('/admin/company/coupons')}>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate('/admin/company/coupon')}>
             Cancel
           </button>
         </div>

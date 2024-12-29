@@ -3,7 +3,16 @@ import branches from "../../dummy/branches.json";
 
 const Reservation = () => {
     const [includePreorder, setIncludePreorder] = useState(false);
-    const cart = location.state?.cart || [];
+    // const cart = location.state?.cart || [];
+    const [cart, setCart] = useState(() => {
+        try {
+            const storedCart = localStorage.getItem("cart");
+            return storedCart ? JSON.parse(storedCart) : [];
+        } catch (error) {
+            console.error("Error reading cart from localStorage:", error);
+            return [];
+        }
+    });
     return (
         <main>
             <div>
@@ -156,7 +165,7 @@ const Reservation = () => {
                     </div>
 
                     {/* Image Section */}
-                    {/* {!includePreorder && */}
+                    {!includePreorder &&
                     <div className="col-md-6">
                         <img
                             src="https://tokyodeli.com.vn/Data/Sites/3/media/img_0096.jpg"
@@ -169,9 +178,9 @@ const Reservation = () => {
                             }}
                         />
                     </div>
-                    {/* } */}
+                     }
 
-                    {/* {includePreorder && (
+                     {includePreorder && (
                         <div className="col-md-6">
                             <h4 className="mb-4 text-danger">Thông tin đơn đặt trước</h4>
                             <h5>Sản phẩm</h5>
@@ -186,7 +195,7 @@ const Reservation = () => {
                                         alt={item.name}
                                         className="rounded"
                                         style={{
-                                            width: "80px",
+                                            width: "110px",
                                             height: "80px",
                                             objectFit: "cover",
                                         }}
@@ -201,7 +210,7 @@ const Reservation = () => {
                                 </div>
                             ))}
                         </div>
-                    )} */}
+                    )} 
                 </div>
             </div>
         </main>

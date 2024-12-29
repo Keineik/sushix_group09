@@ -4,7 +4,7 @@ import api from './api';
 export const fetchCardTypes = async () => {
     try {
         const response = await api.get('/card-type');
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
         console.error('Error fetching card types:', error);
         throw error;

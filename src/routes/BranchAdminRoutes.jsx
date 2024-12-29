@@ -45,7 +45,7 @@ export const BranchAdminRoutes = [
       {
         path: 'orders',
         children: [
-          { path: '', element: <BranchOrder OrderType="Dine-In" /> },
+          { path: '', element: <BranchOrder OrderType="Dine-In" />},
           {
             path: 'delivery',
             children: [

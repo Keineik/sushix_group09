@@ -9,7 +9,16 @@ const Checkout = ({isLoggedIn}) => {
     // isLoggedIn = true;
     const location = useLocation();
     const navigate = useNavigate();
-    const cart = location.state?.cart || [];
+    // const cart = location.state?.cart || [];
+    const [cart, setCart] = useState(() => {
+        try {
+            const storedCart = localStorage.getItem("cart");
+            return storedCart ? JSON.parse(storedCart) : [];
+        } catch (error) {
+            console.error("Error reading cart from localStorage:", error);
+            return [];
+        }
+    });
     const [couponCode, setCouponCode] = useState("");
     const [discount, setDiscount] = useState(0);
     const [error, setError] = useState("");
@@ -209,7 +218,7 @@ const Checkout = ({isLoggedIn}) => {
                                         alt={item.name}
                                         className="rounded"
                                         style={{
-                                            width: "80px",
+                                            width: "100px",
                                             height: "80px",
                                             objectFit: "cover",
                                         }}
