@@ -1,8 +1,8 @@
-//T code dơ quá, m sửa lại đi :)
+//T code dơ quá, m sửa lại đi :), j noo ok maf
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { updateCoupon, createCoupon, getCoupon } from '../../../api/coupon';
-import { fetchCardTypes } from '../../../api/cardType';
+// import { fetchCardTypes } from '../../../api/cardType';
 
 const CouponForm = () => {
   const { id } = useParams();
@@ -26,8 +26,8 @@ const CouponForm = () => {
 
   const fetchData = async () => {
     try {
-      const cardTypesResponse = await fetchCardTypes();
-      setCardTypes(cardTypesResponse || []);
+      // const cardTypesResponse = await fetchCardTypes();
+      // setCardTypes(cardTypesResponse || []);
 
       if (isEdit) {
         const couponResponse = await getCoupon(id);
@@ -41,33 +41,6 @@ const CouponForm = () => {
   useEffect(() => {
     fetchData();
   }, [id, isEdit]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (isEdit) {
-  //       try {
-  //         const coupon = await getCoupon(id); 
-  //         console.log('Coupon data:', coupon);
-  //         setFormData({
-  //           couponCode: coupon.couponCode || '',
-  //           couponDesc: coupon.couponDesc || '',
-  //           discountFlat: coupon.discountFlat || null,
-  //           discountRate: coupon.discountRate || null,
-  //           minPurchase: coupon.minPurchase || null,
-  //           maxDiscount: coupon.maxDiscount || null,
-  //           effectiveDate: coupon.effectiveDate || '',
-  //           expiryDate: coupon.expiryDate || '',
-  //           totalUsageLimit: coupon.totalUsageLimit || null,
-  //           minMembershipRequirement: coupon.minMembershipRequirement || null,
-  //         });
-  //       } catch (error) {
-  //         console.error('Error fetching coupon:', error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [id, isEdit]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,36 +1,45 @@
-import {useState, useEffect} from "react";
-import {useParams} from "react-router-dom";
-import itemsData from "../../dummy/items.json";
-import {useOutletContext, Link} from "react-router-dom";
-//import { fetchMenuItem, fetchMenuItems } from "../../api/menuItem";
-
-//Sửa giúp t nha Thùy :)
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+import { fetchMenuItem, fetchMenuItems } from "../../api/menuItem";
 
 const ItemInfo = () => {
     const {id} = useParams();
-    const item = itemsData.find((item) => item.id === parseInt(id));
     const {addToCart} = useOutletContext();
 
+    const [item, setItem] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [otherFood, setOtherFood] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    //const [item, setItem] = useState(null);
-    //const [items, setItems] = useState([]);
+    const loadItemData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const fetchedItem = await fetchMenuItem(id);
+            setItem(fetchedItem);
+        } catch (err) {
+            setError("Failed to load item details.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    // const loadData = async () => {
-    //     const item = await fetchMenuItem(id);
-    //     setItem(item);
-    //     const items = await fetchMenuItems({limit: 180}); 
-    // }
+    const loadOtherFoodData = async () => {
+        try {
+            const fetchedItems = await fetchMenuItems({ limit: 180 });
+            const randomItems = getRandomItems(fetchedItems.items || [], 4);
+            setOtherFood(randomItems);
+        } catch (err) {
+            console.error("Failed to load other food items.");
+        }
+    };
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    });
-
-    const getRandomItems = (n) => {
+    const getRandomItems = (items, n) => {
         const randomItems = [];
         while (randomItems.length < n) {
-            const randomItem = itemsData[Math.floor(Math.random() * itemsData.length)];
+            const randomItem = items[Math.floor(Math.random() * items.length)];
             if (!randomItems.includes(randomItem)) {
                 randomItems.push(randomItem);
             }
@@ -38,9 +47,10 @@ const ItemInfo = () => {
         return randomItems;
     };
 
-    //Sao có 2 useEffect() v haha
     useEffect(() => {
-        setOtherFood(getRandomItems(4));
+        loadItemData();
+        loadOtherFoodData();
+        window.scrollTo(0, 0);
     }, [id]);
 
     const handleIncrease = () => setQuantity((prev) => prev + 1);
@@ -50,6 +60,14 @@ const ItemInfo = () => {
             setQuantity((prev) => prev - 1);
         }
     };
+
+    if (loading) {
+        return <div>Loading item details...</div>;
+    }
+
+    if (error) {
+        return <div className="text-danger">{error}</div>;
+    }
 
     if (!item) {
         return <div>Item not found!</div>;
@@ -61,8 +79,8 @@ const ItemInfo = () => {
                 <div className="row">
                     <div className="col-md-6 text-center">
                         <img
-                            src={item.image}
-                            alt={item.name}
+                            src={item.imgUrl}
+                            alt={item.itemName}
                             className="img-fluid zoom-image"
                             style={{
                                 maxWidth: "400px",
@@ -73,12 +91,17 @@ const ItemInfo = () => {
                         />
                     </div>
                     <div className="col-md-6">
-                        <h2 className="item-name" style={{fontSize: "1.5rem"}}>
-                            {item.name}
+                        <h2 className="item-name" style={{ fontSize: "1.5rem" }}>
+                            {item.itemName}
                         </h2>
-                        <h4 className="item-price text-danger" style={{fontSize: "1.2rem"}}>
-                            {item.price}đ
+                        <h4 className="item-price text-danger" style={{ fontSize: "1.2rem" }}>
+                            {item.unitPrice.toLocaleString()}đ
                         </h4>
+
+                        <p className="item-sold">
+                            <strong>Số lượng đã bán: </strong>
+                            {item.soldQuantity?.toLocaleString() || 0}
+                        </p>
 
                         <div className="quantity-control my-4">
                             <button
@@ -93,7 +116,7 @@ const ItemInfo = () => {
                                 +
                             </button>
                         </div>
-                        <hr/>
+                        <hr />
                         <button
                             className="btn btn-danger btn-lg"
                             onClick={() => addToCart(item, quantity)}
@@ -109,19 +132,21 @@ const ItemInfo = () => {
                 <h3 className="mb-4">Món ăn khác</h3>
                 <div className="row">
                     {otherFood.map((foodItem) => (
-                        <div key={foodItem.id} className="col-md-3 mb-4">
+                        <div key={foodItem.itemId} className="col-md-3 mb-4">
                             <div className="card h-100 border-0">
-                                <Link to={`/menu/item/${foodItem.id}`}>
+                                <Link to={`/menu/item/${foodItem.itemId}`}>
                                     <img
-                                        src={foodItem.image}
+                                        src={foodItem.imgUrl}
                                         className="card-img-top img-hover"
-                                        alt={foodItem.name}
-                                        style={{maxHeight: "200px", objectFit: "cover"}}
+                                        alt={foodItem.itemName}
+                                        style={{ maxHeight: "200px", objectFit: "cover" }}
                                     />
                                 </Link>
                                 <div className="card-body text-center">
-                                    <p className="card-text">{foodItem.name}</p>
-                                    <h5 className="card-title text-danger">{foodItem.price}đ</h5>
+                                    <p className="card-text">{foodItem.itemName}</p>
+                                    <h5 className="card-title text-danger">
+                                        {foodItem.unitPrice.toLocaleString()}đ
+                                    </h5>
                                 </div>
                             </div>
                         </div>
