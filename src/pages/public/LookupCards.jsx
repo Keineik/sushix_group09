@@ -1,64 +1,47 @@
 import { useState } from "react";
 import customers from "../../dummy/customers";
+import { getMembershipCard } from "../../api/membershipCard";
+
 const LookupCards = () => {
-    const [name, setName] = useState("");
     const [cardNumber, setCardNumber] = useState("");
     const [searchResult, setSearchResult] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
   
-    const handleSearch = (e) => {
+    const handleSearch = async(e) => {
       e.preventDefault();
   
       // Validate inputs
-      if (!name || !cardNumber) {
+      if (!cardNumber) {
         alert("Vui lòng nhập đầy đủ thông tin để tìm kiếm.");
         return;
       }
-  
+      setIsLoading(true); // Show loading indicator
       // Perform search in the JSON data
-      const result = customers.find(
-        (customer) =>
-          customer.CustName.toLowerCase() === name.toLowerCase() &&
-          customer.MembershipCardID.toString() === cardNumber
-      );
+      try {
+
+        const result = await getMembershipCard(cardNumber);
   
-      // Update search result
-      if (result) {
-        setSearchResult(result);
-      } else {
+        // Validate if the name matches the fetched membership card
+        if (result.CustName.toLowerCase() === name.toLowerCase()) {
+          setSearchResult(result);
+        } else {
+          setSearchResult("Tên không khớp với ID thẻ thành viên.");
+        }
+      } catch (error) {
         setSearchResult("Không tìm thấy thông tin khách hàng.");
+      } finally {
+        setIsLoading(false); // Hide loading indicator
       }
     };
   
     return (
       <div className="container mt-5">
         <div className="text-center mb-4">
-          Vui lòng nhập các thông tin cần thiết để tra cứu điểm tích lũy của thẻ Member Card
+          Vui lòng nhập các thông tin cần thiết để tra cứu điểm tích lũy của thẻ Membership
         </div>
         <div className="row justify-content-center">
           <div className="col-md-4">
             <form onSubmit={handleSearch}>
-              <div className="input-group mb-3">
-                <span className="input-group-text">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-person"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
-                  </svg>
-                </span>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  placeholder="Nhập họ và tên"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
               <div className="input-group mb-3">
                 <span className="input-group-text">
                   <svg
@@ -82,9 +65,9 @@ const LookupCards = () => {
                   onChange={(e) => setCardNumber(e.target.value)}
                 />
               </div>
-              <button type="submit" className="btn btn-danger w-100">
-                Tìm kiếm
-              </button>
+              <button type="submit" className="btn btn-danger w-100" disabled={isLoading}>
+              {isLoading ? "Đang tìm kiếm..." : "Tìm kiếm"}
+            </button>
             </form>
             <div className="mt-4">
               {searchResult ? (
@@ -93,10 +76,9 @@ const LookupCards = () => {
                 ) : (
                   <div className="alert alert-success">
                     <h5>Thông tin khách hàng:</h5>
-                    <p><strong>Họ và tên:</strong> {searchResult.CustName}</p>
-                    <p><strong>Email:</strong> {searchResult.CustEmail}</p>
-                    <p><strong>Số điện thoại:</strong> {searchResult.CustPhoneNumber}</p>
-                    <p><strong>ID thẻ thành viên:</strong> {searchResult.MembershipCardID}</p>
+                    <p><strong>ID thẻ thành viên:</strong> {searchResult.CardID}</p>
+                    <p><strong>Điểm:</strong> {searchResult.Points}</p>
+                    <p><strong>Ngày phát hành:</strong> {searchResult.IssueDate}</p>
                   </div>
                 )
               ) : null}
