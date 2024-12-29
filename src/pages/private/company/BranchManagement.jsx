@@ -7,9 +7,9 @@ const BranchManagement = () => {
   const [branches, setBranches] = useState([]);
 
   const loadBranches = async () => {
-    const { result } = await fetchBranches();
-    console.log(result);
-    setBranches(result || []);
+    const branchesResponse = await fetchBranches();
+    console.log(branchesResponse);
+    setBranches(branchesResponse || []);
   }
 
   useEffect(() => {

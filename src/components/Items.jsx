@@ -11,16 +11,29 @@ const Items = ({ onAddToCart }) => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const currentPage = parseInt(searchParams.get("page") || "1", 10);
+    const categoryId = searchParams.get("categoryId") || "";
+    const branchId = searchParams.get("branchId") || "";
+    const searchTerm = searchParams.get("searchTerm") || "";
+    const sortKey = searchParams.get("sortKey") || "";
+    const sortDirection = searchParams.get("sortDirection") || "";
+    const filterShippable = searchParams.get("filterShippable") || "";
 
-    // Fetch items from the server
-    const loadItems = async (page) => {
+    const loadItems = async () => {
         setLoading(true);
         setError(null);
         try {
-            const { result } = await fetchMenuItems({ page, limit: itemsPerPage });
-
-            setItems(result.items);
-            setTotalCount(result.totalCount);
+            const menuItemsResponse = await fetchMenuItems({
+                page: currentPage,
+                limit: itemsPerPage,
+                branchId: branchId,
+                categoryId: categoryId,
+                searchTerm: searchTerm,
+                sortKey: sortKey,
+                sortDirection: sortDirection,
+                filterShippable: filterShippable,
+            });
+            setItems(menuItemsResponse.items || []);
+            setTotalCount(menuItemsResponse.totalCount || 0);
         } catch (err) {
             setError("Failed to fetch items.");
         } finally {
@@ -28,17 +41,17 @@ const Items = ({ onAddToCart }) => {
         }
     };
 
-    // Trigger loading items whenever the page changes
     useEffect(() => {
-        loadItems(currentPage);
-    }, [currentPage]);
+        loadItems();
+    }, [currentPage, categoryId, branchId, searchTerm, sortKey, sortDirection, filterShippable]);
 
     const handlePageChange = (page) => {
-        setSearchParams({ page: page }); // Update the query parameter
-        window.scrollTo(0, 0); // Scroll to the top of the page
+        searchParams.set("page", page);
+        setSearchParams(searchParams);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    const totalPages = Math.ceil(totalCount / itemsPerPage); // Calculate total pages
+    const totalPages = Math.ceil(totalCount / itemsPerPage);
 
     return (
         <main>

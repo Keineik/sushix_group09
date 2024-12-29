@@ -6,8 +6,8 @@ const MembershipManagement = () => {
     const [cardTypes, setCardTypes] = useState([]);
 
     const fetchData = async () => {
-        const { result } = await fetchCardTypes();
-        setCardTypes(result || []);
+        const cardTypeResponse = await fetchCardTypes();
+        setCardTypes(cardTypeResponse || []);
     };
 
     useEffect(() => {

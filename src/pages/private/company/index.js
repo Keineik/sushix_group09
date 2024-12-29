@@ -10,5 +10,5 @@ export { default as CouponForm } from './CouponForm';
 export { default as CouponManagement } from './CouponManagement';
 export { default as HRManagement } from './HRManagement';
 export { default as HRForm } from './HRForm';
-export { default as ItemEditForm } from './ItemEditForm';
+export { default as ItemForm } from './ItemForm';
 export { default as CategoryForm } from './CategoryForm';

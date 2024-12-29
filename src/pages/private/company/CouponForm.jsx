@@ -1,3 +1,4 @@
+//T code dơ quá, m sửa lại đi :)
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { updateCoupon, createCoupon, getCoupon } from '../../../api/coupon';
@@ -23,21 +24,21 @@ const CouponForm = () => {
 
   const [cardTypes, setCardTypes] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const cardTypesResponse = await fetchCardTypes();
-        setCardTypes(cardTypesResponse || []);
+  const fetchData = async () => {
+    try {
+      const cardTypesResponse = await fetchCardTypes();
+      setCardTypes(cardTypesResponse || []);
 
-        if (isEdit) {
-          const coupon = await getCoupon(id);
-          setFormData(coupon);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+      if (isEdit) {
+        const couponResponse = await getCoupon(id);
+        setFormData(couponResponse);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [id, isEdit]);
 

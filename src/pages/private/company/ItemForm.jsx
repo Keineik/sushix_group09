@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getMenuItem, updateMenuItem } from '../../../api/menuItem';
+import { fetchMenuItem, updateMenuItem } from '../../../api/menuItem';
 import { fetchCategories } from '../../../api/category';
 
 const ItemEditForm = () => {
@@ -24,10 +24,10 @@ const ItemEditForm = () => {
         const fetchData = async () => {
             try {
                 const categoriesResponse = await fetchCategories();
-                setCategories(categoriesResponse.result || []);
+                setCategories(categoriesResponse || []);
 
                 if (isEdit) {
-                    const item = await getMenuItem(id);
+                    const item = await fetchMenuItem(id);
                     setFormData(item);
                     console.log('item:', item);
                 }

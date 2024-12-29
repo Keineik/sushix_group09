@@ -12,8 +12,8 @@ const CategoryManagement = () => {
         setLoading(true);
         setError(null);
         try {
-            const { result } = await fetchCategories();
-            setCategories(result);
+            const categoriesResponse = await fetchCategories();
+            setCategories(categoriesResponse);
         } catch (err) {
             setError("Failed to fetch categories.");
         } finally {

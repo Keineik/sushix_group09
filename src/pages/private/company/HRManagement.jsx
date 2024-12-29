@@ -15,23 +15,7 @@ const HRManagement = () => {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        // Fetch staffs from the API with pagination
-        const fetchStaffs = async () => {
-            const response = await fetch(`/api/staffs?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}&branch=${selectedBranch}`);
-            const data = await response.json();
-            setStaffs(data.staffs);
-            setTotalPages(data.totalPages);
-        };
-
-        // Fetch branches from the API
-        const fetchBranches = async () => {
-            const response = await fetch('/api/branches');
-            const data = await response.json();
-            setBranches(data);
-        };
-
-        // fetchStaffs();
-        // fetchBranches();
+        //fok
 
         setStaffs(staffsData);
         setBranches(branchesData);

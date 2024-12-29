@@ -24,9 +24,9 @@ const ItemManagement = () => {
                 sortDirection: sortConfig.direction === 'desc'
             });
             const categoriesResponse = await fetchCategories();
-            setItems(menuItemsResponse.result.items || []);
-            setTotalCount(menuItemsResponse.result.totalCount || 0);
-            setCategories(categoriesResponse.result || []);
+            setItems(menuItemsResponse.items || []);
+            setTotalCount(menuItemsResponse.totalCount || 0);
+            setCategories(categoriesResponse || []);
         } catch (error) {
             console.error('Error fetching menu items:', error);
         }

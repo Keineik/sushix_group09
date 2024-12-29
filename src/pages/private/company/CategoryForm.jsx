@@ -14,10 +14,10 @@ const CategoryForm = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-
                 if (isEdit) {
-                    const item = await fetchCategory(id);
-                    setFormData(item);
+                    const categoryResponse = await fetchCategory(id);
+                    console.log('Category data:', categoryResponse);
+                    setFormData(categoryResponse);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -65,7 +65,7 @@ const CategoryForm = () => {
                         type="text"
                         className="form-control"
                         name="itemName"
-                        value={formData.itemName}
+                        value={formData.categoryName}
                         onChange={handleChange}
                         required
                     />

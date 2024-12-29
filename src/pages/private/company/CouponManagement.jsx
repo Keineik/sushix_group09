@@ -13,9 +13,8 @@ const CouponManagement = () => {
     setLoading(true);
     setError(null);
     try {
-      const { result } = await fetchCoupons();
-      console.log(result);
-      setCoupons(result || []);
+      const couponsResponse = await fetchCoupons();
+      setCoupons(couponsResponse || []);
     } catch (err) {
       setError("Failed to fetch coupons.");
     } finally {

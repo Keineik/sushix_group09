@@ -19,30 +19,29 @@ const BranchForm = () => {
     imgUrl: ''
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (isEdit) {
-        try {
-          const { result } = await fetchBranch(id);
-          console.log('result:', result);
-          setFormData({
-            branchName: result.branchName || '',
-            branchAddress: result.branchAddress || '',
-            branchRegion: result.branchRegion || '',
-            openingTime: result.openingTime || '',
-            closingTime: result.closingTime || '',
-            branchPhoneNumber: result.branchPhoneNumber || '',
-            hasCarParking: result.hasCarParking || false,
-            hasBikeParking: result.hasBikeParking || false,
-            imgUrl: result.imgUrl || ''
-          });
-        } catch (error) {
-          console.error('Error fetching branch:', error);
-        }
+  const loadData = async () => {
+    if (isEdit) {
+      try {
+        const branchResponse = await fetchBranch(id);
+        setFormData({
+          branchName: branchResponse.branchName || '',
+          branchAddress: branchResponse.branchAddress || '',
+          branchRegion: branchResponse.branchRegion || '',
+          openingTime: branchResponse.openingTime || '',
+          closingTime: branchResponse.closingTime || '',
+          branchPhoneNumber: branchResponse.branchPhoneNumber || '',
+          hasCarParking: branchResponse.hasCarParking || false,
+          hasBikeParking: branchResponse.hasBikeParking || false,
+          imgUrl: branchResponse.imgUrl || ''
+        });
+      } catch (error) {
+        console.error('Error fetching branch:', error);
       }
-    };
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    loadData();
   }, [id, isEdit]);
 
   const handleSubmit = async (e) => {

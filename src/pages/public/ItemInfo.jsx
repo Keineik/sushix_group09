@@ -2,6 +2,9 @@ import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import itemsData from "../../dummy/items.json";
 import {useOutletContext, Link} from "react-router-dom";
+//import { fetchMenuItem, fetchMenuItems } from "../../api/menuItem";
+
+//Sửa giúp t nha Thùy :)
 
 const ItemInfo = () => {
     const {id} = useParams();
@@ -10,6 +13,15 @@ const ItemInfo = () => {
 
     const [quantity, setQuantity] = useState(1);
     const [otherFood, setOtherFood] = useState([]);
+
+    //const [item, setItem] = useState(null);
+    //const [items, setItems] = useState([]);
+
+    // const loadData = async () => {
+    //     const item = await fetchMenuItem(id);
+    //     setItem(item);
+    //     const items = await fetchMenuItems({limit: 180}); 
+    // }
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -26,7 +38,7 @@ const ItemInfo = () => {
         return randomItems;
     };
 
-
+    //Sao có 2 useEffect() v haha
     useEffect(() => {
         setOtherFood(getRandomItems(4));
     }, [id]);
