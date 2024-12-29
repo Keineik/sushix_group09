@@ -4,19 +4,18 @@ import { AuthContext } from '../../context/AuthContext';
 const Register = () => {
     const [formData, setFormData] = useState({
         username: '',
-        phone: '',
+        phoneNumber: '',
         email: '',
-        membershipCode: '',
-        fullName: '',
+        cardId: '',
+        custName: '',
         password: '',
         confirmPassword: '',
     });
     const { register } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
-    const [loading, setLoading] = useState(false); // Show loading state during API call
+    const [loading, setLoading] = useState(false);
 
-    // Handle form input changes dynamically
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData((prevState) => ({
@@ -30,25 +29,28 @@ const Register = () => {
         setError(null);
         setLoading(true);
 
-
         if (formData.password !== formData.confirmPassword) {
             setError('Mật Khẩu và Xác Nhận Mật Khẩu không khớp!');
             setLoading(false);
             return;
         }
 
+        const { confirmPassword, ...registrationData } = formData;
+        console.log('Registration data:', registrationData);
+
         try {
-            await register(formData);
+            const response = await register(registrationData);
             setSuccess(true);
             setFormData({
                 username: '',
-                phone: '',
+                phoneNumber: '',
                 email: '',
-                membershipCode: '',
-                fullName: '',
+                cardId: '',
+                custName: '',
                 password: '',
                 confirmPassword: '',
             });
+            console.log('WTF happened:', response);
         } catch (err) {
             setError(err.message || 'Đăng ký thất bại. Vui lòng thử lại.');
         } finally {
@@ -100,8 +102,8 @@ const Register = () => {
                                 <input
                                     type="tel"
                                     className="form-control"
-                                    id="phone"
-                                    value={formData.phone}
+                                    id="phoneNumber"
+                                    value={formData.phoneNumber}
                                     onChange={handleChange}
                                     required
                                 />
@@ -124,8 +126,8 @@ const Register = () => {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="membershipCode"
-                                    value={formData.membershipCode}
+                                    id="cardId"
+                                    value={formData.cardId}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -135,8 +137,8 @@ const Register = () => {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="fullName"
-                                    value={formData.fullName}
+                                    id="custName"
+                                    value={formData.custName}
                                     onChange={handleChange}
                                     required
                                 />

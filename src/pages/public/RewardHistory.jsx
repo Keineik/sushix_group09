@@ -7,10 +7,8 @@ const RewardHistoryPage = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Assuming the logged-in customer's ID is 1 for this example
     const loggedInCustID = 1;
 
-    // Find the logged-in user
     const loggedInUser = customers.find((customer) => customer.CustID === loggedInCustID);
 
     if (loggedInUser) {
@@ -20,7 +18,6 @@ const RewardHistoryPage = () => {
         phone: loggedInUser.CustPhoneNumber,
       });
 
-      // Filter reward history based on the logged-in user’s CustID
       const userHistory = rewardHistoryData.filter((entry) => entry.CustID === loggedInCustID);
       setRewardHistory(userHistory);
     }

@@ -1,38 +1,28 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import api from '../../api/api'; // Assuming you fetch additional data like reward points from the API
 
 const Profile = () => {
-    const { user, token, isAuthenticated } = useContext(AuthContext); // Pull user and token from context
+    const { user } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
     });
-    const [rewardPoints, setRewardPoints] = useState(0); // Reward points fetched dynamically
+    const [rewardPoints, setRewardPoints] = useState(0);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
 
-    // Fetch reward points if authenticated
     useEffect(() => {
-        if (isAuthenticated && user) {
+        if (user) {
             setFormData({
-                name: user.name || '', // Pull current user name
-                email: user.email || '', // Pull current user email
-                phone: user.phone || '', // Pull current user phone
+                name: user.custName || '',
+                email: user.custEmail || '',
+                phone: user.custPhoneNumber || '',
             });
-            // If reward points data isn't already in the user, fetch it
-            api.post('/auth/introspect', { token }) // Example endpoint for fetching reward points
-                .then((response) => {
-                    setRewardPoints(response.data.result.rewardPoints); // Update reward points
-                })
-                .catch((err) => {
-                    console.error('Failed to fetch reward points', err);
-                });
         }
-    }, [user, isAuthenticated, token]);
+    }, [user]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -49,25 +39,11 @@ const Profile = () => {
             return;
         }
         setError(null);
-        // Optionally call an API to update user details on the server
-        api.put('/users/update-profile', formData, {
-            headers: {
-                Authorization: `Bearer ${token}`, // Send token in headers for authentication
-            },
-        })
-            .then(() => {
-                setSuccessMessage('Profile updated successfully!');
-                setShowSuccess(true);
-                setTimeout(() => setShowSuccess(false), 3000);
-                // Update the context or re-fetch user data if needed
-            })
-            .catch((err) => {
-                console.error('Failed to update profile', err);
-                setError('Failed to update profile. Please try again.');
-            });
+
+        //dew something XD
     };
 
-    if (!isAuthenticated) {
+    if (!user) {
         return <div>Please log in to view your profile.</div>;
     }
 

@@ -1,7 +1,9 @@
-import React from 'react';
+import { useContext } from 'react';
 import {Link, Outlet, useLocation} from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Account = () => {
+    const { user } = useContext(AuthContext);
     const location = useLocation();
     const activeTab = location.pathname.split('/').pop();
 
@@ -20,7 +22,7 @@ const Account = () => {
                         <div className="card-body p-3">
                             <h5 className="card-title mx-4 my-2"
                                 style={{fontSize: '1.2rem', fontWeight: 'bold', color: '#333'}}>Tài khoản của</h5>
-                            <span className='card-text mx-4 my-2'>ZZZZ</span>
+                            <span className='card-text mx-4 my-2'> {user.custName} </span>
                         </div>
                     </div>
 

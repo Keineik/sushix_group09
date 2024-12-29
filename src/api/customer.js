@@ -1,6 +1,5 @@
 import api from './api';
 
-// Fetch all customers
 export const fetchCustomers = async () => {
     try {
         const response = await api.get('/customer');
@@ -11,7 +10,6 @@ export const fetchCustomers = async () => {
     }
 };
 
-// Fetch a specific customer by ID
 export const getCustomer = async (customerId) => {
     try {
         const response = await api.get(`/customer/${customerId}`);
@@ -22,7 +20,16 @@ export const getCustomer = async (customerId) => {
     }
 };
 
-// Create a new customer
+export const getCurrentCustomer = async () => {
+    try {
+        const response = await api.get('/customer/current');
+        return response.data.result;
+    } catch (error) {
+        console.error('Error fetching current customer:', error);
+        throw error;
+    }
+}
+
 export const createCustomer = async (customerRequest) => {
     try {
         const response = await api.post('/customer', customerRequest);
@@ -33,7 +40,6 @@ export const createCustomer = async (customerRequest) => {
     }
 };
 
-// Update an existing customer
 export const updateCustomer = async (customerId, customerRequest) => {
     try {
         const response = await api.put(`/customer/${customerId}`, customerRequest);
@@ -44,7 +50,6 @@ export const updateCustomer = async (customerId, customerRequest) => {
     }
 };
 
-// Delete a customer by ID
 export const deleteCustomer = async (customerId) => {
     try {
         const response = await api.delete(`/customer/${customerId}`);

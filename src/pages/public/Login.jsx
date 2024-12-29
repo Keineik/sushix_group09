@@ -70,7 +70,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 className="btn btn-danger w-100"
-                                disabled={loading} // Disable button during loading
+                                disabled={loading}
                             >
                                 {loading ? 'Đăng Nhập...' : 'Đăng Nhập'}
                             </button>

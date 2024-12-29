@@ -1,9 +1,34 @@
-import React, { useState} from 'react';
-import branches from "../../dummy/branches.json";
+import { useState, useEffect } from 'react';
+import { fetchBranches } from '../../api/branch';
+
 
 const Reservation = () => {
     const [includePreorder, setIncludePreorder] = useState(false);
     // const cart = location.state?.cart || [];
+    const [region, setRegion] = useState("");
+
+    const [branches, setBranches] = useState([]);
+
+    const loadData = async () => {
+        const branchesResponse = await fetchBranches();
+        setBranches(branchesResponse.filter((branch) => (region === "" || branch.branchRegion === region)));
+    }
+
+    const [formData, setFormData] = useState({
+        fullName: "",
+        phoneNumber: "",
+        emailAddress: "",
+        branchId: "",
+        reservationDate: "",
+        reservationTime: "",
+        guestCount: 0,
+        specialNotes: "",
+    });
+
+    useEffect(() => {
+        loadData();
+    }, [region]);
+
     const [cart, setCart] = useState(() => {
         try {
             const storedCart = localStorage.getItem("cart");
@@ -13,6 +38,7 @@ const Reservation = () => {
             return [];
         }
     });
+
     return (
         <main>
             <div>
@@ -91,8 +117,8 @@ const Reservation = () => {
                                             Chọn nhà hàng
                                         </option>
                                         {branches.map((branch) => (
-                                            <option key={branch.id} value={branch.id}>
-                                                {branch.name}
+                                            <option key={branch.branchId} value={branch.branchId}>
+                                                {branch.branchName}
                                             </option>
                                         ))}
                                     </select>
