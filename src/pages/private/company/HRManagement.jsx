@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import staffsData from '../../../dummy/staffs.json';
-import branchesData from '../../../dummy/branches.json';
+import { fetchBranches } from '../../../api/branch'
 import workHistoryData from '../../../dummy/workhistory.json';
 
 const HRManagement = () => {
@@ -27,7 +27,6 @@ const HRManagement = () => {
     };
 
     const handleDelete = async (id) => {
-        // await fetch(`/api/staffs/${id}`, { method: 'DELETE' });
         setStaffs(staffs.filter(staff => staff.StaffID !== id));
     };
 

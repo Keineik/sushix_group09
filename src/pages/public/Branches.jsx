@@ -1,9 +1,19 @@
-import { useState } from "react";
-import branches from "../../dummy/branches.json";
+import { useState, useEffect } from "react";
+import { fetchBranches } from "../../api/branch";
 
 const Branches = () => {
     const itemsPerPage = 6;
     const [currentPage, setCurrentPage] = useState(1);
+    const [branches, setBranches] = useState([]);
+
+    const loadBranches = async () => {
+        try {
+            const branchesResponse = await fetchBranches();
+            setBranches(branchesResponse);
+        } catch (error) {
+            console.error("Error fetching branches:", error);
+        }
+    };
 
     const totalPages = Math.ceil(branches.length / itemsPerPage);
 
@@ -15,6 +25,10 @@ const Branches = () => {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
+    useEffect(() => {
+        loadBranches();
+    }, []);
 
     return (
         <main>
@@ -37,26 +51,26 @@ const Branches = () => {
                                 <div className="card-img-top">
                                     <a href="#">
                                         <img
-                                            src={branch.imgSrc}
+                                            src={branch.imgUrl}
                                             className="img-fluid rounded-top"
                                             alt={branch.altText || "Branch Image"}
                                         />
                                     </a>
                                 </div>
                                 <div className="card-body">
-                                    <h5 className="card-title text-danger fw-bold">{branch.name}</h5>
+                                    <h5 className="card-title text-danger fw-bold">{branch.branchName}</h5>
                                     <ul className="list-unstyled">
                                         <li>
                                             <i className="bi bi-geo-alt-fill text-danger"></i>
-                                            <span> {branch.address}</span>
+                                            <span> {branch.branchAddress}</span>
                                         </li>
                                         <li>
                                             <i className="bi bi-telephone-fill text-success"></i>
-                                            <span> {branch.phone}</span>
+                                            <span> {branch.branchPhoneNumber}</span>
                                         </li>
                                         <li>
                                             <i className="bi bi-clock text-primary"></i>
-                                            <span> {branch.hours}</span>
+                                            <span> {branch.openingTime}-{branch.closingTime}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -67,7 +81,6 @@ const Branches = () => {
             </div>
             <nav className="mt-4">
                 <ul className="pagination justify-content-center align-items-center">
-                    {/* Previous button */}
                     <li className="page-item">
                         <button
                             className="arrow-btn"

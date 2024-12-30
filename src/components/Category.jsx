@@ -25,7 +25,7 @@ const Category = () => {
             </div>
             <div className="row pt-3 ps-4">
                 {categories.map((category) => (
-                    <p key={category.id}>
+                    <p key={category.categoryId}>
                         <Link
                             className="link-underline link-underline-opacity-0 custom-hover-container"
                             to={`/menu?categoryId=${category.categoryId}`}

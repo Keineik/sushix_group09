@@ -1,11 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchBranches } from '../api/branch';
 
-const NavbarDown = ({cart}) => {
+const NavbarDown = ({ cart }) => {
   const [activeNav, setActiveNav] = useState(null);
+  const [branches, setBranches] = useState([]);
+  const [selectedBranch, setSelectedBranch] = useState(localStorage.getItem('selectedBranch') || '');
+
+  useEffect(() => {
+    const loadBranches = async () => {
+      try {
+        const branchesResponse = await fetchBranches();
+        setBranches(branchesResponse);
+      } catch (error) {
+        console.error('Error fetching branches:', error);
+      }
+    };
+
+    loadBranches();
+  }, []);
 
   const handleNavClick = (navIndex) => {
     setActiveNav(navIndex);
+  };
+
+  const handleBranchChange = (e) => {
+    const branch = e.target.value;
+    setSelectedBranch(branch);
+    localStorage.setItem('selectedBranch', branch);
   };
 
   return (
@@ -21,11 +43,20 @@ const NavbarDown = ({cart}) => {
       }}
     >
       <div className="container px-3">
-        <select className="form-select w-25" aria-label="Select Branch">
-          <option selected>Chọn Chi Nhánh</option>
-          <option value="1">366A3 Phan Văn Trị, Quận Gò Vấp</option>
-          <option value="2">242 - 244 Phan Xích Long, Q. Phú Nhuận</option>
-          <option value="3">31 - 33 Nguyễn Thị Thập, Him Lam, Q.7</option>
+        <select
+          className="form-select w-25"
+          aria-label="Select Branch"
+          value={selectedBranch}
+          onChange={handleBranchChange}
+        >
+          <option value="" disabled>
+            Chọn Chi Nhánh
+          </option>
+          {branches.map((branch) => (
+            <option key={branch.branchId} value={branch.branchId}>
+              {branch.branchName}
+            </option>
+          ))}
         </select>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav ms-auto">
@@ -67,7 +98,7 @@ const NavbarDown = ({cart}) => {
             </a>
             <Link
               to="/reservation"
-              state={{ cart }} // Passing cart as state
+              state={{ cart }}
               className={`nav-link ${activeNav === 5 ? 'text-danger' : ''}`}
               onClick={() => handleNavClick(5)}
             >

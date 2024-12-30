@@ -10,7 +10,6 @@ const PrivateLogin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     
-    // Hi Thuy
     let userRole;
     if (username === 'company' && password === 'company') {
       userRole = 'company';

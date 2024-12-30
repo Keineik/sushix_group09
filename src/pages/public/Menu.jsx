@@ -1,6 +1,5 @@
 import Category from "../../components/Category"
 import Items from "../../components/Items"
-import items from "../../dummy/items.json"
 import { useOutletContext } from "react-router-dom";
 
 const Menu = () => {
@@ -14,7 +13,7 @@ const Menu = () => {
               <Category />
             </div>
             <div className="col col-9">
-              <Items key={items.id} items={items} onAddToCart={addToCart} />
+              <Items onAddToCart={addToCart} />
             </div>
           </div>
         </div>

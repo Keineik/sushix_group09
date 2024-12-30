@@ -2,27 +2,11 @@ import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import logo from '../assets/logo.png';
-import { getCurrentCustomer } from '../api/customer';
 
 const Navbar = ({ cart, onCartClick }) => {
-    const { user, setUser, logout } = useContext(AuthContext);
+    const { isAuth, logout } = useContext(AuthContext);
 
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            if (!user) {
-                try {
-                    const userData = await getCurrentCustomer();
-                    setUser(userData);
-                } catch (error) {
-                    console.error('Failed to fetch user data:', error);
-                }
-            }
-        };
-
-        fetchUserData();
-    }, [user, setUser]);
 
     return (
         <nav
@@ -124,7 +108,7 @@ const Navbar = ({ cart, onCartClick }) => {
                         </svg>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
-                        {user ? (
+                        {isAuth ? (
                             <>
                                 <li>
                                     <Link to="/account" className="dropdown-item">

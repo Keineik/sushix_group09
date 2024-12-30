@@ -1,5 +1,5 @@
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
-import {AuthProvider} from './context/AuthContext'; // Import AuthProvider
+import {AuthProvider} from './context/AuthContext'; 
 import {MainLayout, BranchAdminLayout, CompanyAdminLayout, StaffLayout} from './layouts';
 import {PublicRoutes} from './routes/PublicRoutes';
 import {BranchAdminRoutes} from './routes/BranchAdminRoutes';
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
             <AuthProvider>
                 <MainLayout/>
             </AuthProvider>
-        ), // Wrapping AuthProvider around the MainLayout
+        ),
         children: PublicRoutes,
     },
     {

@@ -9,3 +9,13 @@ export const createReservation = async (reservationRequest) => {
         throw error;
     }
 }
+
+export const createDeliveryOrder = async (deliveryOrderRequest) => {
+    try {
+        const response = await api.post('/customer/delivery-order', deliveryOrderRequest);
+        return response.data.result;
+    } catch (error) {
+        console.error('Error creating delivery order:', error);
+        throw error;
+    }
+}

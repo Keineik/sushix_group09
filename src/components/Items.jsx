@@ -12,7 +12,7 @@ const Items = ({ onAddToCart }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const currentPage = parseInt(searchParams.get("page") || "1", 10);
     const categoryId = searchParams.get("categoryId") || "";
-    const branchId = searchParams.get("branchId") || "";
+    const branchId = parseInt(localStorage.getItem('selectedBranch'), 10) || null;
     const searchTerm = searchParams.get("searchTerm") || "";
     const sortKey = searchParams.get("sortKey") || "";
     const sortDirection = searchParams.get("sortDirection") || "";
@@ -32,6 +32,7 @@ const Items = ({ onAddToCart }) => {
                 sortDirection: sortDirection,
                 filterShippable: filterShippable,
             });
+            console.log(menuItemsResponse);
             setItems(menuItemsResponse.items || []);
             setTotalCount(menuItemsResponse.totalCount || 0);
         } catch (err) {
@@ -60,7 +61,6 @@ const Items = ({ onAddToCart }) => {
                     <h5 className="ps-5 py-2">SUSHIX</h5>
                 </div>
 
-                {/* Conditional rendering for loading and error states */}
                 {loading ? (
                     <p className="text-center">Loading items...</p>
                 ) : error ? (
@@ -97,7 +97,6 @@ const Items = ({ onAddToCart }) => {
                 )}
             </div>
 
-            {/* Pagination Controls */}
             <nav className="mt-4">
                 <ul className="pagination justify-content-center align-items-center">
                     <li className="page-item">
