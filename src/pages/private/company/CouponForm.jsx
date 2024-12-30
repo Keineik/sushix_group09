@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { updateCoupon, createCoupon, getCoupon } from '../../../api/coupon';
-// import { fetchCardTypes } from '../../../api/cardType';
+import { fetchCardTypes } from '../../../api/cardType';
 
 const CouponForm = () => {
   const { id } = useParams();
@@ -26,8 +26,8 @@ const CouponForm = () => {
 
   const fetchData = async () => {
     try {
-      // const cardTypesResponse = await fetchCardTypes();
-      // setCardTypes(cardTypesResponse || []);
+      const cardTypesResponse = await fetchCardTypes();
+      setCardTypes(cardTypesResponse || []);
 
       if (isEdit) {
         const couponResponse = await getCoupon(id);

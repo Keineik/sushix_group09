@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchCoupons } from '../../../api/coupon';
+import { fetchCardTypes } from '../../../api/cardType';
 
 const CouponManagement = () => {
   const [coupons, setCoupons] = useState([]);
@@ -8,6 +9,16 @@ const CouponManagement = () => {
   const [selectedCoupon, setSelectedCoupon] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cardTypes, setCardTypes] = useState([]);
+
+  const loadCardTypes = async () => {
+    try {
+        const cardTypesResponse = await fetchCardTypes();
+        setCardTypes(cardTypesResponse || []);
+    } catch (err) {
+        console.error("Failed to fetch card types.");
+    }
+  };
 
   const loadCoupons = async () => {
     setLoading(true);
@@ -23,7 +34,8 @@ const CouponManagement = () => {
   }
 
   useEffect(() => {
-    loadCoupons();
+      loadCoupons();
+      loadCardTypes();
   }, []);
 
   const handleSearchChange = (e) => {
@@ -37,6 +49,11 @@ const CouponManagement = () => {
   const filteredCoupons = coupons.filter(coupon =>
     coupon.couponCode.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const getCardName = (cardTypeId) => {
+    const card = cardTypes.find((ct) => ct.cardTypeId === cardTypeId);
+    return card ? card.cardName : 'Unknown';
+  };
 
   return (
     <div>
@@ -119,7 +136,7 @@ const CouponManagement = () => {
                 <p><strong>Expiry Date:</strong> {selectedCoupon.expiryDate}</p>
                 <p><strong>Total Usage Limit:</strong> {selectedCoupon.totalUsageLimit}</p>
                 <p><strong>Remaining Usage:</strong> {selectedCoupon.RemainingUsage}</p>
-                <p><strong>Minimum Membership Requirement:</strong> {selectedCoupon.minMembershipRequirement}</p>
+                <p><strong>Minimum Membership Requirement:</strong> {getCardName(selectedCoupon.minMembershipRequirement)}</p>
               </div>
               <div className="modal-footer">
                 <button className="btn btn-secondary" onClick={() => setSelectedCoupon(null)}>
