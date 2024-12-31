@@ -44,8 +44,6 @@ const Reservation = () => {
     const loadBranches = async () => {
         try {
             const branchesResponse = await fetchBranches();
-            console.log('Branches:', branchesResponse);
-            console.log('Region:', region);
             setBranches(branchesResponse.filter((branch) => (branch.branchRegion === region)));
         } catch (error) {
             console.error('Error fetching branches:', error);
@@ -101,7 +99,6 @@ const Reservation = () => {
         };
 
         try {
-            console.log('Form data:', updatedFormData);
             await createReservation(updatedFormData);
             setSuccess(true);
             setFormData({

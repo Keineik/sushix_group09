@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { introspectToken, loginUser, registerUser } from '../api/auth';
-import { getCurrentCustomer } from '../api/customer';
+import { fetchCurrentAccount } from '../api/account';
 import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext();
@@ -10,7 +10,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null); 
     const [loading, setLoading] = useState(true);
-    const [isAuth, setIsAuth] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [role, setRole] = useState(null);
     const navigate = useNavigate();
 
@@ -28,9 +28,12 @@ export const AuthProvider = ({ children }) => {
                     logout();
                     return;
                 }
-                setIsAuth(true);
-                const userResponse = await getCurrentCustomer();
+                const role = jwtDecode(storedToken).scope;
+                setIsAuthenticated(true);
+                const userResponse = await fetchCurrentAccount();
                 setUser(userResponse);
+                console.log('Role:', role);
+                console.log('User:', userResponse);
                 setRole(jwtDecode(storedToken).scope);
             } catch (error) {
                 console.error('Token introspection failed:', error);
@@ -46,12 +49,14 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         try {
+            console.log('Login credentials:', credentials);
             const authResponse = await loginUser(credentials);
             const storedToken = authResponse.token;
             saveToken(storedToken);
-            const userResponse = await getCurrentCustomer();
+            const userResponse = await fetchCurrentAccount();
+            
             setUser(userResponse);
-            setIsAuth(true);
+            setIsAuthenticated(true);
             setRole(jwtDecode(storedToken).scope);
             navigate('/');
         } catch (error) {
@@ -74,12 +79,12 @@ export const AuthProvider = ({ children }) => {
         Cookies.remove('token');
         setUser(null);
         setRole(null);
-        setIsAuth(false);
+        setIsAuthenticated(false);
         navigate('/login');
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuth, role, login, register, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, role, login, register, logout }}>
             {!loading && children}
         </AuthContext.Provider>
     );

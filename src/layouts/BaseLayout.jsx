@@ -1,14 +1,10 @@
-// src/layouts/admin/BaseAdminLayout.jsx
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const BaseLayout = ({ title, basePath, navItems }) => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('userRole');
-    navigate('/private-login');
-  };
+  const { logout } = useContext(AuthContext);
 
   return (
     <div className="admin-layout">
@@ -18,7 +14,7 @@ const BaseLayout = ({ title, basePath, navItems }) => {
         </Link>
         <button 
           className="btn text-white border-0 ms-auto me-3"
-          onClick={handleLogout}
+          onClick={logout}
         >
           Log out
         </button>

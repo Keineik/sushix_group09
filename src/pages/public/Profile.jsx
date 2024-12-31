@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 const Profile = () => {
-    const { user } = useContext(AuthContext);
+    const { user, isAuthenticated } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -15,7 +15,7 @@ const Profile = () => {
     const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
-        if (user) {
+        if (isAuthenticated) {
             setFormData({
                 name: user.custName || '',
                 email: user.custEmail || '',
@@ -43,7 +43,7 @@ const Profile = () => {
         //dew something XD
     };
 
-    if (!user) {
+    if (!isAuthenticated) {
         return <div>Please log in to view your profile.</div>;
     }
 

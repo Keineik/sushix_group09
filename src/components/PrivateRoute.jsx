@@ -1,21 +1,22 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
-// Need changes here
-const PrivateRoute = ({ children, allowedRoles = ['company', 'staff', 'branch'] }) => {
-    const userRole = localStorage.getItem('userRole');
+const PrivateRoute = ({ children, allowedRoles = ['ADMIN', 'STAFF MANAGER', 'STAFF'] }) => {
+    const { role } = useContext(AuthContext);
 
-    if (!userRole) {
-        return <Navigate to="/private-login" />;
+    if (!role) {
+        return <Navigate to="/login" />;
     }
 
-    if (!allowedRoles.includes(userRole)) {
+    if (!allowedRoles.includes(role)) {
         return <Navigate to="/unauthorized" />;
     }
 
     if (window.location.pathname === '/admin') {
-        if (userRole === 'branch') return <Navigate to="/admin/branch" />;
-        if (userRole === 'company') return <Navigate to="/admin/company" />;
+        if (role === 'STAFF MANAGER') return <Navigate to={`/admin/branch/`} />;
+        if (role === 'ADMIN') return <Navigate to="/admin/company" />;
     }
 
     return children;

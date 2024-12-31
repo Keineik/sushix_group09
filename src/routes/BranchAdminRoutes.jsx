@@ -13,7 +13,7 @@ import {
 
 export const BranchAdminRoutes = [
   {
-    path: '/admin/branch/:branchId',
+    path: '/admin/branch',
     children: [
       {
         path: '',

@@ -1,40 +1,80 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import staffs from '../../../dummy/staffs.json';
-import departments from '../../../dummy/departments.json';
+import { fetchStaff, updateStaff, createStaff } from '../../../api/staff';
+import { fetchDistinctDepartments } from '../../../api/department';
+import { AuthContext } from '../../../context/AuthContext';
 
 const StaffForm = () => {
+    const { user } = useContext(AuthContext);
+    console.log(user);
+    const branchId = user.staff.department.branch.branchId;
     const { id } = useParams();
     const navigate = useNavigate();
+    const [departments, setDepartments] = useState([]);
+    const [notification, setNotification] = useState({ message: '', type: '' });
     const isEdit = Boolean(id);
 
+    const loadDepartments = async () => {
+        try {
+            const response = await fetchDistinctDepartments();
+            setDepartments(response);
+        } catch (err) {
+            console.error('Failed to fetch departments:', err);
+        }
+    };
+
+    useEffect(() => {
+        loadDepartments();
+    }, []);
+
     const [formData, setFormData] = useState({
-        StaffName: '',
-        StaffDoB: '',
-        StaffGender: '',
-        DeptName: '',
-        BranchID: 1
+        staffName: '',
+        staffDOB: '',
+        staffGender: '',
+        deptName: '',
+        branchId: branchId,
+        staffPhoneNumber: '',
+        staffCitizenId: '',
     });
 
     useEffect(() => {
         if (isEdit) {
-            const staff = staffs.find(staff => staff.StaffID === parseInt(id));
-            if (staff) {
-                setFormData(staff);
-            }
+            const loadStaff = async () => {
+                try {
+                    const staff = await fetchStaff(id);
+                    setFormData(staff);
+                } catch (err) {
+                    console.error('Failed to fetch staff:', err);
+                }
+            };
+            loadStaff();
         }
     }, [id, isEdit]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isEdit) {
-            // Handle edit logic
-            console.log('Editing staff:', formData);
-        } else {
-            // Handle add logic
-            console.log('Adding new staff:', formData);
+
+        const updatedFormData = {
+            ...formData,
+            branchId: branchId,
+            staffGender: formData.staffGender === 'Nam' ? 'M' : 'F',
+        };
+        console.log(updatedFormData);
+        try {
+            if (isEdit) {
+                await updateStaff(id, updatedFormData);
+                setNotification({ message: 'Staff updated successfully!', type: 'success' });
+            } else {
+                await createStaff(updatedFormData);
+                setNotification({ message: 'Staff created successfully!', type: 'success' });
+            }
+            setTimeout(() => {
+                navigate('/admin/branch/staffs');
+            }, 3000);
+        } catch (err) {
+            console.error('Failed to save staff:', err);
+            setNotification({ message: 'Failed to save staff. Please try again.', type: 'error' });
         }
-        navigate('/admin/branch/staffs');
     };
 
     const handleCancel = (e) => {
@@ -44,69 +84,90 @@ const StaffForm = () => {
     return (
         <div className="container-fluid py-4">
             <h2 className="mb-4">{isEdit ? 'Edit Staff' : 'Add Staff'}</h2>
-            <div className="card">
-                <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label className="form-label">Name</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={formData.StaffName}
-                                onChange={(e) => setFormData({ ...formData, StaffName: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Date of Birth</label>
-                            <input
-                                type="date"
-                                className="form-control"
-                                value={formData.StaffDoB}
-                                onChange={(e) => setFormData({ ...formData, StaffDoB: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Gender</label>
-                            <select
-                                className="form-select"
-                                value={formData.StaffGender}
-                                onChange={(e) => setFormData({ ...formData, StaffGender: e.target.value })}
-                                required
-                            >
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        <div className="mb-5">
-                            <label className="form-label">Department</label>
-                            <select
-                                className="form-select"
-                                value={formData.DeptName}
-                                onChange={(e) => setFormData({ ...formData, DeptName: e.target.value })}
-                                required
-                            >
-                                <option value="">Select Department</option>
-                                {departments.map(dept => (
-                                    <option key={dept.DeptName} value={dept.DeptName}>
-                                        {dept.DeptName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="d-flex">
-                            <button type="submit" className="btn btn-primary">
-                                {isEdit ? 'Update Staff' : 'Add Staff'}
-                            </button>
-                            <button type="button" className="btn btn-outline-secondary ms-3" onClick={handleCancel}>
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+            {notification.message && (
+                <div className={`alert ${notification.type === 'success' ? 'alert-success' : 'alert-danger'}`}>
+                    {notification.message}
                 </div>
-            </div>
+            )}
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label className="form-label">Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={formData.staffName}
+                        onChange={(e) => setFormData({ ...formData, staffName: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Date of Birth</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={formData.staffDOB}
+                        onChange={(e) => setFormData({ ...formData, staffDOB: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Gender</label>
+                    <select
+                        className="form-select"
+                        value={formData.staffGender}
+                        onChange={(e) => setFormData({ ...formData, staffGender: e.target.value })}
+                        required
+                    >
+                        <option value="">Select Gender</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Department</label>
+                    <select
+                        className="form-select"
+                        value={formData.deptName}
+                        onChange={(e) => setFormData({ ...formData, deptName: e.target.value })}
+                        required
+                    >
+                        <option value="">Select Department</option>
+                        {departments.map(dept => (
+                            <option key={dept} value={dept}>
+                                {dept}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Phone number</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={formData.staffPhoneNumber}
+                        onChange={(e) => setFormData({ ...formData, staffPhoneNumber: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Citizen ID</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={formData.staffCitizenId}
+                        onChange={(e) => setFormData({ ...formData, staffCitizenId: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="d-flex">
+                    <button type="submit" className="btn btn-success">
+                        {isEdit ? 'Update Staff' : 'Add Staff'}
+                    </button>
+                    <button type="button" className="btn btn-outline-secondary ms-3" onClick={handleCancel}>
+                        Cancel
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

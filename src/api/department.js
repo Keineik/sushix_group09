@@ -1,5 +1,15 @@
 import api from './api';
 
+export const fetchDistinctDepartments = async () => {
+    try {
+        const response = await api.get('/department/distinct');
+        return response.data.result;
+    } catch (error) {
+        console.error('Error fetching distinct departments:', error);
+        throw error;
+    }
+}
+
 // Fetch all departments
 export const fetchDepartments = async () => {
     try {

@@ -51,14 +51,11 @@ const navItems = [
   }
 ];
 
-// Need changes when API is ready
 const BranchAdminLayout = () => {
-  const { branchId } = useParams();
-
   return (
     <BaseLayout
       title="Branch Admin"
-      basePath={`/admin/branch/${branchId}`}
+      basePath={`/admin/branch`}
       navItems={navItems}
     />
   );

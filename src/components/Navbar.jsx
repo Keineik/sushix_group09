@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import logo from '../assets/logo.png';
 
 const Navbar = ({ cart, onCartClick }) => {
-    const { isAuth, logout } = useContext(AuthContext);
+    const { isAuthenticated, logout } = useContext(AuthContext);
 
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -108,7 +108,7 @@ const Navbar = ({ cart, onCartClick }) => {
                         </svg>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
-                        {isAuth ? (
+                        {isAuthenticated ? (
                             <>
                                 <li>
                                     <Link to="/account" className="dropdown-item">
