@@ -3,8 +3,7 @@ import Navbar from '../components/Navbar';
 import NavbarDown from '../components/NavbarDown';
 import Footer from '../components/Footer';
 import Cart from '../components/Cart';
-import { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState, useEffect } from 'react';
 
 const MainLayout = () => {
   const [cart, setCart] = useState(() => {
@@ -13,7 +12,6 @@ const MainLayout = () => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
   const [showCart, setShowCart] = useState(false);
-  const { user, isAuthenticated, logout } = useContext(AuthContext);
 
   // Sync cart to localStorage whenever it changes
   useEffect(() => {
@@ -22,10 +20,10 @@ const MainLayout = () => {
 
   const addToCart = (product, quantity = 1) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.itemId);
+      const existingItem = prevCart.find((item) => item.itemId === product.itemId);
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.itemId
+          item.itemId === product.itemId
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -34,10 +32,7 @@ const MainLayout = () => {
       return [
         ...prevCart,
         {
-          id: product.itemId,
-          name: product.itemName,
-          price: product.unitPrice,
-          imgUrl: product.imgUrl,
+          itemId: product.itemId,
           quantity,
         },
       ];
@@ -45,13 +40,13 @@ const MainLayout = () => {
   };
 
   const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+    setCart((prevCart) => prevCart.filter((item) => item.itemId !== productId));
   };
 
   const updateQuantity = (productId, quantity) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
-        item.id === productId ? { ...item, quantity: quantity } : item
+        item.itemId === productId ? { ...item, quantity: quantity } : item
       )
     );
   };
@@ -61,9 +56,6 @@ const MainLayout = () => {
       <Navbar
         cart={cart}
         onCartClick={() => setShowCart(!showCart)}
-        isLoggedIn={isAuthenticated}
-        onLogout={logout} // Use logout from context
-        user={user} // Pass logged-in user info, if needed (optional)
       />
       <NavbarDown />
       <main>

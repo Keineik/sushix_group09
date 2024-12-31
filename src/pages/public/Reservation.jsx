@@ -1,49 +1,59 @@
 import { useState, useEffect } from 'react';
 import { fetchBranches } from '../../api/branch';
 import { createReservation } from '../../api/onlineCustomer';
+import { fetchMenuItem } from '../../api/menuItem';
 
 const Reservation = () => {
     const [includePreorder, setIncludePreorder] = useState(false);
     const [region, setRegion] = useState("");
     const [branches, setBranches] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
     const [formData, setFormData] = useState({
-        CustName: '',
-        CustPhoneNumber: '',
-        CustEmail: '',
+        custName: '',
+        custPhoneNumber: '',
+        custEmail: '',
         branchId: null,
-        reservationDate: '',
-        reservationTime: '',
+        arrivalDateTime: '',
         numOfGuests: 0,
         rsNotes: '',
-    });
-    const [cart, setCart] = useState(() => {
-        try {
-            const storedCart = localStorage.getItem("cart");
-            return storedCart ? JSON.parse(storedCart) : [];
-        } catch (error) {
-            console.error("Error reading cart from localStorage:", error);
-            return [];
-        }
     });
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const branchesResponse = await fetchBranches();
-                console.log('Branches:', branchesResponse);
-                console.log('Region:', region);
-                setBranches(branchesResponse.filter((branch) => (branch.branchRegion === region)));
-            } catch (error) {
-                console.error('Error fetching branches:', error);
-            }
-        };
+    const loadCartItems = async () => {
+        try {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const fetchedItems = await Promise.all(
+                cart.map(async (cartItem) => {
+                    const item = await fetchMenuItem(cartItem.itemId);
+                    return { ...item, quantity: cartItem.quantity };
+                })
+            );
+            setCartItems(fetchedItems);
+        } catch (error) {
+            console.error("Error fetching cart items:", error);
+        }
+    };
 
-        loadData();
-        console.log('Cart:', cart);
+    useEffect(() => {
+        loadCartItems();
+    }, []); // I understand why there are 2 useEffects now XD
+
+    const loadBranches = async () => {
+        try {
+            const branchesResponse = await fetchBranches();
+            console.log('Branches:', branchesResponse);
+            console.log('Region:', region);
+            setBranches(branchesResponse.filter((branch) => (branch.branchRegion === region)));
+        } catch (error) {
+            console.error('Error fetching branches:', error);
+        }
+    };
+
+    useEffect(() => {
+        loadBranches();
     }, [region]);
 
     const handleInputChange = (e) => {
@@ -58,23 +68,48 @@ const Reservation = () => {
         setRegion(e.target.value);
     };
 
+    const handleDateTimeChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            arrivalDateTime: {
+                ...formData.arrivalDateTime,
+                [name]: value,
+            },
+        });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         setSuccess(false);
 
+        const arrivalDateTime = `${formData.arrivalDateTime.reservationDate} ${formData.arrivalDateTime.reservationTime}:00`;
+
+        const orderDetails = cartItems.map(item => ({
+            itemId: item.itemId,
+            quantity: item.quantity,
+        }));
+
+        const updatedFormData = {
+            ...formData,
+            branchId: parseInt(formData.branchId, 10),
+            numOfGuests: parseInt(formData.numOfGuests, 10),
+            orderDetails,
+            arrivalDateTime,
+        };
+
         try {
-            console.log('Form data:', formData);
-            await createReservation(formData);
+            console.log('Form data:', updatedFormData);
+            await createReservation(updatedFormData);
             setSuccess(true);
             setFormData({
-                CustName: '',
-                CustPhoneNumber: '',
-                CustEmail: '',
+                custName: '',
+                custPhoneNumber: '',
+                custEmail: '',
                 branchId: null,
-                reservationDate: '',
-                reservationTime: '',
+                arrivalDateTime: '',
                 numOfGuests: 0,
                 rsNotes: '',
             });
@@ -120,8 +155,8 @@ const Reservation = () => {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    name="CustName"
-                                    value={formData.CustName}
+                                    name="custName"
+                                    value={formData.custName}
                                     onChange={handleInputChange}
                                     required
                                 />
@@ -132,8 +167,8 @@ const Reservation = () => {
                                     <input
                                         type="text"
                                         className="form-control"
-                                        name="CustPhoneNumber"
-                                        value={formData.CustPhoneNumber}
+                                        name="custPhoneNumber"
+                                        value={formData.custPhoneNumber}
                                         onChange={handleInputChange}
                                         required
                                     />
@@ -144,8 +179,8 @@ const Reservation = () => {
                                     <input
                                         type="email"
                                         className="form-control"
-                                        name="CustEmail"
-                                        value={formData.CustEmail}
+                                        name="custEmail"
+                                        value={formData.custEmail}
                                         onChange={handleInputChange}
                                         required
                                     />
@@ -178,7 +213,7 @@ const Reservation = () => {
                                     >
                                         <option value="">Chọn nhà hàng</option>
                                         {branches.map((branch) => (
-                                            <option key={branch.branchID} value={branch.branchID}>
+                                            <option key={branch.branchId} value={branch.branchId}>
                                                 {branch.branchName}
                                             </option>
                                         ))}
@@ -190,25 +225,25 @@ const Reservation = () => {
                                 <div className="col-md-6 form-group">
                                     <label htmlFor="reservationDate">Ngày (*)</label>
                                     <input
-                                        type="date"
-                                        className="form-control"
-                                        name="reservationDate"
-                                        value={formData.reservationDate}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
+                        type="date"
+                        className="form-control"
+                        name="reservationDate"
+                        value={formData.arrivalDateTime.reservationDate || ''}
+                        onChange={handleDateTimeChange}
+                        required
+                    />
                                 </div>
 
                                 <div className="col-md-6 form-group">
                                     <label htmlFor="reservationTime">Thời gian (*)</label>
                                     <input
-                                        type="time"
-                                        className="form-control"
-                                        name="reservationTime"
-                                        value={formData.reservationTime}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
+                        type="time"
+                        className="form-control"
+                        name="reservationTime"
+                        value={formData.arrivalDateTime.reservationTime || ''}
+                        onChange={handleDateTimeChange}
+                        required
+                    />
                                 </div>
                             </div>
                             <div className="form-group mb-4">
@@ -271,8 +306,8 @@ const Reservation = () => {
                         <div className="col-md-6">
                             <h4 className="mb-4 text-danger">Thông tin đơn đặt trước</h4>
                             <h5>Sản phẩm</h5>
-                            <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                                {cart.map((item, index) => (
+                            <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                {cartItems.map((item, index) => (
                                     <div
                                         key={index}
                                         className="d-flex align-items-center border-bottom py-3"
@@ -280,7 +315,7 @@ const Reservation = () => {
                                     >
                                         <img
                                             src={item.imgUrl}
-                                            alt={item.name}
+                                            alt={item.itemName}
                                             className="rounded"
                                             style={{
                                                 width: "110px",
@@ -289,14 +324,18 @@ const Reservation = () => {
                                             }}
                                         />
                                         <div className="flex-grow-1">
-                                            <h6>{item.name}</h6>
+                                            <h6>{item.itemName}</h6>
                                             <div>
-                                                <span>{item.price}</span>
+                                                <span>{item.unitPrice}</span>
                                                 <span className="mx-3">x {item.quantity}</span>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                            <div className="d-flex justify-content-between mt-4">
+                                <h5>Tổng cộng:</h5>
+                                <h5>{cartItems.reduce((total, item) => total + item.unitPrice * item.quantity, 0)} ₫</h5>
                             </div>
                         </div>
                     )}

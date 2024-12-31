@@ -1,10 +1,31 @@
 import { useNavigate } from "react-router-dom";
+import { fetchMenuItem } from "../api/menuItem";
+import { useEffect, useState } from "react";
 
 const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+
+  const loadCartItems = async () => {
+    try {
+      const fetchedItems = await Promise.all(
+        cart.map(async (cartItem) => {
+          const item = await fetchMenuItem(cartItem.itemId);
+          return { ...item, quantity: cartItem.quantity };
+        })
+      );
+      setCartItems(fetchedItems);
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadCartItems();
+  }, [cart]);
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
   };
 
   const handleUpdateQuantity = (id, newQuantity) => {
@@ -16,10 +37,10 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
   };
 
   const handleConfirmOrder = () => {
-  onClose();
-  window.scrollTo(0, 0);
-  navigate("/checkout", { state: { cart } });
-};
+    onClose();
+    window.scrollTo(0, 0);
+    navigate("/checkout", { state: { cartItems } });
+  };
 
   return (
     <div
@@ -61,11 +82,11 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
       ) : (
         <>
           <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-            {cart.map((item) => (
-              <div key={item.id} style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+            {cartItems.map((item) => (
+              <div key={item.itemId} style={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
                 <img
                   src={item.imgUrl}
-                  alt={item.name}
+                  alt={item.itemName}
                   style={{
                     width: "60px",
                     height: "50px",
@@ -74,12 +95,12 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
                   }}
                 />
                 <div style={{ flex: 1 }}>
-                  <span style={{ fontWeight: "bold", fontSize: "1rem" }}>{item.name}</span>
+                  <span style={{ fontWeight: "bold", fontSize: "1rem" }}>{item.itemName}</span>
                   <div style={{ display: "flex", justifyContent: "space-between", marginTop: "5px" }}>
-                    <span>{item.price.toLocaleString()} ₫</span>
+                    <span>{item.unitPrice.toLocaleString()} ₫</span>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => handleUpdateQuantity(item.itemId, item.quantity - 1)}
                         className="btn btn-sm btn-outline-secondary"
                         style={{ marginRight: "5px" }}
                       >
@@ -87,7 +108,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
                       </button>
                       <span>{item.quantity}</span>
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => handleUpdateQuantity(item.itemId, item.quantity + 1)}
                         className="btn btn-sm btn-outline-secondary"
                         style={{ marginLeft: "5px" }}
                       >

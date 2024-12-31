@@ -28,6 +28,7 @@ const NavbarDown = ({ cart }) => {
     const branch = e.target.value;
     setSelectedBranch(branch);
     localStorage.setItem('selectedBranch', branch);
+    window.location.reload()
   };
 
   return (
