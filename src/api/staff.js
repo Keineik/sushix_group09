@@ -1,8 +1,16 @@
 import api from './api';
 
-export const fetchStaffs = async () => {
+export const fetchStaffs = async ({
+    page = 1,
+    limit = 18,
+    searchTerm = '',
+    branchId = 0,
+    department = '',
+}) => {
     try {
-        const response = await api.get('/staff');
+        const response = await api.get('/staff', {
+            params: { page, limit, searchTerm, branchId, department },
+        });
         return response.data.result;
     } catch (error) {
         console.error('Error fetching staffs:', error);

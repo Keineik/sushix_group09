@@ -6,7 +6,7 @@ import { AuthContext } from '../../../context/AuthContext';
 
 const BranchStaff = () => {
     const { user } = useContext(AuthContext);
-    const branchId = user.staff.department.branch.branchId;
+    const branchId = user?.staff.department.branch.branchId;
     const [staffs, setStaffs] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');

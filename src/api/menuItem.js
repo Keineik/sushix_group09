@@ -2,18 +2,18 @@ import api from './api';
 
 // Fetch paginated menu items
 export const fetchMenuItems = async ({
-                                         page = 1,
-                                         limit = 18,
-                                         searchTerm = '',
-                                         categoryId = 0,
-                                         branchId = 0,
-                                         filterShippable = 0,
-                                         sortKey = 'ID',
-                                         sortDirection = false,
-                                     }) => {
+    page = 1,
+    limit = 18,
+    searchTerm = '',
+    categoryId = 0,
+    branchId = 0,
+    filterShippable = 0,
+    sortKey = 'ID',
+    sortDirection = false,
+}) => {
     try {
         const response = await api.get('/menu-item', {
-            params: {page, limit, searchTerm, categoryId, branchId, filterShippable, sortKey, sortDirection},
+            params: { page, limit, searchTerm, categoryId, branchId, filterShippable, sortKey, sortDirection },
         });
         return response.data.result;
     } catch (error) {
