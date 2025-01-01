@@ -1,51 +1,84 @@
-import {useState} from "react";
-import {useLocation, useNavigate} from "react-router-dom";
-import promotions from "../../dummy/promotions.json";
-import branches from "../../dummy/branches.json";
-import customers from '../../dummy/customers.json';
+import {useState, useEffect, useContext} from "react";
+import {useNavigate} from "react-router-dom";
+import { fetchMenuItem } from "../../api/menuItem";
+import { AuthContext } from '../../context/AuthContext';
+import { fetchBranches } from '../../api/branch';
+import { fetchCoupons } from '../../api/coupon';
+import { createDeliveryOrder } from '../../api/onlineCustomer';
+import { createInvoice } from '../../api/staffwork';
 
-
-const Checkout = ({isLoggedIn}) => {
-    // isLoggedIn = true;
-    const location = useLocation();
+const Checkout = () => {
+    const { user, isAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
-    // const cart = location.state?.cart || [];
-    const [cart, setCart] = useState(() => {
-        try {
-            const storedCart = localStorage.getItem("cart");
-            return storedCart ? JSON.parse(storedCart) : [];
-        } catch (error) {
-            console.error("Error reading cart from localStorage:", error);
-            return [];
-        }
-    });
+    const [cartItems, setCartItems] = useState([]);
+    const [branches, setBranches] = useState([]);
+    const [coupons, setCoupons] = useState([]);
     const [couponCode, setCouponCode] = useState("");
     const [discount, setDiscount] = useState(0);
     const [error, setError] = useState("");
-    const [step, setStep] = useState(isLoggedIn ? 2 : 1); // Default to Step 2 if logged in
+    const [success, setSuccess] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [step, setStep] = useState(isAuthenticated ? 2 : 1); // Default to Step 2 if logged in
 
-    const loggedInCustID = 1;
-
-    const loggedInUser = customers.find((customer) => customer.CustID === loggedInCustID);
-
-    const [customerInfo, setCustomerInfo] = useState({
-        name: isLoggedIn ? loggedInUser.CustName : "",
-        phone: isLoggedIn ? loggedInUser.CustPhoneNumber : "",
-        email: isLoggedIn ? loggedInUser.CustEmail : "",
-        address: ""
-    });
-    const [branch, setBranch] = useState(null);
-    const [paymentMethod, setPaymentMethod] = useState("credit");
-
-    const calculateSubtotal = () => {
-        return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const loadCartItems = async () => {
+        try {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const fetchedItems = await Promise.all(
+                cart.map(async (cartItem) => {
+                    const item = await fetchMenuItem(cartItem.itemId);
+                    return { ...item, quantity: cartItem.quantity };
+                })
+            );
+            setCartItems(fetchedItems);
+        } catch (error) {
+            console.error("Error fetching cart items:", error);
+        }
     };
 
-    const VAT_PERCENTAGE = 10;
-    const SHIPPING_FEE = 30.000;
+
+    const loadBranches = async () => {
+        try {
+        const branchData = await fetchBranches();
+        setBranches(branchData);
+        } catch (error) {
+        console.error("Error fetching branches:", error);
+        }
+    };
+
+    const loadCoupons = async () => {
+        try {
+        const couponData = await fetchCoupons();
+        setCoupons(couponData);
+        } catch (error) {
+        console.error("Error fetching coupons:", error);
+        }
+    };
+
+    useEffect(() => {
+        loadCartItems();
+        loadBranches();
+        loadCoupons();
+    }, []);
+
+
+    const [customerInfo, setCustomerInfo] = useState({
+        name: isAuthenticated ? user.customer?.custName || '' : '',
+        phone: isAuthenticated ? user.customer?.custPhoneNumber || '' : '',
+        email: isAuthenticated ? user.customer?.custEmail || '' : '',
+        address: isAuthenticated ? '' : '',
+    });
+    const [branch, setBranch] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState("Cash");
+
+    const calculateSubtotal = () => {
+        return cartItems.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
+    };
+
+    const VAT_PERCENTAGE = 0.1;
+    const SHIPPING_FEE = 30000;
 
     const calculateVAT = () => {
-        return (calculateSubtotal() * VAT_PERCENTAGE) / 100;
+        return (calculateSubtotal() * VAT_PERCENTAGE);
     };
 
     const calculateTotal = () => {
@@ -54,11 +87,11 @@ const Checkout = ({isLoggedIn}) => {
 
     const handleCoupon = () => {
         const today = new Date();
-        const matchingCoupon = promotions.find(
+        const matchingCoupon = coupons.find(
             (coupon) =>
-                coupon.CouponCode === couponCode &&
-                new Date(coupon.EffectiveDate) <= today &&
-                new Date(coupon.ExpiredDate) >= today
+                coupon.couponCode === couponCode &&
+                new Date(coupon.effectiveDate) <= today &&
+                new Date(coupon.expiryDate) >= today
         );
 
         if (!matchingCoupon) {
@@ -67,19 +100,19 @@ const Checkout = ({isLoggedIn}) => {
             return;
         }
 
-        if (calculateSubtotal() < matchingCoupon.MinOrderValue) {
-            setError(`Đơn hàng phải từ ${matchingCoupon.MinOrderValue.toLocaleString()} để sử dụng mã này.`);
+        if (calculateSubtotal() < matchingCoupon.minPurchase) {
+            setError(`Đơn hàng phải từ ${matchingCoupon.minPurchase.toLocaleString()} để sử dụng mã này.`);
             setDiscount(0);
             return;
         }
 
         let calculatedDiscount = 0;
-        if (matchingCoupon.DiscountFlat) {
-            calculatedDiscount = matchingCoupon.DiscountFlat;
-        } else if (matchingCoupon.DiscountRate) {
-            calculatedDiscount = (calculateSubtotal() * matchingCoupon.DiscountRate) / 100;
-            if (matchingCoupon.MaxDiscountValue) {
-                calculatedDiscount = Math.min(calculatedDiscount, matchingCoupon.MaxDiscountValue);
+        if (matchingCoupon.discountFlat) {
+            calculatedDiscount = matchingCoupon.discountFlat;
+        } else if (matchingCoupon.discountRate) {
+            calculatedDiscount = (calculateSubtotal() * matchingCoupon.discountRate) / 100;
+            if (matchingCoupon.maxDiscount) {
+                calculatedDiscount = Math.min(calculatedDiscount, matchingCoupon.maxDiscount);
             }
         }
 
@@ -87,12 +120,54 @@ const Checkout = ({isLoggedIn}) => {
         setError("");
     };
 
-    const handlePayment = () => {
+    const handlePayment = async (e) => {
+        e.preventDefault();
+        setLoading(true);  
+        setError(null);    
+        setSuccess(false); 
+
         if (!customerInfo.name || !customerInfo.phone || !customerInfo.address || !branch) {
             setError("Vui lòng nhập đầy đủ thông tin bắt buộc!");
+            setLoading(false);
             return;
         }
-        alert("Thanh toán thành công!");
+
+        const orderDetails = cartItems.map(item => ({
+            itemId: item.itemId, 
+            quantity: item.quantity,
+        }));
+
+        const deliveryOrderRequest = {
+            custName: customerInfo.name,
+            custPhoneNumber: customerInfo.phone,
+            custEmail: customerInfo.email || "",  
+            branchId: branch.branchId,
+            deliveryAddress: customerInfo.address,
+            deliveryDateTime: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), // luoi
+            orderDetails: orderDetails
+        };
+        console.log("Delivery Order Request:", deliveryOrderRequest);
+
+        try {
+            const orderResponse = await createDeliveryOrder(deliveryOrderRequest);
+            const orderId = orderResponse.order.orderId;
+
+            const invoiceRequest = {
+                orderId,
+                paymentMethod,
+                taxRate: VAT_PERCENTAGE,
+                couponCode: couponCode
+            };
+            console.log("Invoice Request:", invoiceRequest);
+            await createInvoice(invoiceRequest);
+            setSuccess(true);  
+            localStorage.removeItem('cart');
+        } catch (error) {
+            console.error("Error creating delivery order:", error);
+            setError("Đặt hàng thất bại. Vui lòng thử lại!"); 
+        } finally {
+            setLoading(false);  
+        }
     };
 
     const handleLoginRedirect = () => {
@@ -172,17 +247,17 @@ const Checkout = ({isLoggedIn}) => {
                             <h6 className=" text-danger mt-4">Chọn chi nhánh nhà hàng</h6>
                             <select
                                 className="form-control"
-                                value={branch?.BranchID || ""}
+                                value={branch ? branch.branchId : ""} 
                                 onChange={(e) =>
                                     setBranch(
-                                        branches.find((b) => b.BranchID === parseInt(e.target.value))
+                                        branches.find((b) => b.branchId === parseInt(e.target.value))
                                     )
                                 }
                             >
                                 <option value="" disabled>Chọn chi nhánh</option>
                                 {branches.map((b) => (
-                                    <option key={b.BranchID} value={b.BranchID}>
-                                        {b.name} - {b.address}
+                                    <option key={b.branchId} value={b.branchId}>
+                                        {b.branchName} - {b.branchAddress}
                                     </option>
                                 ))}
                             </select>
@@ -194,9 +269,9 @@ const Checkout = ({isLoggedIn}) => {
                                     <label>
                                         <input
                                             type="radio"
-                                            value="cash"
-                                            checked={paymentMethod === "cash"}
-                                            onChange={() => setPaymentMethod("cash")}
+                                            value="Cash"
+                                            checked={paymentMethod === "Cash"}
+                                            onChange={() => setPaymentMethod("Cash")}
                                         />{" "}
                                         Thanh toán khi nhận hàng
                                     </label>
@@ -207,7 +282,7 @@ const Checkout = ({isLoggedIn}) => {
                         <div className="col-md-5">
                             <h4 className="mb-4 text-danger">Thông tin đơn hàng</h4>
                             <h5>Sản phẩm</h5>
-                            {cart.map((item, index) => (
+                            {cartItems.map((item, index) => (
                                 <div
                                     key={index}
                                     className="d-flex align-items-center border-bottom py-3"
@@ -215,7 +290,7 @@ const Checkout = ({isLoggedIn}) => {
                                 >
                                     <img
                                         src={item.imgUrl}
-                                        alt={item.name}
+                                        alt={item.itemName}
                                         className="rounded"
                                         style={{
                                             width: "100px",
@@ -224,9 +299,9 @@ const Checkout = ({isLoggedIn}) => {
                                         }}
                                     />
                                     <div className="flex-grow-1">
-                                        <h6>{item.name}</h6>
+                                        <h6>{item.itemName}</h6>
                                         <div>
-                                            <span>{item.price.toLocaleString()}</span>
+                                            <span>{item.unitPrice.toLocaleString()}</span>
                                             <span className="mx-3">x {item.quantity}</span>
                                         </div>
                                     </div>
@@ -255,7 +330,7 @@ const Checkout = ({isLoggedIn}) => {
                                 <span>{calculateSubtotal().toLocaleString()}</span>
                             </p>
                             <p className="d-flex justify-content-between">
-                                <span>VAT ({VAT_PERCENTAGE}%):</span>
+                                <span>VAT ({VAT_PERCENTAGE * 100}%):</span>
                                 <span>{calculateVAT().toLocaleString()}</span>
                             </p>
                             <h5 className="d-flex justify-content-between mt-3 border-top pt-3">
@@ -282,9 +357,11 @@ const Checkout = ({isLoggedIn}) => {
 
                         <div className="col-md-5 offset-md-7 mt-2">
                             <button className="btn btn-danger w-100 text-white" onClick={handlePayment}>
-                                Xác nhận và thanh toán
+                                Xác nhận đặt hàng
+
                             </button>
-                            {error && <p className="text-danger mt-2">{error}</p>}
+                            {error && <p className="text-danger mt-2">{error}</p>}                    
+                            {success && <div className="alert alert-success mt-2">Đặt hàng thành công!</div>}
                         </div>
                     </div>
                 </>

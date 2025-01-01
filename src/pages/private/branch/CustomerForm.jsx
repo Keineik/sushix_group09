@@ -38,14 +38,6 @@ const CustomerForm = () => {
         });
     };
 
-    const formatDateToSQL = (date) => {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const updatedForm = {
@@ -57,13 +49,7 @@ const CustomerForm = () => {
                 await updateCustomer(id, updatedForm);
             } else {
                 const newCustomer = await createCustomer(updatedForm);
-                const memberForm = {
-                    custId: newCustomer.custId,
-                    cardTypeId: 1,
-                    issuedDate: formatDateToSQL(new Date())
-                };
-                console.log('Membership card:', memberForm);
-                await createMembershipCard(memberForm);                
+                await createMembershipCard({custId: newCustomer.custId});                
             }
             navigate('/admin/branch/customers');
         } catch (error) {

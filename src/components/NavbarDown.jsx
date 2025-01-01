@@ -99,7 +99,6 @@ const NavbarDown = ({ cart }) => {
             </a>
             <Link
               to="/reservation"
-              state={{ cart }}
               className={`nav-link ${activeNav === 5 ? 'text-danger' : ''}`}
               onClick={() => handleNavClick(5)}
             >
