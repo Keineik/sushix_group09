@@ -97,13 +97,13 @@ const NavbarDown = ({ cart }) => {
             >
               <b>KHUYẾN MÃI</b>
             </a>
-            <Link
-              to="/reservation"
+            <a
               className={`nav-link ${activeNav === 5 ? 'text-danger' : ''}`}
+              href="/reservation"
               onClick={() => handleNavClick(5)}
             >
               <b>ĐẶT BÀN</b>
-            </Link>
+            </a>
           </div>
           <Link to="/account/deliverytracking" className="btn btn-outline-danger ms-auto d-flex align-items-center">
             <svg

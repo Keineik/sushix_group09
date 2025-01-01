@@ -12,7 +12,6 @@ import {
   Profile,
   Membershipcards,
   Account,
-  RewardHistory,
   CardsPolicy,
   LookupCards,
   Checkout
@@ -72,7 +71,6 @@ export const PublicRoutes = [
       { path: '', element: <Profile /> }, 
       { path: 'profile', element: <Profile /> },
       { path: 'deliverytracking', element: <DeliveryTrackingPage /> },
-      { path: 'rewardhistory', element: <RewardHistory /> },
     ],
   },
 

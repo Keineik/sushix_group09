@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { fetchMenuItems, updateMenuItem } from '../../../api/menuItem';
 import { fetchCategories } from '../../../api/category';
 import { AuthContext } from '../../../context/AuthContext';
-import { Link } from 'react-router-dom';
 
 const BranchMenu = () => {
     const { user } = useContext(AuthContext);
@@ -130,9 +129,6 @@ const BranchMenu = () => {
                                 </td>
                                 <td>
                                     <div className="d-flex align-items-center">
-                                        <Link to={`edit/${item.itemId}`} className="btn btn-sm btn-outline-primary me-2">
-                                            <i className="bi bi-pencil"></i>
-                                        </Link>
                                         <div className="form-check form-switch">
                                             <input
                                                 className="form-check-input"

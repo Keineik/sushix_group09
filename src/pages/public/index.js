@@ -11,7 +11,6 @@ export { default as DeliveryTrackingPage } from './DeliveryTracking';
 export {default as Profile} from './Profile';
 export {default as Membershipcards} from './Membershipcards';
 export {default as Account} from './Account';
-export {default as RewardHistory} from './RewardHistory';
 export {default as CardsPolicy} from './CardPolicy'; 
 export {default as LookupCards} from './LookupCards';
 export {default as Checkout} from './Checkout';

@@ -332,7 +332,7 @@ const Reservation = () => {
                             </div>
                             <div className="d-flex justify-content-between mt-4">
                                 <h5>Tổng cộng:</h5>
-                                <h5>{cartItems.reduce((total, item) => total + item.unitPrice * item.quantity, 0)} ₫</h5>
+                                <h5>{(cartItems.reduce((total, item) => total + item.unitPrice * item.quantity, 0)).toLocaleString() } ₫</h5>
                             </div>
                         </div>
                     )}
