@@ -1,14 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import reservationsData from '../../../dummy/reservations.json';
+import React, { useState, useEffect, useContext } from 'react';
+import { fetchReservations } from '../../../api/reservation';
+import { AuthContext } from '../../../context/AuthContext';
 
 const BranchReservation = () => {
+    const { user } = useContext(AuthContext);
+    const branchId = user?.staff.department.branch.branchId;
     const [activeTab, setActiveTab] = useState('Not Confirmed');
     const [reservations, setReservations] = useState([]);
     const [selectedReservation, setSelectedReservation] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCounts, setTotalCounts] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const itemsPerPage = 12;
+
+    const loadReservations = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetchReservations({
+                branchId: branchId,
+                page: currentPage,
+                searchTerm: searchTerm
+            });
+            setReservations(response.items);
+            setTotalCounts(response.totalCounts);
+        } catch (error) {
+            setError('Failed to fetch reservations');
+            console.error('Error fetching reservations:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        setReservations(reservationsData);
-    }, []);
+        loadReservations();
+    }, [branchId, currentPage]);
 
     const filteredReservations = reservations.filter(
         (reservation) => reservation.RsStatus === activeTab
@@ -22,10 +50,16 @@ const BranchReservation = () => {
         setSelectedReservation(null);
     };
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const totalPages = Math.ceil(totalCounts / itemsPerPage);
+
     return (
         <div className="container-fluid py-4">
             <h2 className="mb-4">Branch Reservations</h2>
-            <ul className="nav nav-tabs">
+            <ul className="nav nav-tabs mb-4">
                 <li className="nav-item">
                     <button
                         className={`nav-link ${activeTab === 'Not Confirmed' ? 'active' : ''}`}
@@ -43,56 +77,94 @@ const BranchReservation = () => {
                     </button>
                 </li>
             </ul>
-            <div className="card mt-4">
-                <div className="table-responsive">
-                    <table className="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Reservation ID</th>
-                                <th>Customer ID</th>
-                                <th>Number of Guests</th>
-                                <th>Reservation Date</th>
-                                <th>Arrival Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredReservations.map((reservation) => (
-                                <tr key={reservation.RsID}>
-                                    <td>{reservation.RsID}</td>
-                                    <td>{reservation.CustID}</td>
-                                    <td>{reservation.NumOfGuests}</td>
-                                    <td>{new Date(reservation.RsDateTime).toLocaleString()}</td>
-                                    <td>{new Date(reservation.ArrivalDateTime).toLocaleString()}</td>
-                                    <td>
-                                        <button
-                                            className="btn btn-sm btn-outline-primary"
-                                            onClick={() => handleViewDetails(reservation)}
-                                        >
-                                            View Details
-                                        </button>
-                                        {activeTab == 'Not Confirmed' &&
-                                            <button
-                                                className="btn btn-sm btn-outline-success ms-2"
-                                                onClick={() => handleConfirmReservation(reservation.RsID)}
-                                            >
-                                                Confirm
-                                            </button>
-                                        }
-                                        {activeTab == 'Not Confirmed' &&
-                                            <button
-                                                className="btn btn-sm btn-outline-danger ms-2"
-                                                onClick={() => handleCancelReservation(reservation.RsID)}
-                                            >
-                                                Cancel
-                                            </button>
-                                        }
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+
+            <div className="row mb-4">
+                <div className="col-md-6">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by ReservationID, Customer Name, CustPhoneNumber..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
+            </div>
+
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p className="text-danger">{error}</p>
+            ) : (
+                <div className="card">
+                    <div className="table-responsive">
+                        <table className="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Number of Guests</th>
+                                    <th>Reservation Time</th>
+                                    <th>Arrival Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredReservations.map((reservation) => (
+                                    <tr key={reservation.rsId}>
+                                        <td>{reservation.rsId}</td>
+                                        <td>{reservation.custName}</td>
+                                        <td>{reservation.numOfGuests}</td>
+                                        <td>{reservation.rsDateTime}</td>
+                                        <td>{reservation.arrivalDateTime}</td>
+                                        <td>
+                                            <button
+                                                className="btn btn-sm btn-outline-info"
+                                                onClick={() => handleViewDetails(reservation)}
+                                            >
+                                                View Details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
+
+            <div className="d-flex justify-content-center mt-4">
+                <nav>
+                    <ul className="pagination">
+                        <li className="page-item mt-1">
+                            <button
+                                className="arrow-btn"
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            >
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
+                        </li>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <li className="page-item" key={index + 1}>
+                                <button
+                                    className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                                    onClick={() => handlePageChange(index + 1)}
+                                >
+                                    {index + 1}
+                                </button>
+                            </li>
+                        ))}
+                        <li className="page-item mt-1">
+                            <button
+                                className="arrow-btn"
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                            >
+                                <i className="bi bi-arrow-right"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
 
             {selectedReservation && (
@@ -107,7 +179,7 @@ const BranchReservation = () => {
                                 <button className="btn-close" onClick={handleCloseModal}></button>
                             </div>
                             <div className="modal-body">
-                                <p><strong>Reservation ID:</strong> {selectedReservation.RsID}</p>
+                                <p><strong>Reservation ID:</strong> {selectedReservation.rsId}</p>
                                 <p><strong>Number of Guests:</strong> {selectedReservation.NumOfGuests}</p>
                                 <p><strong>Reservation Date:</strong> {new Date(selectedReservation.RsDateTime).toLocaleString()}</p>
                                 <p><strong>Arrival Date:</strong> {new Date(selectedReservation.ArrivalDateTime).toLocaleString()}</p>

@@ -1,6 +1,8 @@
 export { default as CompanyDashboard } from './CompanyDashboard';
 export { default as BranchManagement } from './BranchManagement';
 export { default as BranchForm } from './BranchForm';
+export { default as OrderManagement } from './OrderManagement';
+export { default as OrderForm } from './OrderForm';
 export { default as ItemManagement } from './ItemManagement';
 export { default as ComboManagement } from './ComboManagement';
 export { default as CategoryManagement } from './CategoryManagement';
