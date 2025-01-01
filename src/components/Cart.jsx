@@ -39,7 +39,7 @@ const Cart = ({ cart, removeFromCart, updateQuantity, onClose }) => {
   const handleConfirmOrder = () => {
     onClose();
     window.scrollTo(0, 0);
-    navigate("/checkout", { state: { cartItems } });
+    navigate("/checkout");
   };
 
   return (
