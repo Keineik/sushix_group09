@@ -12,6 +12,23 @@ const navItems = [
     icon: 'building',
   },
   {
+    path: 'orders',
+    label: 'Orders',
+    icon: 'list-ol',
+    children: [
+      {
+        path: 'dine-in',
+        label: 'Dine In',
+        icon: 'person-wheelchair'
+      },
+      {
+        path: 'delivery',
+        label: 'Delivery',
+        icon: 'truck'
+      }
+    ]
+  },
+  {
     path: 'menu',
     label: 'Menu Management',
     icon: 'book',

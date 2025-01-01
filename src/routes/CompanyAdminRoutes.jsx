@@ -1,6 +1,8 @@
 import {
   CompanyDashboard,
   BranchManagement,
+  OrderManagement,
+  OrderForm,
   BranchForm,
   ItemManagement,
   ComboManagement,
@@ -28,6 +30,28 @@ export const CompanyAdminRoutes = [
           { path: '', element: <BranchManagement /> },
           { path: 'add', element: <BranchForm /> },
           { path: 'edit/:id', element: <BranchForm /> },
+        ]
+      },
+      {
+        path: 'orders',
+        children: [
+            { path: '', element: <OrderManagement OrderType="Dine-In" /> },
+            {
+                path: 'delivery',
+                children: [
+                    { path: '', element: <OrderManagement OrderType="Delivery" />, },
+                    { path: 'add', element: <OrderForm /> },
+                    { path: 'edit/:id', element: <OrderForm /> },
+                ]
+            },
+            {
+                path: 'dine-in',
+                children: [
+                    { path: '', element: <OrderManagement OrderType="Dine-In" /> },
+                    { path: 'add', element: <OrderForm /> },
+                    { path: 'edit/:id', element: <OrderForm /> },
+                ]
+            }
         ]
       },
       {
