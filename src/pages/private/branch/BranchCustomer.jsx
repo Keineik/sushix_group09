@@ -1,23 +1,57 @@
-import { useState } from 'react';
-import { Link} from 'react-router-dom';
-import customers from '../../../dummy/customers.json';
-import membershipCards from '../../../dummy/membershipCards.json';
-import cardTypes from '../../../dummy/cardTypes.json';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { fetchCustomers } from '../../../api/customer';
+import { fetchMembershipCardByCustomer } from '../../../api/membershipCard';
+import { fetchCardTypes } from '../../../api/cardType';
 
 const CustomerList = () => {
+  const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [membershipCard, setMembershipCard] = useState(null);
+  const [cardTypes, setCardTypes] = useState([]);
+
+  useEffect(() => {
+    const loadCustomers = async () => {
+      try {
+        const response = await fetchCustomers();
+        console.log(response);
+        setCustomers(response);
+      } catch (error) {
+        console.error('Failed to fetch customers:', error);
+      }
+    };
+
+    const loadCardTypes = async () => {
+      try {
+        const response = await fetchCardTypes();
+        setCardTypes(response);
+      } catch (error) {
+        console.error('Failed to fetch card types:', error);
+      }
+    };
+
+    loadCustomers();
+    loadCardTypes();
+  }, []);
 
   const filteredCustomer = customers.filter(customer =>
-    customer.CustName.toLowerCase().includes(searchTerm.toLowerCase())
+    customer.custName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getMembershipCard = (customerId) => {
-    return membershipCards.find(card => card.CustID === customerId);
+  const handleViewMembershipCard = async (customer) => {
+    setSelectedCustomer(customer);
+    try {
+      const card = await fetchMembershipCardByCustomer(customer.custId);
+      setMembershipCard(card);
+    } catch (error) {
+      console.error('Failed to fetch membership card:', error);
+      setMembershipCard(null);
+    }
   };
 
   const getCardType = (cardTypeId) => {
-    return cardTypes.find(type => type.CardTypeID === cardTypeId);
+    return cardTypes.find(type => type.cardTypeId === cardTypeId);
   };
 
   const calculateAccessTime = (startDateTime, endDateTime) => {
@@ -33,7 +67,7 @@ const CustomerList = () => {
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Customers</h2>
-        <Link to="add" className="btn btn-primary">
+        <Link to="add" className="btn btn-danger">
           Add Customer
         </Link>
       </div>
@@ -50,67 +84,59 @@ const CustomerList = () => {
         </div>
       </div>
 
-      <div className="card">
-        <div className="table-responsive">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Gender</th>
-                <th>Phone Number</th>
-                <th>CitizenID</th>
-                <th>Last Access - Time Access</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredCustomer.map(customer => (
-                <tr key={customer.CustID}>
-                  <td>{customer.CustID}</td>
-                  <td>{customer.CustName}</td>
-                  <td>{customer.CustEmail}</td>
-                  <td>{customer.CustGender}</td>
-                  <td>{customer.CustPhoneNumber}</td>
-                  <td>{customer.CustCitizenID}</td>
-                  <td>
-                    {customer.lastAccess?.EndDateTime} / 
-                    <b>
-                      {customer.lastAccess?.EndDateTime &&
+      <div className="table-responsive">
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Gender</th>
+              <th>Phone Number</th>
+              <th>CitizenID</th>
+              <th>Last Access - Time Access</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCustomer.map(customer => (
+              <tr key={customer.custId}>
+                <td>{customer.custId}</td>
+                <td>{customer.custName}</td>
+                <td>{customer.custEmail}</td>
+                <td>{customer.custGender}</td>
+                <td>{customer.custPhoneNumber}</td>
+                <td>{customer.custCitizenId}</td>
+                <td>
+                  {customer.lastAccess?.EndDateTime} /
+                  <b>
+                    {customer.lastAccess?.EndDateTime &&
                       calculateAccessTime(
                         customer.lastAccess.StartDateTime,
                         customer.lastAccess.EndDateTime
                       )}
-                    </b>
-                  </td>
-                  <td>
-                    <div className="btn-group">
-                      <Link 
-                        to={`edit/${customer.CustID}`} 
-                        className="btn btn-sm btn-outline-primary"
-                      >
-                        Edit
-                      </Link>
-                      <button 
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => alert(`Deleting Customer ${customer.CustID}`)}
-                      >
-                        Delete
-                      </button>
-                      <button 
-                        className="btn btn-sm btn-outline-info"
-                        onClick={() => setSelectedCustomer(customer)}
-                      >
-                        Membership Card
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  </b>
+                </td>
+                <td>
+                  <div className="btn-group">
+                    <Link to={`edit/${customer.CustID}`} className="btn btn-sm btn-outline-primary">
+                      <i className='bi bi-pencil'></i>
+                    </Link>
+                    <button className="btn btn-sm btn-outline-danger">
+                      <i className='bi bi-trash'></i>
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-info"
+                      onClick={() => handleViewMembershipCard(customer)}
+                    >
+                      <i class="bi bi-person-vcard"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {selectedCustomer && (
@@ -122,29 +148,25 @@ const CustomerList = () => {
                 <button className="btn-close" onClick={() => setSelectedCustomer(null)}></button>
               </div>
               <div className="modal-body">
-                {(() => {
-                  const card = getMembershipCard(selectedCustomer.CustID);
-                  if (card) {
-                    const cardType = getCardType(card.CardTypeID);
-                    return (
-                      <div>
-                        <p><strong>Card ID:</strong> {card.CardID}</p>
-                        <p><strong>Issue Date:</strong> {card.IssueDate}</p>
-                        <p><strong>Points:</strong> {card.Points}</p>
-                        <p><strong>Last Updated:</strong> {card.LastUpdated}</p>
-                        {cardType ? (
-                          <>
-                            <p><strong>Card Name:</strong> {cardType.CardName}</p>
-                            <p><strong>Discount Rate:</strong> {cardType.DiscountRate}%</p>
-                          </>
-                        ) : (
-                          <p>Card type details not available.</p>
-                        )}
-                      </div>
-                    );
-                  }
-                  return <p>No Membership Card Found.</p>;
-                })()}
+                {membershipCard ? (
+                  <div>
+                    <p><strong>Card ID:</strong> {membershipCard.cardId}</p>
+                    <p><strong>Card type:</strong> {getCardType(membershipCard.cardTypeId).cardName}</p>
+                    <p><strong>Issue Date:</strong> {membershipCard.issuedDate}</p>
+                    <p><strong>Points:</strong> {membershipCard.points}</p>
+                    <p><strong>Last Updated:</strong> {membershipCard.lastUpdated}</p>
+                    {membershipCard.cardType ? (
+                      <>
+                        <p><strong>Card Name:</strong> {membershipCard.cardType.cardName}</p>
+                        <p><strong>Discount Rate:</strong> {membershipCard.cardType.discountRate}%</p>
+                      </>
+                    ) : (
+                      <p>Card type details not available.</p>
+                    )}
+                  </div>
+                ) : (
+                  <p>No Membership Card Found.</p>
+                )}
               </div>
               <div className="modal-footer">
                 <button className="btn btn-secondary" onClick={() => setSelectedCustomer(null)}>

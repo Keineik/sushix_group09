@@ -10,7 +10,6 @@ import {
     Legend,
 } from "chart.js";
 
-// Register required scales and elements for Chart.js
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -21,17 +20,15 @@ ChartJS.register(
 );
 
 const BranchDashboard = () => {
-    // State for the selected time interval
     const [timeInterval, setTimeInterval] = useState("monthly");
 
-    // Data for different time intervals
     const timeData = {
         daily: {
             labels: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
             datasets: [
                 {
                     label: "Revenue ($)",
-                    data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 500)), // Example: Random revenue data
+                    data: Array.from({ length: 30 }, () => Math.floor(Math.random() * 500)),
                     backgroundColor: "rgba(255, 99, 132, 0.6)",
                     borderColor: "rgba(255, 99, 132, 1)",
                     borderWidth: 1,
@@ -64,7 +61,6 @@ const BranchDashboard = () => {
         },
     };
 
-    // Chart options
     const chartOptions = {
         responsive: true,
         plugins: {
@@ -82,7 +78,6 @@ const BranchDashboard = () => {
         <div className="container-fluid py-4">
             <h2 className="mb-4">Dashboard</h2>
 
-            {/* Buttons to toggle between time intervals */}
             <div className="mb-4">
                 <button
                     className={`btn btn-primary me-2 ${timeInterval === "daily" ? "active" : ""}`}
@@ -104,7 +99,6 @@ const BranchDashboard = () => {
                 </button>
             </div>
 
-            {/* Chart Component */}
             <Bar data={timeData[timeInterval]} options={chartOptions} />
         </div>
     );
