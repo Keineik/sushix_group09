@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import customers from '../../../dummy/customers.json';
+import { getCustomer, updateCustomer, createCustomer } from '../../../api/customer';
+import { createMembershipCard } from '../../../api/membershipCard';
 
 const CustomerForm = () => {
     const { id } = useParams();
@@ -8,41 +9,66 @@ const CustomerForm = () => {
     const isEdit = Boolean(id);
 
     const [formData, setFormData] = useState({
-        CustName: '',
-        CustDoB: '',
-        CustGender: '',
-        CustPhoneNumber: '',
-        CustEmail: '',
-        CustCitizenID: ''
+        custName: '',
+        custGender: '',
+        custPhoneNumber: '',
+        custEmail: '',
+        custCitizenId: ''
     });
 
     useEffect(() => {
         if (isEdit) {
-            const customer = customers.find(cust => cust.CustID === parseInt(id));
-            if (customer) {
-                setFormData(customer);
-            } else {
-                console.error(`Customer with ID ${id} not found.`);
-                navigate('/admin/branch/customers');
-            }
+            const loadCustomer = async () => {
+                try {
+                    const customer = await getCustomer(id);
+                    setFormData(customer);
+                } catch (error) {
+                    console.error(`Failed to fetch customer with ID ${id}:`, error);
+                }
+            };
+            loadCustomer();
         }
-    }, [id, isEdit, navigate]);
+    }, [id, isEdit]);
 
-    const handleSubmit = (e) => {
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const formatDateToSQL = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.CustName || !formData.CustDoB || !formData.CustGender || !formData.CustPhoneNumber || !formData.CustEmail || !formData.CustCitizenID) {
-            alert('Please fill out all required fields.');
-            return;
+        const updatedForm = {
+            ...formData,
+            custGender: formData.custGender === 'Male' ? 'M' : 'F'
+        };
+        try {
+            if (isEdit) {
+                await updateCustomer(id, updatedForm);
+            } else {
+                const newCustomer = await createCustomer(updatedForm);
+                const memberForm = {
+                    custId: newCustomer.custId,
+                    cardTypeId: 1,
+                    issuedDate: formatDateToSQL(new Date())
+                };
+                console.log('Membership card:', memberForm);
+                await createMembershipCard(memberForm);                
+            }
+            navigate('/admin/branch/customers');
+        } catch (error) {
+            console.error('Failed to save customer:', error);
         }
-
-        if (isEdit) {
-            // Update customer logic
-            console.log('Updating customer:', formData);
-        } else {
-            // Add new customer logic
-            console.log('Adding new customer:', formData);
-        }
-        navigate('/admin/branch/customers');
     };
 
     const handleCancel = () => {
@@ -50,89 +76,74 @@ const CustomerForm = () => {
     };
 
     return (
-        <div className="container-fluid py-4">
-            <h2>{isEdit ? 'Edit Customer' : 'Add Customer'}</h2>
-                <div className="card-body">
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="CustName" className="form-label">Name</label>
-                            <input
-                                type="text"
-                                id="CustName"
-                                className="form-control"
-                                value={formData.CustName}
-                                onChange={(e) => setFormData({ ...formData, CustName: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="CustDoB" className="form-label">Date of Birth</label>
-                            <input
-                                type="date"
-                                id="CustDoB"
-                                className="form-control"
-                                value={formData.CustDoB}
-                                onChange={(e) => setFormData({ ...formData, CustDoB: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="CustGender" className="form-label">Gender</label>
-                            <select
-                                id="CustGender"
-                                className="form-select"
-                                value={formData.CustGender}
-                                onChange={(e) => setFormData({ ...formData, CustGender: e.target.value })}
-                                required
-                            >
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="CustPhoneNumber" className="form-label">Phone Number</label>
-                            <input
-                                type="tel"
-                                id="CustPhoneNumber"
-                                className="form-control"
-                                value={formData.CustPhoneNumber}
-                                onChange={(e) => setFormData({ ...formData, CustPhoneNumber: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="CustEmail" className="form-label">Email</label>
-                            <input
-                                type="email"
-                                id="CustEmail"
-                                className="form-control"
-                                value={formData.CustEmail}
-                                onChange={(e) => setFormData({ ...formData, CustEmail: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="CustCitizenID" className="form-label">Citizen ID</label>
-                            <input
-                                type="text"
-                                id="CustCitizenID"
-                                className="form-control"
-                                value={formData.CustCitizenID}
-                                onChange={(e) => setFormData({ ...formData, CustCitizenID: e.target.value })}
-                                required
-                            />
-                        </div>
-                        <div className="d-flex">
-                            <button type="submit" className="btn btn-primary">
-                                {isEdit ? 'Update Customer' : 'Add Customer'}
-                            </button>
-                            <button type="button" className="btn btn-outline-secondary ms-3" onClick={handleCancel}>
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+        <div className="container">
+            <h2>{isEdit ? 'Edit Customer' : 'Add New Customer'}</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label className="form-label">Name</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="custName"
+                        value={formData.custName}
+                        onChange={handleInputChange}
+                        required
+                    />
                 </div>
+                <div className="mb-3">
+                    <label className="form-label">Gender</label>
+                    <select
+                        className="form-select"
+                        name="custGender"
+                        value={formData.custGender}
+                        onChange={handleInputChange}
+                        required
+                    >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Phone Number</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="custPhoneNumber"
+                        value={formData.custPhoneNumber}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Email</label>
+                    <input
+                        type="email"
+                        className="form-control"
+                        name="custEmail"
+                        value={formData.custEmail}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Citizen ID</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="custCitizenId"
+                        value={formData.custCitizenId}
+                        onChange={handleInputChange}
+                        required
+                    />
+                </div>
+                <button type="submit" className="btn btn-success">
+                    {isEdit ? 'Update Customer' : 'Add Customer'}
+                </button>
+                <button type="button" className="btn btn-outline-secondary ms-3" onClick={handleCancel}>
+                    Cancel
+                </button>
+            </form>
         </div>
     );
 };

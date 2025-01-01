@@ -22,6 +22,16 @@ export const getMembershipCard = async (cardId) => {
     }
 };
 
+export const fetchMembershipCardByCustomer = async (customerId) => {
+    try {
+        const response = await api.get(`/membership-card/customer/${customerId}`);
+        return response.data.result;
+    } catch (error) {
+        console.error(`Error fetching membership cards for customer with ID ${customerId}:`, error);
+        throw error;
+    }
+};
+
 // Create a new membership card
 export const createMembershipCard = async (membershipCardRequest) => {
     try {

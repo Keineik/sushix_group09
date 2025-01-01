@@ -1,19 +1,14 @@
 import { useState } from 'react';
-import items from '../../../dummy/items.json';
-import categories from '../../../dummy/categories.json';
+import { fetchMenuItems } from '../../../api/menuItem';
+import { fetchCategories } from '../../../api/category';
 
 const BranchMenu = () => {
-    const [menuItems, setMenuItems] = useState(
-        items.map(item => ({
-            ...item,
-            available: true // Default all items to available
-        }))
-        // Change this later
-    );
+    const [menuItems, setMenuItems] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
 
-    const menuCategories = ['all', ...categories.map(cat => cat.name)];
+    const menuCategories = ['all', ...categories.map(cat => cat.categoryName)];
 
     const handleAvailabilityToggle = (itemId) => {
         setMenuItems(menuItems.map(item =>
@@ -22,7 +17,6 @@ const BranchMenu = () => {
                 : item
         ));
 
-        // Handle back-end update
     };
 
     const filteredItems = menuItems.filter(item => {
