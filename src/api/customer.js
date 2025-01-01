@@ -1,8 +1,18 @@
 import api from './api';
 
-export const fetchCustomers = async () => {
+export const fetchCustomers = async ({
+    page = 1,
+    limit = 18,
+    searchTerm = '',
+}) => {
     try {
-        const response = await api.get('/customer');
+        const response = await api.get('/customer', {
+            params: {
+                page,
+                limit,
+                searchTerm,
+            },
+        });
         return response.data.result;
     } catch (error) {
         console.error('Error fetching customers:', error);

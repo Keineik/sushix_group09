@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { fetchMenuItems, updateMenuItem } from '../../../api/menuItem';
 import { fetchCategories } from '../../../api/category';
 import { AuthContext } from '../../../context/AuthContext';
+import Pagination from '../../../components/Pagination';
 
 const BranchMenu = () => {
     const { user } = useContext(AuthContext);
@@ -48,13 +49,13 @@ const BranchMenu = () => {
     };
 
     const handleUpdateDiscontinued = async (item) => {
-            try {
-                const updatedItem = { ...item, isDiscontinued: !item.isDiscontinued };
-                await updateMenuItem(item.itemId, updatedItem);
-                setItems(items.map(i => (i.itemId === item.itemId ? updatedItem : i)));
-            } catch (error) {
-                console.error('Error updating menu item:', error);
-            }
+        try {
+            const updatedItem = { ...item, isDiscontinued: !item.isDiscontinued };
+            await updateMenuItem(item.itemId, updatedItem);
+            setItems(items.map(i => (i.itemId === item.itemId ? updatedItem : i)));
+        } catch (error) {
+            console.error('Error updating menu item:', error);
+        }
     };
 
     const handlePageChange = (page) => {
@@ -92,94 +93,65 @@ const BranchMenu = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                    <select
+                <select
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                     className="form-select w-25"
-                    >
-                        <option value="all">All Categories</option>
-                        {categories.map(category => (
-                            <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
-                        ))}
-                    </select>
+                >
+                    <option value="all">All Categories</option>
+                    {categories.map(category => (
+                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
+                    ))}
+                </select>
             </div>
 
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th onClick={() => handleSortChange('id')}>ID</th>
-                            <th onClick={() => handleSortChange('name')}>Name</th>
-                            <th>Sold Quantity</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map(item => (
-                            <tr key={item.itemId}>
-                                <td>{item.itemId}</td>
-                                <td>{item.itemName}</td>
-                                <td>{item.soldQuantity}</td>
-                                <td>{item.unitPrice}</td>
-                                <td>
-                                    <span className={`badge bg-${item.isDiscontinued ? 'danger' : 'success'}`}>
-                                        {item.isDiscontinued ? 'Discontinued' : 'Active'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div className="d-flex align-items-center">
-                                        <div className="form-check form-switch">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                checked={!item.isDiscontinued}
-                                                onChange={() => handleUpdateDiscontinued(item)}
-                                            />
-                                        </div>
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th onClick={() => handleSortChange('id')}>ID</th>
+                        <th onClick={() => handleSortChange('name')}>Name</th>
+                        <th>Sold Quantity</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {items.map(item => (
+                        <tr key={item.itemId}>
+                            <td>{item.itemId}</td>
+                            <td>{item.itemName}</td>
+                            <td>{item.soldQuantity}</td>
+                            <td>{item.unitPrice}</td>
+                            <td>
+                                <span className={`badge bg-${item.isDiscontinued ? 'danger' : 'success'}`}>
+                                    {item.isDiscontinued ? 'Discontinued' : 'Active'}
+                                </span>
+                            </td>
+                            <td>
+                                <div className="d-flex align-items-center">
+                                    <div className="form-check form-switch">
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            checked={!item.isDiscontinued}
+                                            onChange={() => handleUpdateDiscontinued(item)}
+                                        />
                                     </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
 
-                <div className="d-flex justify-content-center mt-4">
-                    <nav>
-                        <ul className="pagination">
-                            <li className="page-item mt-1">
-                                <button
-                                    className="arrow-btn"
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    <i className="bi bi-arrow-left"></i>
-                                </button>
-                            </li>
-                            {[...Array(totalPages)].map((_, index) => (
-                                <li className="page-item" key={index + 1}>
-                                    <button
-                                        className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                                        onClick={() => handlePageChange(index + 1)}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                </li>
-                            ))}
-                            <li className="page-item mt-1">
-                                <button
-                                    className="arrow-btn"
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    <i className="bi bi-arrow-right"></i>
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalCount / itemsPerPage)}
+                onPageChange={handlePageChange}
+            />
+
+        </div>
     );
 };
 

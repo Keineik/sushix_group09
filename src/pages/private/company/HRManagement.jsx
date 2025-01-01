@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchBranches } from '../../../api/branch';
 import { fetchDistinctDepartments } from '../../../api/department';
 import { fetchStaffs, fetchStaffWorkHistory, deleteStaff } from '../../../api/staff';
+import Pagination from '../../../components/Pagination';
 
 const HRManagement = () => {
     const [staffs, setStaffs] = useState([]);
@@ -30,7 +31,8 @@ const HRManagement = () => {
                 branchId: selectedBranch === 'all' ? 0 : selectedBranch,
                 department: selectedDepartment === 'all' ? null : selectedDepartment
             });
-            setStaffs(response.staffs || []);
+            
+            setStaffs(response.items || []);
             setTotalPages(Math.ceil(response.totalCount / itemsPerPage));
         } catch (err) {
             setError("Failed to fetch staffs.");
@@ -176,40 +178,11 @@ const HRManagement = () => {
                 </tbody>
             </table>
 
-            <div className="d-flex justify-content-center mt-4">
-                <nav>
-                    <ul className="pagination">
-                        <li className="page-item mt-1">
-                            <button
-                                className="arrow-btn"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                            >
-                                <i className="bi bi-arrow-left"></i>
-                            </button>
-                        </li>
-                        {[...Array(totalPages)].map((_, index) => (
-                            <li className="page-item" key={index + 1}>
-                                <button
-                                    className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                                    onClick={() => handlePageChange(index + 1)}
-                                >
-                                    {index + 1}
-                                </button>
-                            </li>
-                        ))}
-                        <li className="page-item">
-                            <button
-                                className="arrow-btn  mt-1"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                            >
-                                <i className="bi bi-arrow-right"></i>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
 
             {selectedStaff && (
                 <div className="modal show" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>

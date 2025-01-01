@@ -3,20 +3,28 @@ import { Link } from 'react-router-dom';
 import { fetchCustomers } from '../../../api/customer';
 import { fetchMembershipCardByCustomer } from '../../../api/membershipCard';
 import { fetchCardTypes } from '../../../api/cardType';
+import Pagination from '../../../components/Pagination';
 
 const CustomerList = () => {
+  const itemsPerPage = 12;
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [membershipCard, setMembershipCard] = useState(null);
   const [cardTypes, setCardTypes] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const loadCustomers = async () => {
       try {
-        const response = await fetchCustomers();
-        console.log(response);
-        setCustomers(response);
+        const response = await fetchCustomers({
+          page: currentPage,
+          limit: itemsPerPage,
+          searchTerm: searchTerm,
+        });
+        setCustomers(response.items);
+        setTotalCount(response.totalCount);
       } catch (error) {
         console.error('Failed to fetch customers:', error);
       }
@@ -34,10 +42,6 @@ const CustomerList = () => {
     loadCustomers();
     loadCardTypes();
   }, []);
-
-  const filteredCustomer = customers.filter(customer =>
-    customer.custName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   const handleViewMembershipCard = async (customer) => {
     setSelectedCustomer(customer);
@@ -63,6 +67,17 @@ const CustomerList = () => {
     return `${diffHours}h ${diffMinutes}m`;
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -76,10 +91,10 @@ const CustomerList = () => {
         <div className="col-md-6">
           <input
             type="text"
-            className="form-control"
             placeholder="Search by name..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
+            className="form-control w-25"
           />
         </div>
       </div>
@@ -99,7 +114,7 @@ const CustomerList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCustomer.map(customer => (
+            {customers.map(customer => (
               <tr key={customer.custId}>
                 <td>{customer.custId}</td>
                 <td>{customer.custName}</td>
@@ -138,6 +153,12 @@ const CustomerList = () => {
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalCount / itemsPerPage)}
+        onPageChange={handlePageChange}
+      />
 
       {selectedCustomer && (
         <div className="modal show" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
