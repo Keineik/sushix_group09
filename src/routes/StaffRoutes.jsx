@@ -2,12 +2,14 @@ import {
     StaffDashboard,
 } from '../pages/private/staff';
 import {
+    BranchCustomer,
     BranchOrder,
     BranchInvoice,
     BranchReservation,
     OrderForm
 } from '../pages/private/branch';
 import PrivateRoute from '../components/PrivateRoute';
+import { element } from 'prop-types';
 
 
 export const StaffRoutes = [
@@ -18,6 +20,10 @@ export const StaffRoutes = [
                 <StaffDashboard />
             </PrivateRoute>
         ),
+    },
+    {
+        path: '/staff/customers',
+        element: <BranchCustomer />
     },
     {
         path: '/staff/reservations',

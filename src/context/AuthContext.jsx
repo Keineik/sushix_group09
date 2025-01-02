@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import { introspectToken, loginUser, registerUser } from '../api/auth';
 import { fetchCurrentAccount } from '../api/account';
 import { jwtDecode } from 'jwt-decode';
+import { logCustomerOnlineAccess } from '../api/customer';
 
 export const AuthContext = createContext();
 

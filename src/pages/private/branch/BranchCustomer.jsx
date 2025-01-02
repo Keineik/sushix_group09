@@ -30,6 +30,10 @@ const CustomerList = () => {
       }
     };
 
+    loadCustomers();
+  }, [currentPage, searchTerm]);
+
+  useEffect(() => {
     const loadCardTypes = async () => {
       try {
         const response = await fetchCardTypes();
@@ -39,7 +43,6 @@ const CustomerList = () => {
       }
     };
 
-    loadCustomers();
     loadCardTypes();
   }, []);
 
