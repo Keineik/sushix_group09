@@ -45,6 +45,7 @@ const OrderManagement = ({ OrderType }) => {
 
                 setOrders(result.items || []);
                 setTotalCount(result.totalCount || 0);
+                console.log(Math.ceil(result.totalCount / ITEMS_PER_PAGE))
             } catch (err) {
                 setError('Failed to fetch orders. Please try again.');
                 console.error('Error loading orders:', err);
@@ -153,6 +154,12 @@ const OrderManagement = ({ OrderType }) => {
         setCurrentPage(page);
     };
 
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    };
 
     return (
         <div className="container-fluid">
@@ -280,10 +287,10 @@ const OrderManagement = ({ OrderType }) => {
                                         {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                     </th>
                                     <th onClick={() => handleSort('CustID')}>
-                                        Customer ID
+                                        Customer Name
                                         {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                     </th>
-                                    <th>Status</th>
+                                    <th>Subtotal</th>
                                     {/* {OrderType === 'Dine-In' && (
                                         <th onClick={() => handleSort('TableID')}>
                                             Table
@@ -298,8 +305,8 @@ const OrderManagement = ({ OrderType }) => {
                                     <tr key={order.orderId}>
                                         <td>{order.orderId}</td>
                                         <td>{new Date(order.orderDateTime).toLocaleString()}</td>
-                                        <td>{order.custId}</td>
-                                        <td>{order.orderStatus}</td>
+                                        <td>{order.custName}</td>
+                                        <td>{formatPrice(order.estimatedPrice)}</td>
                                         {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
                                         <td>
                                             <button
@@ -424,7 +431,7 @@ const OrderManagement = ({ OrderType }) => {
                             </div>
                             <div className="modal-body">
                                 <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
-                                <p><strong>Estimated Price:</strong> {selectedOrder.estimatedPrice.toLocaleString() } đ</p>
+                                <p><strong>Subtotal:</strong> {selectedOrder.estimatedPrice.toLocaleString() } đ</p>
                                 <form>
                                     <div className="mb-3">
                                         <label htmlFor="couponCode" className="form-label">Coupon Code</label>

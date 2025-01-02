@@ -30,6 +30,26 @@ export const getCustomer = async (customerId) => {
     }
 };
 
+export const getCustomerOnlineAccess = async (customerId) => {
+    try {
+        const response = await api.get(`/customer/${customerId}/online-access`);
+        return response.data.result;
+    } catch (error) {
+        console.error(`Error fetching online access for customer with ID ${customerId}:`, error);
+        throw error;
+    }
+};
+
+export const logCustomerOnlineAccess = async (isStart) => {
+    try {
+        const response = await api.post(`/customer/online-access/${isStart}`);
+        return response.data.result;
+    } catch (error) {
+        console.error('Error logging customer online access:', error);
+        throw error;
+    }
+}
+
 export const getCurrentCustomer = async () => {
     try {
         const response = await api.get('/customer/current');
