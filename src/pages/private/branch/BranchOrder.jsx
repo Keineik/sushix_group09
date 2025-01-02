@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
-import { fetchOrders } from '../../../api/order';
+import { fetchOrders, fetchDineInOrder, fetchDeliveryOrder } from '../../../api/order';
 import Pagination from '../../../components/Pagination';
 import { createInvoice } from '../../../api/staffwork'; 
 
@@ -21,6 +21,7 @@ const OrderManagement = ({ OrderType }) => {
     const [totalCount, setTotalCount] = useState(0);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+    
     const ITEMS_PER_PAGE = 18;
 
 
@@ -55,6 +56,33 @@ const OrderManagement = ({ OrderType }) => {
         loadOrders();
     }, [currentPage, searchTerm, branchId, activeStatus, OrderType, sortConfig]);
 
+    useEffect(() => {
+        const loadOrderDetails = async () => {
+            if (selectedOrder) {
+                setLoading(true);
+                setError(null);
+                try {
+                    let result;
+                    if (selectedOrder.orderType === 'Dine-In') {
+                        result = await fetchDineInOrder(selectedOrder.orderId);
+                        
+                    } else if (selectedOrder.orderType === 'Delivery') {
+                        result = await fetchDeliveryOrder(selectedOrder.orderId);
+                    }
+                    console.log ("Details: ", result)
+                    setOrderDetails(result.orderDetails); 
+                } catch (err) {
+                    setError('Failed to fetch order details. Please try again.');
+                    console.error('Error loading order details:', err);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        loadOrderDetails();
+    }, [selectedOrder]);
+
     const handleSort = (key) => {
         let direction = 'asc';
         if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -86,27 +114,27 @@ const OrderManagement = ({ OrderType }) => {
 
     const handlePayment = async () => {
     
-    const couponCode = document.getElementById("couponCode").value;
-    const paymentMethod = document.getElementById("paymentMethod").value;
-    const taxRate = parseFloat(document.getElementById("taxRate").value/ 100) || 0.08;
+        const couponCode = document.getElementById("couponCode").value;
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        const taxRate = parseFloat(document.getElementById("taxRate").value/ 100) || 0.08;
 
-    const invoiceRequest = {
-        orderId: selectedOrder.orderId,
-        paymentMethod,
-        taxRate,
-        couponCode,
+        const invoiceRequest = {
+            orderId: selectedOrder.orderId,
+            paymentMethod,
+            taxRate,
+            couponCode,
+        };
+
+        try {
+            const invoice = await createInvoice(invoiceRequest);
+            console.log("Invoice created successfully:", invoice);
+            // alert("Invoice created successfully!");
+            handleCloseInvoiceModal();
+        } catch (error) {
+            console.error("Error creating invoice:", error);
+            // alert("Failed to create invoice. Please try again.");
+        }
     };
-
-    try {
-        const invoice = await createInvoice(invoiceRequest);
-        console.log("Invoice created successfully:", invoice);
-        alert("Invoice created successfully!");
-        handleCloseInvoiceModal();
-    } catch (error) {
-        console.error("Error creating invoice:", error);
-        alert("Failed to create invoice. Please try again.");
-    }
-};
 
     const handleDeleteOrder = async (orderID) => {
         if (window.confirm('Are you sure you want to delete this order?')) {
@@ -342,7 +370,8 @@ const OrderManagement = ({ OrderType }) => {
                                 {/* <p><strong>Staff ID:</strong> {selectedOrder.StaffID}</p> */}
                                 <p><strong>Customer Name:</strong> {selectedOrder.custName}</p>
                                 {/* <p><strong>Branch</strong> {selectedOrder.branchId}</p> */}
-                                {selectedOrder.length > 0 && (
+                                
+                                {orderDetails.length > 0 && (
                                     <>
                                         <hr />
                                         <h5>Items in this Order</h5>
@@ -356,7 +385,7 @@ const OrderManagement = ({ OrderType }) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {selectedOrder
+                                                {orderDetails
                                                     .filter(detail => detail.orderID === selectedOrder.orderID)
                                                     .map((detail) => (
                                                         <tr key={detail.itemId}>

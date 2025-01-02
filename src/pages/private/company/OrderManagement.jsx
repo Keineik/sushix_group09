@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchOrders } from '../../../api/order';
 import Pagination from '../../../components/Pagination';
+import { fetchOrders, fetchDineInOrder, fetchDeliveryOrder } from '../../../api/order';
 
 const OrderManagement = ({ OrderType }) => {
     const [activeStatus, setActiveStatus] = useState('COMPLETED');
@@ -46,6 +46,33 @@ const OrderManagement = ({ OrderType }) => {
 
         loadOrders();
     }, [currentPage, searchTerm, activeStatus, OrderType, sortConfig]);
+
+    useEffect(() => {
+            const loadOrderDetails = async () => {
+                if (selectedOrder) {
+                    setLoading(true);
+                    setError(null);
+                    try {
+                        let result;
+                        if (selectedOrder.orderType === 'Dine-In') {
+                            result = await fetchDineInOrder(selectedOrder.orderId);
+                            
+                        } else if (selectedOrder.orderType === 'Delivery') {
+                            result = await fetchDeliveryOrder(selectedOrder.orderId);
+                        }
+                        console.log ("Details: ", result)
+                        setOrderDetails(result.orderDetails); 
+                    } catch (err) {
+                        setError('Failed to fetch order details. Please try again.');
+                        console.error('Error loading order details:', err);
+                    } finally {
+                        setLoading(false);
+                    }
+                }
+            };
+    
+            loadOrderDetails();
+        }, [selectedOrder]);
 
     const handleSort = (key) => {
         let direction = 'asc';
@@ -220,12 +247,6 @@ const OrderManagement = ({ OrderType }) => {
                                             >
                                                <i className="bi bi-eye"></i>
                                             </button>
-                                            <Link
-                                                to={`edit/${order.orderId}`}
-                                                className="btn btn-sm btn-outline-secondary ms-2"
-                                            >
-                                                 <i className="bi bi-pencil"></i>
-                                            </Link>
                                             <button
                                                 className="btn btn-sm btn-outline-danger ms-2"
                                                 onClick={() => handleDeleteOrder(order.orderId)}
@@ -284,16 +305,15 @@ const OrderManagement = ({ OrderType }) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                // idk
                                                 {orderDetails
-                                                    .filter(detail => detail.OrderID === selectedOrder.OrderID)
+                                                    .filter(detail => detail.orderID === selectedOrder.orderID)
                                                     .map((detail) => (
-                                                        <tr key={detail.ItemID}>
-                                                            <td>{detail.ItemID}</td>
-                                                            <td>{detail.UnitPrice.toLocaleString()} VND</td>
-                                                            <td>{detail.OrderQuantity}</td>
+                                                        <tr key={detail.itemId}>
+                                                            <td>{detail.itemId}</td>
+                                                            <td>{detail.unitPrice.toLocaleString()} VND</td>
+                                                            <td>{detail.quantity}</td>
                                                             <td>
-                                                                {(detail.UnitPrice * detail.OrderQuantity).toLocaleString()} VND
+                                                                {(detail.unitPrice * detail.quantity).toLocaleString()} VND
                                                             </td>
                                                         </tr>
                                                     ))}
