@@ -1,122 +1,142 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react'; 
 import { useNavigate, useParams } from 'react-router-dom';
-import orderData from '../../../dummy/orders.json';
-import orderDetailsData from '../../../dummy/orderdetails.json';
-import itemsData from '../../../dummy/items.json';
+import { createDineInOrder, updateDineInOrder } from '../../../api/staffwork'; 
+import { fetchMenuItems } from '../../../api/menuItem'; 
+import { getAllRestaurantTables } from '../../../api/staffwork'; 
+import { fetchDineInOrder } from '../../../api/order'; 
+import { AuthContext } from '../../../context/AuthContext';
 
-const formatCurrency = (value) => {
-  const numericValue = Number(value);
-  if (isNaN(numericValue)) return value; 
-  return numericValue.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); 
-};
 
 const OrderForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
-  const [availableItems, setAvailableItems] = useState(itemsData); 
+  const [availableItems, setAvailableItems] = useState([]);
+  const { user } = useContext(AuthContext);
+  const branchId = user.staff.department.branch.branchId;
 
-  const [orderType, setOrderType] = useState('Dine-In');
-  const [isReservation, setIsReservation] = useState(false); 
-  const [orderStatus, setOrderStatus] = useState('Pending'); 
+  const [restaurantTables, setRestaurantTables] = useState([1]);
+
+  useEffect(() => {
+      const fetchTables = async () => {
+          try {
+              const tables = await getAllRestaurantTables();
+              setRestaurantTables(tables);
+              // console.log("Wth:", tables)
+          } catch (error) {
+              console.error('Error fetching tables:', error);
+          }
+      };
+
+      fetchTables();
+  }, []);
+
   const [order, setOrder] = useState({
-    OrderID: '',
-    OrderDateTime: new Date().toISOString().slice(0, 16),
-    CustID: '',
-    StaffID: '',
-    BranchID: '',
-    OrderStatus: 'Pending', 
-    TableID: '',
-    DeliveryAddress: '',
-    DeliveryDateTime: '',
-    DeliveryStatus: '',
-    NumOfGuests: '',
-    ArrivalDateTime: '',
+    OrderDateTime: new Date(new Date().getTime() + 7 * 60 * 60 * 1000).toISOString().slice(0, 16),
+    custId: '',
+    StaffID: user.staff.staffId,
+    tableCode: '',
+    OrderStatus: 'UNVERIFIED', 
     Notes: '',
   });
 
   const [items, setItems] = useState([]);
-  const [newItem, setNewItem] = useState({ ItemID: '', UnitPrice: 0, OrderQuantity: 1 });
+  const [newItem, setNewItem] = useState({ itemId: '', unitPrice: 0, quantity: 1 });
 
   useEffect(() => {
     if (isEdit) {
-      const selectedOrder = orderData.find((o) => o.OrderID === parseInt(id));
-      const orderItems = orderDetailsData.filter((item) => item.OrderID === parseInt(id));
-      if (selectedOrder) {
-        setOrder(selectedOrder);
-        setItems(orderItems);
-        setOrderType(selectedOrder.TableID ? 'Dine-In' : selectedOrder.DeliveryAddress ? 'Delivery' : 'Dine-In');
-        setOrderStatus(selectedOrder.OrderStatus || 'Pending');
-        setIsReservation(selectedOrder.TableID === null && selectedOrder.DeliveryAddress === null);
-      }
+      const fetchOrderData = async () => {
+        try {
+          const orderData = await fetchDineInOrder(id); 
+          console.log("Orderdata: ", orderData)
+          setOrder({
+            ...orderData, 
+            ...orderData.order,
+          });
+          setItems(orderData.orderDetails);
+        } catch (error) {
+          console.error('Error fetching dine-in order to update:', error);
+        }
+      };
+
+      fetchOrderData();
     }
   }, [id, isEdit]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newOrder = {
-      ...order,
-      OrderID: isEdit ? order.OrderID : Date.now(),
-      OrderType: orderType,
-      OrderStatus: orderStatus,
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const menuItems = await fetchMenuItems({
+          branchId: branchId,
+          limit: 180 // bruh
+        });
+        console.log("R: ", menuItems)
+        setAvailableItems(menuItems.items);
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
     };
 
-    if (isEdit) {
-      console.log('Updating Order:', { order: newOrder, items });
-    } else {
-      console.log('Adding New Order:', { order: newOrder, items });
+    fetchItems();
+  }, [branchId]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const dineInOrderRequest = {
+      custId: order.custId,
+      tableCode: order.tableCode,
+
+      orderDetails: items.map(item => ({
+        itemId: item.itemId,
+        quantity: item.quantity
+      }))
+    };
+    console.log ("dineInOrderRequest:", dineInOrderRequest)
+
+    try {
+      if (isEdit) {
+        console.log('Updating Order:', dineInOrderRequest);
+        updateDineInOrder(id,dineInOrderRequest)
+        navigate('/admin/branch/orders/dine-in');
+      } else {
+        console.log('Adding New Dine-In Order:', dineInOrderRequest);
+        await createDineInOrder(dineInOrderRequest);
+        navigate('/admin/branch/orders/dine-in');
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
     }
-    navigate('/admin/branch/orders');
   };
 
-  const handleCancel = () => navigate('/admin/branch/orders');
+  const handleCancel = () => navigate('/admin/branch/orders/dine-in');
 
   const handleAddItem = () => {
-    if (newItem.ItemID && newItem.UnitPrice && newItem.OrderQuantity) {
-      setItems([...items, { ...newItem, OrderID: order.OrderID || Date.now() }]);
-      setNewItem({ ItemID: '', UnitPrice: 0, OrderQuantity: 1 });
+    if (newItem.itemId && newItem.unitPrice && newItem.quantity) {
+      setItems([...items, { ...newItem }]);
+      setNewItem({ itemId: '', unitPrice: 0, quantity: 1 });
     }
   };
 
-  const handleDeleteItem = (itemID) => {
-    setItems(items.filter((item) => item.ItemID !== itemID));
+  const handleDeleteItem = (itemId) => {
+    setItems(items.filter((item) => item.ItemID !== itemId));
   };
 
-    const handleItemSelect = (e) => {
-    const selectedItem = availableItems.find(item => item.id === parseInt(e.target.value));
-    setNewItem({ ItemID: selectedItem.id, UnitPrice: formatCurrency(parseFloat(selectedItem.price)), OrderQuantity: 1 });
+  const handleItemSelect = (e) => {
+    const selectedItem = availableItems.find(item => item.itemId === parseInt(e.target.value));
+  if (selectedItem) {
+    setNewItem({
+      itemId: selectedItem.itemId,
+      unitPrice: selectedItem.unitPrice, 
+      quantity: 1,
+    });
+  }
   };
 
   return (
     <div className="container-fluid py-4">
-      <h2>{isEdit ? 'Edit Order' : 'Add Order'}</h2>
+      <h2>{isEdit ? 'Edit Dine-In Order' : 'Add Dine-In Order'}</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label>Order Type</label>
-          <select
-            className="form-select"
-            value={orderType}
-            onChange={(e) => setOrderType(e.target.value)}
-            disabled={isReservation}
-          >
-            <option value="Dine-In">Dine-In</option>
-            <option value="Delivery">Delivery</option>
-          </select>
-        </div>
-
-        {orderType !== 'Delivery' && ( 
-          <div className="mb-3 form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              checked={isReservation}
-              onChange={() => setIsReservation(!isReservation)}
-            />
-            <label className="form-check-label">Reservation</label>
-          </div>
-        )}
-
         <div className="mb-3">
           <label>Order Date</label>
           <input
@@ -132,9 +152,8 @@ const OrderForm = () => {
           <input
             type="text"
             className="form-control"
-            value={order.CustID}
-            onChange={(e) => setOrder({ ...order, CustID: e.target.value })}
-            required
+            value={order.custId}
+            onChange={(e) => setOrder({ ...order, custId: e.target.value })}
           />
         </div>
         <div className="mb-3">
@@ -148,94 +167,22 @@ const OrderForm = () => {
           />
         </div>
 
-        {(orderType === 'Dine-In' || isReservation) && (
-          <div className="mb-3">
-            <label>Table ID</label>
-            <input
-              type="text"
-              className="form-control"
-              value={order.TableID}
-              onChange={(e) => setOrder({ ...order, TableID: e.target.value })}
-              required
-            />
-          </div>
-        )}
-
-        {/* Show Delivery fields if the order type is Delivery */}
-        {orderType === 'Delivery' && (
-          <>
-            <div className="mb-3">
-              <label>Delivery Address</label>
-              <input
-                type="text"
-                className="form-control"
-                value={order.DeliveryAddress}
-                onChange={(e) => setOrder({ ...order, DeliveryAddress: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label>Delivery Date</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                value={order.DeliveryDateTime}
-                onChange={(e) => setOrder({ ...order, DeliveryDateTime: e.target.value })}
-                required
-              />
-            </div>
-          </>
-        )}
-
-        {/* Show reservation fields if isReservation is true */}
-        {isReservation && (
-          <>
-            <div className="mb-3">
-              <label>Number of Guests</label>
-              <input
-                type="number"
-                className="form-control"
-                value={order.NumOfGuests}
-                onChange={(e) => setOrder({ ...order, NumOfGuests: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label>Arrival Date</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                value={order.ArrivalDateTime}
-                onChange={(e) => setOrder({ ...order, ArrivalDateTime: e.target.value })}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label>Notes</label>
-              <textarea
-                className="form-control"
-                value={order.Notes}
-                onChange={(e) => setOrder({ ...order, Notes: e.target.value })}
-              />
-            </div>
-          </>
-        )}
-
-
-        {/* Order Status Dropdown */}
         <div className="mb-3">
-          <label>Order Status</label>
+          <label>Table Code</label>
           <select
-            className="form-select"
-            value={orderStatus}
-            onChange={(e) => setOrderStatus(e.target.value)}
+              className="form-select"
+              value={order.tableCode}
+              onChange={(e) => setOrder({ ...order, tableCode: e.target.value })}
+              required
           >
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="In Progress">In Progress</option>
+              <option value="">Select Table</option>
+              {restaurantTables.map((table) => (
+                  <option key={table.tableId} value={table.tableCode}>
+                      { `Table ${table.tableCode}`} 
+                  </option>
+              ))}
           </select>
-        </div>
+      </div>
 
         <h5>Order Items</h5>
         <table className="table">
@@ -251,34 +198,34 @@ const OrderForm = () => {
           <tbody>
             {items.map((item, idx) => (
               <tr key={idx}>
-                <td>{item.ItemID}</td>
-                <td>{formatCurrency(item.UnitPrice.toLocaleString())} VND</td>
-                <td>{item.OrderQuantity}</td>
-                <td>{formatCurrency((item.UnitPrice * item.OrderQuantity).toLocaleString())} VND</td>
+                <td>{item.itemId}</td>
+                <td>{item.unitPrice.toLocaleString()} VND</td>
+                <td>{item.quantity}</td>
+                <td>{(item.unitPrice * item.quantity).toLocaleString()} VND</td>
                 <td>
                   <button
                     type="button"
                     className="btn btn-sm btn-danger"
                     onClick={() => handleDeleteItem(item.ItemID)}
                   >
-                    Delete
+                    <i className="bi bi-trash"></i>
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {/* Add Item Section */}
+
         <div className="mb-3">
           <select
             className="form-select d-inline-block w-25 me-2"
-            value={newItem.ItemID}
+            value={newItem.itemId}
             onChange={handleItemSelect}
           >
             <option value="">Select Item</option>
             {availableItems.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
+              <option key={item.itemId} value={item.itemId}>
+                {item.itemName}
               </option>
             ))}
           </select>
@@ -286,8 +233,8 @@ const OrderForm = () => {
             type="number"
             placeholder="Quantity"
             className="form-control d-inline-block w-25 me-2"
-            value={newItem.OrderQuantity}
-            onChange={(e) => setNewItem({ ...newItem, OrderQuantity: parseInt(e.target.value) })}
+            value={newItem.quantity}
+            onChange={(e) => setNewItem({ ...newItem, quantity: parseInt(e.target.value) })}
           />
           <button type="button" className="btn btn-primary" onClick={handleAddItem}>
             Add Item

@@ -8,7 +8,8 @@ import {
   BranchInvoice,
   OrderForm,
   CustomerForm,
-  BranchReservation
+  BranchReservation,
+  ItemForm
 } from '../pages/private/branch';
 
 export const BranchAdminRoutes = [
@@ -29,7 +30,13 @@ export const BranchAdminRoutes = [
           { path: 'edit/:id', element: <StaffForm /> }
         ]
       },
-      { path: 'menu', element: <BranchMenu /> },
+      { path: 'menu', element: <BranchMenu />,
+        children: [
+          { path: '', element: <BranchMenu /> },
+          { path: 'add', element: <ItemForm /> },
+          { path: 'edit/:id', element: <ItemForm /> }
+        ]
+       },
       {
         path: 'customers',
         children: [

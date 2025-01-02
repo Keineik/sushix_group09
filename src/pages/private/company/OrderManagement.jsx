@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchOrders } from '../../../api/order';
+import Pagination from '../../../components/Pagination';
 
 const OrderManagement = ({ OrderType }) => {
     const [activeStatus, setActiveStatus] = useState('COMPLETED');
@@ -13,6 +14,7 @@ const OrderManagement = ({ OrderType }) => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
     const ITEMS_PER_PAGE = 18;
 
     useEffect(() => {
@@ -20,19 +22,20 @@ const OrderManagement = ({ OrderType }) => {
             setLoading(true);
             setError(null);
             try {
+                const orderType = OrderType === 'Dine-In' ? 'I' : (OrderType === 'Delivery' ? 'D' : '');
                 const result = await fetchOrders({
                     page: currentPage,
                     limit: ITEMS_PER_PAGE,
                     searchTerm,
                     orderStatus: activeStatus,
-                    orderType: OrderType,
+                    orderType: orderType,
                     sortDirection: sortConfig.direction === 'desc' ? 1 : 0,
                 });
 
                 console.log ("Result",result)
 
                 setOrders(result.items || []);
-                setTotalPages(Math.ceil((result.total || 0) / ITEMS_PER_PAGE));
+                setTotalCount(result.totalCount || 0);
             } catch (err) {
                 setError('Failed to fetch orders. Please try again.');
                 console.error('Error loading orders:', err);
@@ -74,42 +77,6 @@ const OrderManagement = ({ OrderType }) => {
         setCurrentPage(page);
     };
 
-    const renderPagination = () => {
-        return (
-            <nav className="mt-4">
-                <ul className="pagination justify-content-center">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button
-                            className="page-link"
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
-                        >
-                            Previous
-                        </button>
-                    </li>
-                    {[...Array(totalPages)].map((_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button
-                                className="page-link"
-                                onClick={() => handlePageChange(index + 1)}
-                            >
-                                {index + 1}
-                            </button>
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button
-                            className="page-link"
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                        >
-                            Next
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        );
-    };
 
     return (
         <div className="container-fluid">
@@ -244,7 +211,7 @@ const OrderManagement = ({ OrderType }) => {
                                         <td>{order.orderId}</td>
                                         <td>{new Date(order.orderDateTime).toLocaleString()}</td>
                                         <td>{order.custId}</td>
-                                        <td>{activeStatus}</td>
+                                        <td>{order.orderStatus}</td>
                                         {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
                                         <td>
                                             <button
@@ -274,7 +241,13 @@ const OrderManagement = ({ OrderType }) => {
                 </div>
             )}
 
-            {!loading && !error && renderPagination()}
+            {!loading && !error && 
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+                    onPageChange={handlePageChange}
+                />
+            }
 
             {selectedOrder && (
                 <div

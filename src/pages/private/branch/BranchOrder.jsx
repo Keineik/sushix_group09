@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 import { fetchOrders } from '../../../api/order';
+import Pagination from '../../../components/Pagination';
 
 const OrderManagement = ({ OrderType }) => {
     const { user } = useContext(AuthContext);
@@ -16,6 +17,7 @@ const OrderManagement = ({ OrderType }) => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
     const ITEMS_PER_PAGE = 18;
 
     useEffect(() => {
@@ -23,20 +25,21 @@ const OrderManagement = ({ OrderType }) => {
             setLoading(true);
             setError(null);
             try {
+                const orderType = OrderType === 'Dine-In' ? 'I' : (OrderType === 'Delivery' ? 'D' : '');
                 const result = await fetchOrders({
                     page: currentPage,
                     limit: ITEMS_PER_PAGE,
                     searchTerm,
                     branchId: branchId,                
                     orderStatus: activeStatus,
-                    orderType: OrderType,
+                    orderType: orderType,
                     sortDirection: sortConfig.direction === 'desc' ? 1 : 0,
                 });
 
                 console.log ("Result",result)
 
                 setOrders(result.items || []);
-                setTotalPages(Math.ceil((result.total || 0) / ITEMS_PER_PAGE));
+                setTotalCount(result.totalCount || 0);
             } catch (err) {
                 setError('Failed to fetch orders. Please try again.');
                 console.error('Error loading orders:', err);
@@ -78,45 +81,12 @@ const OrderManagement = ({ OrderType }) => {
         setCurrentPage(page);
     };
 
-    const renderPagination = () => {
-        return (
-            <nav className="mt-4">
-                <ul className="pagination justify-content-center">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button
-                            className="page-link"
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
-                        >
-                            Previous
-                        </button>
-                    </li>
-                    {[...Array(totalPages)].map((_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button
-                                className="page-link"
-                                onClick={() => handlePageChange(index + 1)}
-                            >
-                                {index + 1}
-                            </button>
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button
-                            className="page-link"
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                        >
-                            Next
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        );
-    };
 
     return (
         <div className="container-fluid">
+          {/* <div>
+                <p>Current Branch ID: {branchId}</p>  
+            </div> */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>{OrderType} Orders </h2>
                 <Link to="add" className="btn btn-primary">
@@ -194,6 +164,15 @@ const OrderManagement = ({ OrderType }) => {
                                 Unverified
                             </button>
                         </li>
+
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeStatus === 'CANCELLED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('CANCELLED')}
+                            >
+                                Cancelled
+                            </button>
+                        </li>
                     </>
                 )}
             </ul>
@@ -248,7 +227,7 @@ const OrderManagement = ({ OrderType }) => {
                                         <td>{order.orderId}</td>
                                         <td>{new Date(order.orderDateTime).toLocaleString()}</td>
                                         <td>{order.custId}</td>
-                                        <td>{activeStatus}</td>
+                                        <td>{order.orderStatus}</td>
                                         {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
                                         <td>
                                             <button
@@ -257,12 +236,14 @@ const OrderManagement = ({ OrderType }) => {
                                             >
                                                <i className="bi bi-eye"></i>
                                             </button>
-                                            <Link
-                                                to={`edit/${order.orderId}`}
-                                                className="btn btn-sm btn-outline-secondary ms-2"
-                                            >
-                                                 <i className="bi bi-pencil"></i>
-                                            </Link>
+                                            {OrderType !== 'Delivery' && (
+                                                <Link
+                                                    to={`edit/${order.orderId}`}
+                                                    className="btn btn-sm btn-outline-secondary ms-2"
+                                                >
+                                                    <i className="bi bi-pencil"></i>
+                                                </Link>
+                                            )}
                                             <button
                                                 className="btn btn-sm btn-outline-danger ms-2"
                                                 onClick={() => handleDeleteOrder(order.orderId)}
@@ -278,7 +259,13 @@ const OrderManagement = ({ OrderType }) => {
                 </div>
             )}
 
-            {!loading && !error && renderPagination()}
+            {!loading && !error && 
+              <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+                    onPageChange={handlePageChange}
+                />
+            }
 
             {selectedOrder && (
                 <div
