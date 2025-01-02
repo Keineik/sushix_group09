@@ -31,7 +31,7 @@ const HRManagement = () => {
                 branchId: selectedBranch === 'all' ? 0 : selectedBranch,
                 department: selectedDepartment === 'all' ? null : selectedDepartment
             });
-            
+            console.log(response);
             setStaffs(response.items || []);
             setTotalPages(Math.ceil(response.totalCount / itemsPerPage));
         } catch (err) {
@@ -72,6 +72,7 @@ const HRManagement = () => {
     const loadWorkHistory = async (staffId) => {
         try {
             const history = await fetchStaffWorkHistory(staffId);
+            console.log(history);
             setWorkHistory(history || []);
         } catch (err) {
             console.error('Failed to fetch work history:', err);
@@ -93,7 +94,7 @@ const HRManagement = () => {
 
     const handleViewHistory = (staff) => {
         setSelectedStaff(staff);
-        loadWorkHistory(staff.StaffID);
+        loadWorkHistory(staff.staffId);
     };
 
     return (
@@ -155,10 +156,10 @@ const HRManagement = () => {
                             <tr key={staff.staffId}>
                                 <td>{staff.staffId}</td>
                                 <td>{staff.staffName}</td>
-                                <td>{staff.staffDoB}</td>
+                                <td>{staff.staffDOB}</td>
                                 <td>{staff.staffGender}</td>
                                 <td>{staff.deptName}</td>
-                                <td>{branches.find(branch => branch.BranchID === staff.BranchID)?.name}</td>
+                                <td>{branches.find(branch => branch.branchId === staff.branchId)?.branchName}</td>
                                 <td>
                                     <div className="btn-group">
                                         <Link to={`edit/${staff.staffId}`} className="btn btn-sm btn-outline-primary">
@@ -205,15 +206,15 @@ const HRManagement = () => {
                                     <tbody>
                                         {workHistory.map((record, index) => (
                                             <tr key={index}>
-                                                <td>{record.StartDate}</td>
-                                                <td>{record.QuitDate}</td>
-                                                <td>{branches.find(branch => branch.BranchID === record.BranchID)?.name}</td>
-                                                <td>{record.DeptName}</td>
+                                                <td>{record.startDate}</td>
+                                                <td>{record.quitDate}</td>
+                                                <td>{branches.find(branch => branch.branchId === record.branchId)?.branchName}</td>
+                                                <td>{record.deptName}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                                {getWorkHistory(selectedStaff.staffId).length === 0 && <p>No work history available.</p>}
+                                {workHistory.length === 0 && <p>No work history available.</p>}
                             </div>
                             <div className="modal-footer">
                                 <button className="btn btn-secondary" onClick={() => setSelectedStaff(null)}>Close</button>

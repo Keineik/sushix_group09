@@ -28,13 +28,11 @@ export const AuthProvider = ({ children }) => {
                     logout();
                     return;
                 }
-                const role = jwtDecode(storedToken).scope;
+                const userRole = jwtDecode(storedToken).scope;
                 setIsAuthenticated(true);
                 const userResponse = await fetchCurrentAccount();
                 setUser(userResponse);
-                console.log('Role:', role);
-                console.log('User:', userResponse);
-                setRole(jwtDecode(storedToken).scope);
+                setRole(userRole);
             } catch (error) {
                 console.error('Token introspection failed:', error);
                 Cookies.remove('token');
@@ -57,8 +55,18 @@ export const AuthProvider = ({ children }) => {
             
             setUser(userResponse);
             setIsAuthenticated(true);
-            setRole(jwtDecode(storedToken).scope);
-            navigate('/');
+            const userRole = jwtDecode(storedToken).scope;
+            setRole(userRole);
+
+            if (userRole === 'ADMIN') {
+                navigate('/admin/company');
+            } else if (userRole === 'STAFF MANAGER') {
+                navigate('/admin/branch');
+            } else if (userRole === 'STAFF') {
+                navigate('/staff');
+            } else {
+                navigate('/');
+            }
         } catch (error) {
             console.error("Login error: ", error);
             throw error;

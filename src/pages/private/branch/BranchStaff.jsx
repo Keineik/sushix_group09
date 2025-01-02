@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { fetchDistinctDepartments } from '../../../api/department';
 import { fetchStaffs, fetchStaffWorkHistory, deleteStaff } from '../../../api/staff';
 import { AuthContext } from '../../../context/AuthContext';
+import { fetchBranch } from '../../../api/branch';
+import Pagination from '../../../components/Pagination';
 
 const BranchStaff = () => {
     const { user } = useContext(AuthContext);
@@ -14,7 +16,7 @@ const BranchStaff = () => {
     const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [workHistory, setWorkHistory] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const itemsPerPage = 12;
@@ -30,8 +32,8 @@ const BranchStaff = () => {
                 branchId: branchId,
                 department: selectedDepartment === 'all' ? null : selectedDepartment
             });
-            setStaffs(response.staffs || []);
-            setTotalPages(Math.ceil(response.totalCount / itemsPerPage));
+            setStaffs(response.items || []);
+            setTotalCount(response.totalCount);
         } catch (err) {
             setError("Failed to fetch staffs.");
         } finally {
@@ -59,7 +61,8 @@ const BranchStaff = () => {
     const loadWorkHistory = async (staffId) => {
         try {
             const history = await fetchStaffWorkHistory(staffId);
-            setWorkHistory(history || []);
+            const branch = await fetchBranch(branchId);
+            setWorkHistory({ ...history, branch } || []);
         } catch (err) {
             console.error('Failed to fetch work history:', err);
         }
@@ -114,7 +117,6 @@ const BranchStaff = () => {
                         <th>Date of Birth</th>
                         <th>Gender</th>
                         <th>Department</th>
-                        <th>Branch</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -135,7 +137,6 @@ const BranchStaff = () => {
                                 <td>{staff.staffDoB}</td>
                                 <td>{staff.staffGender}</td>
                                 <td>{staff.deptName}</td>
-                                <td>{branches.find(branch => branch.BranchID === staff.BranchID)?.name}</td>
                                 <td>
                                     <div className="btn-group">
                                         <Link to={`edit/${staff.staffId}`} className="btn btn-sm btn-outline-primary">
@@ -155,40 +156,11 @@ const BranchStaff = () => {
                 </tbody>
             </table>
 
-            <div className="d-flex justify-content-center mt-4">
-                <nav>
-                    <ul className="pagination">
-                        <li className="page-item mt-1">
-                            <button
-                                className="arrow-btn"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                            >
-                                <i className="bi bi-arrow-left"></i>
-                            </button>
-                        </li>
-                        {[...Array(totalPages)].map((_, index) => (
-                            <li className="page-item" key={index + 1}>
-                                <button
-                                    className={`pagination-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                                    onClick={() => handlePageChange(index + 1)}
-                                >
-                                    {index + 1}
-                                </button>
-                            </li>
-                        ))}
-                        <li className="page-item">
-                            <button
-                                className="arrow-btn  mt-1"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                            >
-                                <i className="bi bi-arrow-right"></i>
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalCount / itemsPerPage) || 1}
+                onPageChange={handlePageChange}
+            />
 
             {selectedStaff && (
                 <div className="modal show" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
@@ -213,13 +185,13 @@ const BranchStaff = () => {
                                             <tr key={index}>
                                                 <td>{record.StartDate}</td>
                                                 <td>{record.QuitDate}</td>
-                                                <td>{branches.find(branch => branch.BranchID === record.BranchID)?.name}</td>
+                                                <td>{record.branch.branchName}</td>
                                                 <td>{record.DeptName}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                                {getWorkHistory(selectedStaff.staffId).length === 0 && <p>No work history available.</p>}
+                                {workHistory.length === 0 && <p>No work history available.</p>}
                             </div>
                             <div className="modal-footer">
                                 <button className="btn btn-secondary" onClick={() => setSelectedStaff(null)}>Close</button>

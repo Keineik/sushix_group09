@@ -1,5 +1,6 @@
 import BaseLayout from './BaseLayout';
-import { useParams } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
 const navItems = [
   {
@@ -52,11 +53,14 @@ const navItems = [
 ];
 
 const BranchAdminLayout = () => {
+  const { user, logout } = useContext(AuthContext);
   return (
     <BaseLayout
-      title="Branch Admin"
+      title={`${user.staff.department.branch.branchName}. Staff Manager`}
       basePath={`/admin/branch`}
       navItems={navItems}
+      name={user.username}
+      logout={logout}
     />
   );
 };

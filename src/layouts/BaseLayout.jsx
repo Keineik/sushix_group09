@@ -1,10 +1,18 @@
 import { Outlet, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState } from 'react';
 
-const BaseLayout = ({ title, basePath, navItems }) => {
-  const { logout } = useContext(AuthContext);
+const BaseLayout = ({ title, name, basePath, navItems, logout }) => {
+  const [showLogoutDropdown, setShowLogoutDropdown] = useState(false);
+
+  const handleLogoutClick = () => {
+    setShowLogoutDropdown(!showLogoutDropdown);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutDropdown(false);
+    logout();
+  };
 
   return (
     <div className="admin-layout">
@@ -14,11 +22,19 @@ const BaseLayout = ({ title, basePath, navItems }) => {
         </Link>
         <button 
           className="btn text-white border-0 ms-auto me-3"
-          onClick={logout}
+          onClick={handleLogoutClick}
         >
-          Log out
+          {name}
         </button>
       </header>
+
+      {showLogoutDropdown && (
+            <div className="dropdown-menu dropdown-menu-end show" style={{ position: 'absolute', right: 0 }}>
+              <button className="dropdown-item" onClick={handleConfirmLogout}>
+                Log out
+              </button>
+            </div>
+          )}
 
       <div className="container-fluid">
         <div className="row">
