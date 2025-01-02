@@ -30,13 +30,7 @@ export const BranchAdminRoutes = [
           { path: 'edit/:id', element: <StaffForm /> }
         ]
       },
-      { path: 'menu', element: <BranchMenu />,
-        children: [
-          { path: '', element: <BranchMenu /> },
-          { path: 'add', element: <ItemForm /> },
-          { path: 'edit/:id', element: <ItemForm /> }
-        ]
-       },
+      { path: 'menu', element: <BranchMenu /> }, 
       {
         path: 'customers',
         children: [
