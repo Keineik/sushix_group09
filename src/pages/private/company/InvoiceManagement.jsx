@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchInvoices } from '../../../api/invoice';
+import Pagination from '../../../components/Pagination';
 
 const InvoiceManagement = () => {
     const [invoices, setInvoices] = useState([]);
@@ -9,6 +10,7 @@ const InvoiceManagement = () => {
     const [endDate, setEndDate] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [totalCount, setTotalCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [sortDirection, setSortDirection] = useState(0); // 0: ASC, 1: DESC
     const ITEMS_PER_PAGE = 18;
@@ -27,6 +29,7 @@ const InvoiceManagement = () => {
                     sortDirection, // Pass the sort direction to the API
                 });
                 setInvoices(result.items || []);
+                setTotalCount(result.totalCount || 0);
             } catch (error) {
                 setError('Error fetching invoices');
             } finally {
@@ -35,6 +38,10 @@ const InvoiceManagement = () => {
         };
         loadInvoices();
     }, [currentPage, searchTerm, branchId, startDate, endDate, sortDirection]);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     const handleSearch = (e) => {
         setSearchTerm(e.target.value);
@@ -159,30 +166,11 @@ const InvoiceManagement = () => {
                 </div>
             )}
 
-            <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li
-                        className={`page-item ${
-                            currentPage === 1 ? 'disabled' : ''
-                        }`}
-                    >
-                        <button
-                            className="page-link"
-                            onClick={() => setCurrentPage((prev) => prev - 1)}
-                        >
-                            Previous
-                        </button>
-                    </li>
-                    <li className="page-item">
-                        <button
-                            className="page-link"
-                            onClick={() => setCurrentPage((prev) => prev + 1)}
-                        >
-                            Next
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 };
