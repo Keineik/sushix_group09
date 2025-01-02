@@ -31,6 +31,11 @@ const navItems = [
     ]
   },
   {
+    path: 'invoices',
+    label: 'Invoices',
+    icon: 'receipt'
+  },
+  {
     path: 'menu',
     label: 'Menu Management',
     icon: 'book',
