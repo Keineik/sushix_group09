@@ -22,7 +22,7 @@ const OrderForm = () => {
           try {
               const tables = await getAllRestaurantTables();
               setRestaurantTables(tables);
-              // console.log("Wth:", tables)
+              console.log("Wth:", tables)
           } catch (error) {
               console.error('Error fetching tables:', error);
           }
@@ -176,11 +176,14 @@ const OrderForm = () => {
               required
           >
               <option value="">Select Table</option>
-              {restaurantTables.map((table) => (
+              {restaurantTables
+                .filter((table) => table.isVacant)
+                .map((table) => (
                   <option key={table.tableId} value={table.tableCode}>
-                      { `Table ${table.tableCode}`} 
+                    {`Table ${table.tableCode}`}
                   </option>
-              ))}
+                ))}
+
           </select>
       </div>
 
