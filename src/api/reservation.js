@@ -4,12 +4,13 @@ export const fetchReservations = async ({
     page = 1,
     limit = 10,
     searchTerm = '',
+    status = '',
     branchId = 0,
-    sortDirection = false,
+    sortDirection = true,
 }) => {
     try {
         const response = await api.get('/reservation', {
-            params: { page, limit, searchTerm, branchId, sortDirection },
+            params: { page, limit, searchTerm, status, branchId, sortDirection },
         });
         return response.data.result;
     } catch (error) {

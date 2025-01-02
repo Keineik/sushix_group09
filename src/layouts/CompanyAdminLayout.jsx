@@ -1,4 +1,6 @@
 import BaseLayout from './BaseLayout';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const navItems = [
   {
@@ -29,6 +31,11 @@ const navItems = [
     ]
   },
   {
+    path: 'invoices',
+    label: 'Invoices',
+    icon: 'receipt'
+  },
+  {
     path: 'menu',
     label: 'Menu Management',
     icon: 'book',
@@ -56,11 +63,14 @@ const navItems = [
 ];
 
 const CompanyAdminLayout = () => {
+  const { user, logout } = useContext(AuthContext);
   return (
     <BaseLayout
       title="Company Admin"
       basePath="/admin/company"
       navItems={navItems}
+      name={user.username}
+      logout={logout}
     />
   );
 };

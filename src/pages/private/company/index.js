@@ -14,3 +14,4 @@ export { default as HRManagement } from './HRManagement';
 export { default as HRForm } from './HRForm';
 export { default as ItemForm } from './ItemForm';
 export { default as CategoryForm } from './CategoryForm';
+export { default as InvoiceManagement } from './InvoiceManagement';

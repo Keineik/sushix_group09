@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -8,7 +7,6 @@ const Login = () => {
     const { login } = useContext(AuthContext);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,7 +14,6 @@ const Login = () => {
         setError(null);
         try {
             await login({ username, password });
-            navigate('/');
         } catch (err) {
             setError(err.message || 'Tên đăng nhập hoặc mật khẩu không chính xác!');
         } finally {

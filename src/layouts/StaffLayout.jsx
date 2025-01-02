@@ -1,5 +1,6 @@
-import { Children } from 'react';
+import { useContext } from 'react';
 import BaseLayout from './BaseLayout';
+import { AuthContext } from '../context/AuthContext';
 
 const navItems = [
   {
@@ -42,11 +43,14 @@ const navItems = [
 ];
 
 const StaffLayout = () => {
+  const { user, logout } = useContext(AuthContext);
   return (
     <BaseLayout
-      title="Staff"
+    title={`${user.staff.department.branch.branchName}. Staff ${user.staff.department.deptName}`}
       basePath="/staff"
       navItems={navItems}
+      logout={logout}
+      name={user.username}
     />
   );
 };
