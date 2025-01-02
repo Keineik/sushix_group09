@@ -70,7 +70,7 @@ const OrderForm = () => {
     navigate('/admin/branch/orders');
   };
 
-  const handleCancel = () => navigate('/admin/branch/orders');
+  const handleCancel = () => navigate('/admin/orders');
 
   const handleAddItem = () => {
     if (newItem.ItemID && newItem.UnitPrice && newItem.OrderQuantity) {

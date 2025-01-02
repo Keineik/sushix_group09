@@ -1,4 +1,4 @@
-import api from "./api";
+import api from './api';
 
 // Fetch all orders
 export const fetchOrders = async ({
@@ -6,34 +6,49 @@ export const fetchOrders = async ({
     limit = 18,
     searchTerm = '',
     branchId = 0,
-    customerID = 0,
+    custId = 0,
     orderStatus = '',
     orderType = '',
-    sortKey = 'OrderDateTime',
-    sortDirection = 0, 
+    sortDirection = false,
 }) => {
     try {
-        const response = await api.get('/orders', {
+        const response = await api.get('/order', {
             params: {
                 page,
                 limit,
                 searchTerm,
                 branchId,
-                customerID,
+                custId,
                 orderStatus,
                 orderType,
-                sortKey,
                 sortDirection,
             },
         });
-        if (response.data && response.data.result) {
-            return response.data.result;
-        } else {
-            console.warn('Unexpected response structure:', response.data);
-            return [];
-        }
+        return response.data.result;
     } catch (error) {
-        console.error('Error fetching orders:', error.message || error);
-        throw new Error('Failed to fetch orders. Please try again later.');
+        console.error('Error fetching orders:', error);
+        throw error;
+    }
+};
+
+// Fetch dine-in order by ID
+export const fetchDineInOrder = async (orderId) => {
+    try {
+        const response = await api.get(`/order/dine-in/${orderId}`);
+        return response.data.result;
+    } catch (error) {
+        console.error('Error fetching dine-in order:', error);
+        throw error;
+    }
+};
+
+// Fetch delivery order by ID
+export const fetchDeliveryOrder = async (orderId) => {
+    try {
+        const response = await api.get(`/order/delivery/${orderId}`);
+        return response.data.result;
+    } catch (error) {
+        console.error('Error fetching delivery order:', error);
+        throw error;
     }
 };

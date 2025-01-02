@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchOrders } from '../../../api/order';
 
 const OrderManagement = ({ OrderType }) => {
-    const [activeStatus, setActiveStatus] = useState('Preparing');
+    const [activeStatus, setActiveStatus] = useState('COMPLETED');
     const [orders, setOrders] = useState([]);
     const [orderDetails, setOrderDetails] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -26,11 +26,12 @@ const OrderManagement = ({ OrderType }) => {
                     searchTerm,
                     orderStatus: activeStatus,
                     orderType: OrderType,
-                    sortKey: sortConfig.key,
                     sortDirection: sortConfig.direction === 'desc' ? 1 : 0,
                 });
 
-                setOrders(result.orders || []);
+                console.log ("Result",result)
+
+                setOrders(result.items || []);
                 setTotalPages(Math.ceil((result.total || 0) / ITEMS_PER_PAGE));
             } catch (err) {
                 setError('Failed to fetch orders. Please try again.');
@@ -113,7 +114,7 @@ const OrderManagement = ({ OrderType }) => {
     return (
         <div className="container-fluid">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>{OrderType} Orders - {activeStatus}</h2>
+                <h2>{OrderType} Orders </h2>
                 <Link to="add" className="btn btn-primary">
                     Add Order
                 </Link>
@@ -124,34 +125,34 @@ const OrderManagement = ({ OrderType }) => {
                     <>
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeStatus === 'Preparing' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Preparing')}
-                            >
-                                Preparing
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeStatus === 'Served' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Served')}
-                            >
-                                Served
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeStatus === 'Completed' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Completed')}
+                                className={`nav-link ${activeStatus === 'COMPLETED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('COMPLETED')}
                             >
                                 Completed
                             </button>
                         </li>
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeStatus === 'Cancelled' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Cancelled')}
+                                className={`nav-link ${activeStatus === 'CANCELLED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('CANCELLED')}
                             >
                                 Cancelled
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeStatus === 'UNVERIFIED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('UNVERIFIED')}
+                            >
+                                Unverified
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeStatus === 'VERIFIED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('VERIFIED')}
+                            >
+                                Verified
                             </button>
                         </li>
                     </>
@@ -159,50 +160,34 @@ const OrderManagement = ({ OrderType }) => {
                     <>
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeStatus === 'Ordered' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Ordered')}
-                            >
-                                Ordered
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeStatus === 'Preparing' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Preparing')}
-                            >
-                                Preparing
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeStatus === 'Out for Delivery' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Out for Delivery')}
-                            >
-                                Out for Delivery
-                            </button>
-                        </li>
-                        <li className="nav-item">
-                            <button
-                                className={`nav-link ${activeStatus === 'Delivered' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Delivered')}
+                                className={`nav-link ${activeStatus === 'DELIVERED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('DELIVERED')}
                             >
                                 Delivered
                             </button>
                         </li>
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeStatus === 'Completed' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Completed')}
+                                className={`nav-link ${activeStatus === 'COMPLETED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('COMPLETED')}
                             >
                                 Completed
                             </button>
                         </li>
                         <li className="nav-item">
                             <button
-                                className={`nav-link ${activeStatus === 'Cancelled' ? 'active' : ''}`}
-                                onClick={() => setActiveStatus('Cancelled')}
+                                className={`nav-link ${activeStatus === 'VERIFIED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('VERIFIED')}
                             >
-                                Cancelled
+                                Verified
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button
+                                className={`nav-link ${activeStatus === 'UNVERIFIED' ? 'active' : ''}`}
+                                onClick={() => setActiveStatus('UNVERIFIED')}
+                            >
+                                Unverified
                             </button>
                         </li>
                     </>
@@ -244,41 +229,41 @@ const OrderManagement = ({ OrderType }) => {
                                         {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                     </th>
                                     <th>Status</th>
-                                    {OrderType === 'Dine-In' && (
+                                    {/* {OrderType === 'Dine-In' && (
                                         <th onClick={() => handleSort('TableID')}>
                                             Table
                                             {sortConfig.key === 'TableID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                         </th>
-                                    )}
+                                    )} */}
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {orders.map((order) => (
-                                    <tr key={order.OrderID}>
-                                        <td>{order.OrderID}</td>
-                                        <td>{new Date(order.OrderDateTime).toLocaleString()}</td>
-                                        <td>{order.CustID}</td>
-                                        <td>{order.OrderStatus}</td>
-                                        {OrderType === 'Dine-In' && <td>{order.TableID}</td>}
+                                    <tr key={order.orderId}>
+                                        <td>{order.orderId}</td>
+                                        <td>{new Date(order.orderDateTime).toLocaleString()}</td>
+                                        <td>{order.custId}</td>
+                                        <td>{activeStatus}</td>
+                                        {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
                                         <td>
                                             <button
                                                 className="btn btn-sm btn-outline-primary"
                                                 onClick={() => handleViewOrder(order)}
                                             >
-                                                View Details
+                                               <i className="bi bi-eye"></i>
                                             </button>
                                             <Link
-                                                to={`edit/${order.OrderID}`}
+                                                to={`edit/${order.orderId}`}
                                                 className="btn btn-sm btn-outline-secondary ms-2"
                                             >
-                                                Edit Order
+                                                 <i className="bi bi-pencil"></i>
                                             </Link>
                                             <button
                                                 className="btn btn-sm btn-outline-danger ms-2"
-                                                onClick={() => handleDeleteOrder(order.OrderID)}
+                                                onClick={() => handleDeleteOrder(order.orderId)}
                                             >
-                                                Delete
+                                                <i className="bi bi-trash"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -303,23 +288,15 @@ const OrderManagement = ({ OrderType }) => {
                                 <button className="btn-close" onClick={() => setSelectedOrder(null)}></button>
                             </div>
                             <div className="modal-body">
-                                <p><strong>Order ID:</strong> {selectedOrder.OrderID}</p>
-                                <p><strong>Order Type:</strong> {selectedOrder.OrderType}</p>
-                                <p><strong>Order Date:</strong> {new Date(selectedOrder.OrderDateTime).toLocaleString()}</p>
-                                {selectedOrder.OrderType === 'Dine-In' && selectedOrder.TableID && (
+                                <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
+                                <p><strong>Order Type:</strong> {selectedOrder.orderType}</p>
+                                <p><strong>Order Date:</strong> {new Date(selectedOrder.orderDateTime).toLocaleString()}</p>
+                                {/* {selectedOrder.OrderType === 'Dine-In' && selectedOrder.TableID && (
                                     <p><strong>Table ID:</strong> {selectedOrder.TableID}</p>
-                                )}
-                                {selectedOrder.OrderType === 'Dine-In' && selectedOrder.RsID && (
-                                    <>
-                                        <p><strong>Reservation ID:</strong> {selectedOrder.RsID}</p>
-                                        <p><strong>Arrival Time:</strong> {new Date(selectedOrder.ArrivalDateTime).toLocaleString()}</p>
-                                        <p><strong>Number of Guests:</strong> {selectedOrder.NumOfGuests}</p>
-                                        <p><strong>Special Notes:</strong> {selectedOrder.RsNotes}</p>
-                                    </>
-                                )}
-                                <p><strong>Status:</strong> {selectedOrder.OrderStatus}</p>
-                                <p><strong>Staff ID:</strong> {selectedOrder.StaffID}</p>
-                                <p><strong>Customer ID:</strong> {selectedOrder.CustID}</p>
+                                )} */}
+                                <p><strong>Status:</strong> {activeStatus}</p>
+                                {/* <p><strong>Staff ID:</strong> {selectedOrder.StaffID}</p> */}
+                                <p><strong>Customer Name:</strong> {selectedOrder.custName}</p>
                                 {orderDetails.length > 0 && (
                                     <>
                                         <hr />
@@ -334,6 +311,7 @@ const OrderManagement = ({ OrderType }) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                // idk
                                                 {orderDetails
                                                     .filter(detail => detail.OrderID === selectedOrder.OrderID)
                                                     .map((detail) => (
