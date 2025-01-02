@@ -36,7 +36,7 @@ export const CompanyAdminRoutes = [
       {
         path: 'orders',
         children: [
-            { path: '', element: <OrderManagement OrderType="Dine-In" /> },
+            { path: '', element: <Navigate to="dine-in" /> },
             {
                 path: 'delivery',
                 children: [

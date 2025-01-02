@@ -11,6 +11,7 @@ import {
   BranchReservation,
   ItemForm
 } from '../pages/private/branch';
+import { Navigate } from 'react-router-dom';
 
 export const BranchAdminRoutes = [
   {
@@ -52,7 +53,7 @@ export const BranchAdminRoutes = [
       {
         path: 'orders',
         children: [
-          { path: '', element: <BranchOrder OrderType="Dine-In" />},
+          { path: '', element: <Navigate to="dine-in" />},
           {
             path: 'delivery',
             children: [
