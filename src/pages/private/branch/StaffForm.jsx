@@ -6,7 +6,6 @@ import { AuthContext } from '../../../context/AuthContext';
 
 const StaffForm = () => {
     const { user } = useContext(AuthContext);
-    console.log(user);
     const branchId = user.staff.department.branch.branchId;
     const { id } = useParams();
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ const StaffForm = () => {
     const loadDepartments = async () => {
         try {
             const response = await fetchDistinctDepartments();
-            setDepartments(response);
+            setDepartments(response.filter(dept => dept !== 'Manager'));
         } catch (err) {
             console.error('Failed to fetch departments:', err);
         }
