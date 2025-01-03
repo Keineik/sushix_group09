@@ -26,6 +26,7 @@ const CouponManagement = () => {
     try {
       const couponsResponse = await fetchCoupons();
       setCoupons(couponsResponse || []);
+      console.log("couponsResponse: ",couponsResponse )
     } catch (err) {
       setError("Failed to fetch coupons.");
     } finally {
@@ -88,7 +89,7 @@ const CouponManagement = () => {
                 {coupon.discountFlat ? `${coupon.discountFlat} VND` : ''}
                 {coupon.discountRate ? ` ${coupon.discountRate*100}%` : ''}
               </td>
-              <td>{coupon.RemainingUsage}/{coupon.totalUsageLimit}</td>
+              <td>{coupon.remainingUsage}/{coupon.totalUsageLimit}</td>
               <td>
                 <div className="d-flex align-items-center">
                   <button
@@ -135,7 +136,7 @@ const CouponManagement = () => {
                 <p><strong>Effective Date:</strong> {selectedCoupon.effectiveDate}</p>
                 <p><strong>Expiry Date:</strong> {selectedCoupon.expiryDate}</p>
                 <p><strong>Total Usage Limit:</strong> {selectedCoupon.totalUsageLimit}</p>
-                <p><strong>Remaining Usage:</strong> {selectedCoupon.RemainingUsage}</p>
+                <p><strong>Remaining Usage:</strong> {selectedCoupon.remainingUsage}</p>
                 <p><strong>Minimum Membership Requirement:</strong> {getCardName(selectedCoupon.minMembershipRequirement)}</p>
               </div>
               <div className="modal-footer">

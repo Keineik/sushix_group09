@@ -125,6 +125,7 @@ const Checkout = () => {
         setLoading(true);  
         setError(null);    
         setSuccess(false); 
+        // localStorage.removeItem('cart');
 
         if (!customerInfo.name || !customerInfo.phone || !customerInfo.address || !branch) {
             setError("Vui lòng nhập đầy đủ thông tin bắt buộc!");
