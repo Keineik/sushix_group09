@@ -9,7 +9,7 @@ export const fetchOrders = async ({
     custId = 0,
     orderStatus = '',
     orderType = '',
-    sortDirection = false,
+    sortDirection = true,
 }) => {
     try {
         const response = await api.get('/order', {

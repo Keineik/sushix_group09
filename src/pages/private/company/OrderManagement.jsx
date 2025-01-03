@@ -44,7 +44,7 @@ const OrderManagement = ({ OrderType }) => {
                     orderStatus: activeStatus,
                     orderType: orderType,
                     branchId: selectedBranch === 'all' ? null : selectedBranch,
-                    sortDirection: sortConfig.direction === 'desc' ? 1 : 0,
+                    sortDirection: true,
                 });
 
                 console.log("Result", result)
@@ -60,7 +60,7 @@ const OrderManagement = ({ OrderType }) => {
         };
 
         loadOrders();
-    }, [currentPage, searchTerm, activeStatus, OrderType, sortConfig, selectedBranch]);
+    }, [currentPage, searchTerm, activeStatus, OrderType, selectedBranch]);
 
     useEffect(() => {
         const loadOrderDetails = async () => {
@@ -88,15 +88,6 @@ const OrderManagement = ({ OrderType }) => {
 
         loadOrderDetails();
     }, [selectedOrder]);
-
-    const handleSort = (key) => {
-        let direction = 'asc';
-        if (sortConfig.key === key && sortConfig.direction === 'asc') {
-            direction = 'desc';
-        }
-        setSortConfig({ key, direction });
-        setCurrentPage(1); // Reset to first page when sorting changes
-    };
 
     const handleViewOrder = (order) => {
         setSelectedOrder(order);
@@ -235,17 +226,17 @@ const OrderManagement = ({ OrderType }) => {
                     <table className="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th onClick={() => handleSort('OrderID')}>
+                                <th>
                                     Order ID
-                                    {sortConfig.key === 'OrderID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                 </th>
-                                <th onClick={() => handleSort('OrderDateTime')}>
+                                <th>
                                     Order Date
-                                    {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                 </th>
-                                <th onClick={() => handleSort('CustID')}>
+                                <th>
                                     Customer Name
-                                    {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th>
+                                    Customer Phone Number
                                 </th>
                                 <th>Subtotal</th>
                                 {/* {OrderType === 'Dine-In' && (
@@ -263,6 +254,7 @@ const OrderManagement = ({ OrderType }) => {
                                     <td>{order.orderId}</td>
                                     <td>{new Date(order.orderDateTime).toLocaleString()}</td>
                                     <td>{order.custName}</td>
+                                    <td>{order.custPhoneNumber}</td>
                                     <td>{formatPrice(order.estimatedPrice)}</td>
                                     {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
                                     <td>
