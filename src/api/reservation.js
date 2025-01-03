@@ -28,3 +28,13 @@ export const fetchReservation = async (reservationId) => {
         throw error;
     }
 }
+
+export const updateReservation = async (reservationId, data) => {
+    try {
+        const response = await api.put(`/reservation/${reservationId}`, data);
+        return response.data.result;
+    } catch (error) {
+        console.error(`Error updating reservation with ID ${reservationId}:`, error);
+        throw error;
+    }
+}

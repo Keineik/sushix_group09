@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 import { fetchOrders, fetchDineInOrder, fetchDeliveryOrder } from '../../../api/order';
 import Pagination from '../../../components/Pagination';
-import { createInvoice } from '../../../api/staffwork'; 
+import { createInvoice } from '../../../api/staffwork';
 
 const OrderManagement = ({ OrderType }) => {
     const { user } = useContext(AuthContext);
@@ -21,7 +21,7 @@ const OrderManagement = ({ OrderType }) => {
     const [totalCount, setTotalCount] = useState(0);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-    
+
     const ITEMS_PER_PAGE = 18;
 
 
@@ -35,13 +35,13 @@ const OrderManagement = ({ OrderType }) => {
                     page: currentPage,
                     limit: ITEMS_PER_PAGE,
                     searchTerm,
-                    branchId: branchId,                
+                    branchId: branchId,
                     orderStatus: activeStatus,
                     orderType: orderType,
                     sortDirection: sortConfig.direction === 'desc' ? 1 : 0,
                 });
 
-                console.log ("Result",result)
+                console.log("Result", result)
 
                 setOrders(result.items || []);
                 setTotalCount(result.totalCount || 0);
@@ -66,12 +66,12 @@ const OrderManagement = ({ OrderType }) => {
                     let result;
                     if (selectedOrder.orderType === 'Dine-In') {
                         result = await fetchDineInOrder(selectedOrder.orderId);
-                        
+
                     } else if (selectedOrder.orderType === 'Delivery') {
                         result = await fetchDeliveryOrder(selectedOrder.orderId);
                     }
-                    console.log ("Details: ", result)
-                    setOrderDetails(result.orderDetails); 
+                    console.log("Details: ", result)
+                    setOrderDetails(result.orderDetails);
                 } catch (err) {
                     setError('Failed to fetch order details. Please try again.');
                     console.error('Error loading order details:', err);
@@ -114,10 +114,10 @@ const OrderManagement = ({ OrderType }) => {
     };
 
     const handlePayment = async () => {
-    
+
         const couponCode = document.getElementById("couponCode").value;
         const paymentMethod = document.getElementById("paymentMethod").value;
-        const taxRate = parseFloat(document.getElementById("taxRate").value/ 100) || 0.08;
+        const taxRate = parseFloat(document.getElementById("taxRate").value / 100) || 0.08;
 
         const invoiceRequest = {
             orderId: selectedOrder.orderId,
@@ -163,7 +163,7 @@ const OrderManagement = ({ OrderType }) => {
 
     return (
         <div className="container-fluid">
-          {/* <div>
+            {/* <div>
                 <p>Current Branch ID: {branchId}</p>  
             </div> */}
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -264,7 +264,7 @@ const OrderManagement = ({ OrderType }) => {
                     value={searchTerm}
                     onChange={(e) => {
                         setSearchTerm(e.target.value);
-                        setCurrentPage(1); // Reset to first page when search term changes
+                        setCurrentPage(1);
                     }}
                 />
             </div>
@@ -273,88 +273,86 @@ const OrderManagement = ({ OrderType }) => {
             {error && <div className="alert alert-danger">{error}</div>}
 
             {!loading && !error && (
-                <div className="card">
-                    <div className="table-responsive">
-                        <table className="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th onClick={() => handleSort('OrderID')}>
-                                        Order ID
-                                        {sortConfig.key === 'OrderID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
-                                    </th>
-                                    <th onClick={() => handleSort('OrderDateTime')}>
-                                        Order Date
-                                        {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
-                                    </th>
-                                    <th onClick={() => handleSort('CustID')}>
-                                        Customer Name
-                                        {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
-                                    </th>
-                                    <th>Subtotal</th>
-                                    {/* {OrderType === 'Dine-In' && (
+                <div className="table-responsive">
+                    <table className="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th onClick={() => handleSort('OrderID')}>
+                                    Order ID
+                                    {sortConfig.key === 'OrderID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th onClick={() => handleSort('OrderDateTime')}>
+                                    Order Date
+                                    {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th onClick={() => handleSort('CustID')}>
+                                    Customer Name
+                                    {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th>Subtotal</th>
+                                {/* {OrderType === 'Dine-In' && (
                                         <th onClick={() => handleSort('TableID')}>
                                             Table
                                             {sortConfig.key === 'TableID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                         </th>
                                     )} */}
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders.map((order) => (
-                                    <tr key={order.orderId}>
-                                        <td>{order.orderId}</td>
-                                        <td>{new Date(order.orderDateTime).toLocaleString()}</td>
-                                        <td>{order.custName}</td>
-                                        <td>{formatPrice(order.estimatedPrice)}</td>
-                                        {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
-                                        <td>
-                                            <button
-                                                className="btn btn-sm btn-outline-primary"
-                                                onClick={() => handleViewOrder(order)}
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map((order) => (
+                                <tr key={order.orderId}>
+                                    <td>{order.orderId}</td>
+                                    <td>{new Date(order.orderDateTime).toLocaleString()}</td>
+                                    <td>{order.custName}</td>
+                                    <td>{formatPrice(order.estimatedPrice)}</td>
+                                    {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
+                                    <td>
+                                        <button
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() => handleViewOrder(order)}
+                                        >
+                                            <i className="bi bi-eye"></i>
+                                        </button>
+                                        {OrderType !== 'Delivery' && (
+                                            <Link
+                                                to={`edit/${order.orderId}`}
+                                                className="btn btn-sm btn-outline-secondary ms-2"
                                             >
-                                               <i className="bi bi-eye"></i>
-                                            </button>
-                                            {OrderType !== 'Delivery' && (
-                                                <Link
-                                                    to={`edit/${order.orderId}`}
-                                                    className="btn btn-sm btn-outline-secondary ms-2"
-                                                >
-                                                    <i className="bi bi-pencil"></i>
-                                                </Link>
-                                            )}
-                                            <button
-                                                className="btn btn-sm btn-outline-danger ms-2"
-                                                onClick={() => handleDeleteOrder(order.orderId)}
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                            {/* {console.log(order.orderStatus)} */}
-                                            {OrderType === 'Dine-In' && order.orderStatus !== 'CANCELLED ' && order.orderStatus !== 'COMPLETED ' && (
+                                                <i className="bi bi-pencil"></i>
+                                            </Link>
+                                        )}
+                                        <button
+                                            className="btn btn-sm btn-outline-danger ms-2"
+                                            onClick={() => handleDeleteOrder(order.orderId)}
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+                                        {/* {console.log(order.orderStatus)} */}
+                                        {OrderType === 'Dine-In' && order.orderStatus !== 'CANCELLED ' && order.orderStatus !== 'COMPLETED ' && (
                                             <button
                                                 className="btn btn-sm btn-outline-success ms-2"
                                                 onClick={() => handleOpenInvoiceModal(order)}
                                             >
                                                 <i className="bi bi-printer"></i>
                                             </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
 
-            {!loading && !error && 
-              <Pagination
+            {!loading && !error &&
+                <Pagination
                     currentPage={currentPage}
                     totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
                     onPageChange={handlePageChange}
                 />
             }
-        
+
             {showDetailsModal && selectedOrder && (
                 <div
                     className="modal show"
@@ -377,7 +375,7 @@ const OrderManagement = ({ OrderType }) => {
                                 {/* <p><strong>Staff ID:</strong> {selectedOrder.StaffID}</p> */}
                                 <p><strong>Customer Name:</strong> {selectedOrder.custName}</p>
                                 {/* <p><strong>Branch</strong> {selectedOrder.branchId}</p> */}
-                                
+
                                 {orderDetails.length > 0 && (
                                     <>
                                         <hr />
@@ -431,7 +429,7 @@ const OrderManagement = ({ OrderType }) => {
                             </div>
                             <div className="modal-body">
                                 <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
-                                <p><strong>Subtotal:</strong> {selectedOrder.estimatedPrice.toLocaleString() } đ</p>
+                                <p><strong>Subtotal:</strong> {selectedOrder.estimatedPrice.toLocaleString()} đ</p>
                                 <form>
                                     <div className="mb-3">
                                         <label htmlFor="couponCode" className="form-label">Coupon Code</label>
@@ -449,7 +447,7 @@ const OrderManagement = ({ OrderType }) => {
                                             <option value="cash">Cash</option>
                                             <option value="credit_card">Credit Card</option>
                                             <option value="paypal">PayPal</option>
-                                            
+
                                         </select>
                                     </div>
 
@@ -476,7 +474,7 @@ const OrderManagement = ({ OrderType }) => {
                 </div>
             )}
         </div>
-        
+
     );
 };
 
