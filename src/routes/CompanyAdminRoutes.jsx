@@ -17,6 +17,7 @@ import {
   CategoryForm,
   InvoiceManagement
 } from '../pages/private/company';
+import { BranchCustomer, CustomerForm } from '../pages/private/branch';
 import { Navigate } from 'react-router-dom';
 
 
@@ -36,23 +37,23 @@ export const CompanyAdminRoutes = [
       {
         path: 'orders',
         children: [
-            { path: '', element: <Navigate to="dine-in" /> },
-            {
-                path: 'delivery',
-                children: [
-                    { path: '', element: <OrderManagement OrderType="Delivery" />, },
-                    { path: 'add', element: <OrderForm /> },
-                    { path: 'edit/:id', element: <OrderForm /> },
-                ]
-            },
-            {
-                path: 'dine-in',
-                children: [
-                    { path: '', element: <OrderManagement OrderType="Dine-In" /> },
-                    { path: 'add', element: <OrderForm /> },
-                    { path: 'edit/:id', element: <OrderForm /> },
-                ]
-            }
+          { path: '', element: <Navigate to="dine-in" /> },
+          {
+            path: 'delivery',
+            children: [
+              { path: '', element: <OrderManagement OrderType="Delivery" />, },
+              { path: 'add', element: <OrderForm /> },
+              { path: 'edit/:id', element: <OrderForm /> },
+            ]
+          },
+          {
+            path: 'dine-in',
+            children: [
+              { path: '', element: <OrderManagement OrderType="Dine-In" /> },
+              { path: 'add', element: <OrderForm /> },
+              { path: 'edit/:id', element: <OrderForm /> },
+            ]
+          }
         ]
       },
       {
@@ -65,23 +66,32 @@ export const CompanyAdminRoutes = [
         path: 'menu',
         children: [
           { path: '', element: <Navigate to="items" /> },
-          { path: 'items', 
+          {
+            path: 'items',
             children: [
               { path: '', element: <ItemManagement /> },
               { path: 'add', element: <ItemForm /> },
               { path: 'edit/:id', element: <ItemForm /> },
             ]
-            
+
           },
-          { 
-            path: 'categories', 
+          {
+            path: 'categories',
             children: [
               { path: '', element: <CategoryManagement /> },
               { path: 'add', element: <CategoryForm /> },
-              { path : 'edit/:id', element: <CategoryForm /> }
+              { path: 'edit/:id', element: <CategoryForm /> }
             ]
           },
           { path: 'combos', element: <ComboManagement /> }
+        ]
+      },
+      {
+        path: 'customers',
+        children: [
+          { path: '', element: <BranchCustomer /> },
+          { path: 'add', element: <CustomerForm /> },
+          { path: 'edit/:id', element: <CustomerForm /> }
         ]
       },
       {

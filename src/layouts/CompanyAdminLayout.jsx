@@ -46,6 +46,11 @@ const navItems = [
     ]
   },
   {
+    path: 'customers',
+    label: 'Customers',
+    icon: 'person'
+  },
+  {
     path: 'membership',
     label: 'Membership',
     icon: 'trophy'

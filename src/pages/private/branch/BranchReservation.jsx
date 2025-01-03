@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { fetchReservations, fetchReservation } from '../../../api/reservation';
+import { fetchReservations, fetchReservation, updateReservation } from '../../../api/reservation';
 import { getCustomer } from '../../../api/customer';
 import { fetchBranch } from '../../../api/branch';
 import { AuthContext } from '../../../context/AuthContext';
@@ -59,6 +59,15 @@ const BranchReservation = () => {
 
     const handleViewDetails = (rsId) => {
         loadReservation(rsId);
+    };
+
+    const handleUpdateStatus = async (rsId, status) => {
+        try {
+            await updateReservation(rsId, { rsStatus: status });
+            loadReservations();
+        } catch (error) {
+            console.error('Error updating reservation:', error);
+        }
     };
 
     const handleCloseModal = () => {
@@ -159,13 +168,13 @@ const BranchReservation = () => {
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-success mx-1"
-                                                    onClick={() => handleViewDetails(reservation.rsId)}
+                                                    onClick={() => handleUpdateStatus(reservation.rsId, 'Confirmed')}
                                                 >
                                                     <i className='bi bi-calendar-check'></i>
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-danger"
-                                                    onClick={() => handleViewDetails(reservation.rsId)}
+                                                    onClick={() => handleUpdateStatus(reservation.rsId, 'Cancelled')}
                                                 >
                                                     <i className='bi bi-calendar-x'></i>
                                                 </button>

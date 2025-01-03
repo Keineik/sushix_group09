@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import Pagination from '../../../components/Pagination';
 import { fetchOrders, fetchDineInOrder, fetchDeliveryOrder } from '../../../api/order';
+import { fetchBranches } from '../../../api/branch';
 
 const OrderManagement = ({ OrderType }) => {
     const [activeStatus, setActiveStatus] = useState('COMPLETED');
@@ -13,9 +13,23 @@ const OrderManagement = ({ OrderType }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [branches, setBranches] = useState([]);
+    const [selectedBranch, setSelectedBranch] = useState('all');
     const [totalCount, setTotalCount] = useState(0);
     const ITEMS_PER_PAGE = 18;
+
+    useEffect(() => {
+        const loadBranches = async () => {
+            try {
+                const branchesResponse = await fetchBranches();
+                setBranches(branchesResponse || []);
+            } catch (error) {
+                console.error('Failed to fetch branches:', error);
+            }
+        };
+
+        loadBranches();
+    }, []);
 
     useEffect(() => {
         const loadOrders = async () => {
@@ -29,10 +43,11 @@ const OrderManagement = ({ OrderType }) => {
                     searchTerm,
                     orderStatus: activeStatus,
                     orderType: orderType,
+                    branchId: selectedBranch === 'all' ? null : selectedBranch,
                     sortDirection: sortConfig.direction === 'desc' ? 1 : 0,
                 });
 
-                console.log ("Result",result)
+                console.log("Result", result)
 
                 setOrders(result.items || []);
                 setTotalCount(result.totalCount || 0);
@@ -45,34 +60,34 @@ const OrderManagement = ({ OrderType }) => {
         };
 
         loadOrders();
-    }, [currentPage, searchTerm, activeStatus, OrderType, sortConfig]);
+    }, [currentPage, searchTerm, activeStatus, OrderType, sortConfig, selectedBranch]);
 
     useEffect(() => {
-            const loadOrderDetails = async () => {
-                if (selectedOrder) {
-                    setLoading(true);
-                    setError(null);
-                    try {
-                        let result;
-                        if (selectedOrder.orderType === 'Dine-In') {
-                            result = await fetchDineInOrder(selectedOrder.orderId);
-                            
-                        } else if (selectedOrder.orderType === 'Delivery') {
-                            result = await fetchDeliveryOrder(selectedOrder.orderId);
-                        }
-                        console.log ("Details: ", result)
-                        setOrderDetails(result.orderDetails); 
-                    } catch (err) {
-                        setError('Failed to fetch order details. Please try again.');
-                        console.error('Error loading order details:', err);
-                    } finally {
-                        setLoading(false);
+        const loadOrderDetails = async () => {
+            if (selectedOrder) {
+                setLoading(true);
+                setError(null);
+                try {
+                    let result;
+                    if (selectedOrder.orderType === 'Dine-In') {
+                        result = await fetchDineInOrder(selectedOrder.orderId);
+
+                    } else if (selectedOrder.orderType === 'Delivery') {
+                        result = await fetchDeliveryOrder(selectedOrder.orderId);
                     }
+                    console.log("Details: ", result)
+                    setOrderDetails(result.orderDetails);
+                } catch (err) {
+                    setError('Failed to fetch order details. Please try again.');
+                    console.error('Error loading order details:', err);
+                } finally {
+                    setLoading(false);
                 }
-            };
-    
-            loadOrderDetails();
-        }, [selectedOrder]);
+            }
+        };
+
+        loadOrderDetails();
+    }, [selectedOrder]);
 
     const handleSort = (key) => {
         let direction = 'asc';
@@ -102,6 +117,13 @@ const OrderManagement = ({ OrderType }) => {
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
+    };
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
     };
 
 
@@ -185,81 +207,86 @@ const OrderManagement = ({ OrderType }) => {
                 )}
             </ul>
 
-            <div className="mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-4 mt-3">
                 <input
                     type="text"
-                    className="form-control"
-                    placeholder="Search by Order ID, Staff ID, Customer ID..."
+                    placeholder="Search by Order ID, Name, Phone Number"
                     value={searchTerm}
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value);
-                        setCurrentPage(1); // Reset to first page when search term changes
-                    }}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control w-25"
                 />
+                <select
+                    value={selectedBranch}
+                    onChange={(e) => setSelectedBranch(e.target.value)}
+                    className="form-select w-25"
+                >
+                    <option value="all">All Branches</option>
+                    {branches.map(branch => (
+                        <option key={branch.branchId} value={branch.branchId}>{branch.branchName}</option>
+                    ))}
+                </select>
             </div>
 
             {loading && <div className="text-center my-4">Loading orders...</div>}
             {error && <div className="alert alert-danger">{error}</div>}
 
             {!loading && !error && (
-                <div className="card">
-                    <div className="table-responsive">
-                        <table className="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th onClick={() => handleSort('OrderID')}>
-                                        Order ID
-                                        {sortConfig.key === 'OrderID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
-                                    </th>
-                                    <th onClick={() => handleSort('OrderDateTime')}>
-                                        Order Date
-                                        {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
-                                    </th>
-                                    <th onClick={() => handleSort('CustID')}>
-                                        Customer ID
-                                        {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
-                                    </th>
-                                    <th>Status</th>
-                                    {/* {OrderType === 'Dine-In' && (
+                <div className="table-responsive">
+                    <table className="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th onClick={() => handleSort('OrderID')}>
+                                    Order ID
+                                    {sortConfig.key === 'OrderID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th onClick={() => handleSort('OrderDateTime')}>
+                                    Order Date
+                                    {sortConfig.key === 'OrderDateTime' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th onClick={() => handleSort('CustID')}>
+                                    Customer Name
+                                    {sortConfig.key === 'CustID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
+                                </th>
+                                <th>Subtotal</th>
+                                {/* {OrderType === 'Dine-In' && (
                                         <th onClick={() => handleSort('TableID')}>
                                             Table
                                             {sortConfig.key === 'TableID' && (sortConfig.direction === 'asc' ? ' ▲' : ' ▼')}
                                         </th>
                                     )} */}
-                                    <th>Actions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map((order) => (
+                                <tr key={order.orderId}>
+                                    <td>{order.orderId}</td>
+                                    <td>{new Date(order.orderDateTime).toLocaleString()}</td>
+                                    <td>{order.custName}</td>
+                                    <td>{formatPrice(order.estimatedPrice)}</td>
+                                    {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
+                                    <td>
+                                        <button
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() => handleViewOrder(order)}
+                                        >
+                                            <i className="bi bi-eye"></i>
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-outline-danger ms-2"
+                                            onClick={() => handleDeleteOrder(order.orderId)}
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {orders.map((order) => (
-                                    <tr key={order.orderId}>
-                                        <td>{order.orderId}</td>
-                                        <td>{new Date(order.orderDateTime).toLocaleString()}</td>
-                                        <td>{order.custId}</td>
-                                        <td>{order.orderStatus}</td>
-                                        {/* {OrderType === 'Dine-In' && <td>{order.TableID}</td>} */}
-                                        <td>
-                                            <button
-                                                className="btn btn-sm btn-outline-primary"
-                                                onClick={() => handleViewOrder(order)}
-                                            >
-                                               <i className="bi bi-eye"></i>
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-outline-danger ms-2"
-                                                onClick={() => handleDeleteOrder(order.orderId)}
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
 
-            {!loading && !error && 
+            {!loading && !error &&
                 <Pagination
                     currentPage={currentPage}
                     totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}

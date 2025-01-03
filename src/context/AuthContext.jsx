@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
                 const userResponse = await fetchCurrentAccount();
                 setUser(userResponse);
                 setRole(userRole);
+                console.log('User: ', userResponse);
             } catch (error) {
                 console.error('Token introspection failed:', error);
                 Cookies.remove('token');
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }) => {
             } else if (userRole === 'STAFF') {
                 navigate('/staff');
             } else {
+                logCustomerOnlineAccess(userResponse.customer.custId)
                 navigate('/');
             }
         } catch (error) {
@@ -85,6 +87,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
+        if (user && user.customer) {
+            logCustomerOnlineAccess(user.customer.custId);
+        }
         Cookies.remove('token');
         setUser(null);
         setRole(null);
